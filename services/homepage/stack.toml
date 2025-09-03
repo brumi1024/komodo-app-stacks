@@ -1,0 +1,69 @@
+[[stack]]
+name = "homepage"
+tags = ["dashboard", "homepage", "monitoring"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/homepage/docker-compose.yaml",
+]
+
+environment = """
+# User and group configuration
+PUID=[[PUID]]
+PGID=[[PGID]]
+TZ=[[TZ]]
+
+# Repository directory (for config mount)
+REPODIR=[[REPODIR]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Application configuration
+HOMEPAGE_TAG=[[HOMEPAGE_TAG]]
+HOMEPAGE_ALLOWED_HOSTS=[[HOMEPAGE_ALLOWED_HOSTS]]
+
+# Network and domain configuration
+ADMIN_DOMAIN=[[ADMIN_DOMAIN]]
+DOMAIN=[[DOMAIN]]
+TAILNET=[[TAILNET]]
+PORT_DASH_HTTP=[[PORT_DASH_HTTP]]
+PORT_SOCKY_PROXY=[[PORT_SOCKY_PROXY]]
+
+# Proxmox configuration
+PORT_PROXMOX_HTTPS=[[PORT_PROXMOX_HTTPS]]
+SUSANOO_MONITORING_USER=[[SUSANOO_MONITORING_USER]]
+SUSANOO_MONITORING_TOKEN=[[SUSANOO_MONITORING_TOKEN]]
+EURUS_MONITORING_USER=[[EURUS_MONITORING_USER]]
+EURUS_MONITORING_TOKEN=[[EURUS_MONITORING_TOKEN]]
+
+# TrueNAS configuration
+TRUENAS_SCALE_HOMEPAGE_TOKEN=[[TRUENAS_SCALE_HOMEPAGE_TOKEN]]
+
+# Synology configuration
+PORT_ZEPHYRUS_HTTP=[[PORT_ZEPHYRUS_HTTP]]
+ZEPHYRUS_REMOTE_STATS_PASSWORD=[[ZEPHYRUS_REMOTE_STATS_PASSWORD]]
+
+# Home Assistant configuration
+HOMEASSISTANT_KEY=[[HOMEASSISTANT_KEY]]
+HOMEASSISTANT_SEQ_KEY=[[HOMEASSISTANT_SEQ_KEY]]
+HOMEASSISTANT_KALASZ_KEY=[[HOMEASSISTANT_KALASZ_KEY]]
+
+# Plex configuration
+PORT_PLEX_HTTP=[[PORT_PLEX_HTTP]]
+PLEX_HOMEPAGE_TOKEN=[[PLEX_HOMEPAGE_TOKEN]]
+
+# Pi-hole configuration
+PIHOLE_1_APP_PASSWORD=[[PIHOLE_1_APP_PASSWORD]]
+PIHOLE_2_APP_PASSWORD=[[PIHOLE_2_APP_PASSWORD]]
+SEQUOIA_PIHOLE_1_APP_PASSWORD=[[SEQUOIA_PIHOLE_1_APP_PASSWORD]]
+SEQUOIA_PIHOLE_2_APP_PASSWORD=[[SEQUOIA_PIHOLE_2_APP_PASSWORD]]
+"""

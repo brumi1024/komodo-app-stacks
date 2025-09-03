@@ -1,0 +1,36 @@
+name: "tautulli"
+
+services:
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: tautulli
+    volumes:
+      - ${CONFIGDIR}/tautulli:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Media
+      - homepage.name=Tautulli
+      - homepage.icon=tautulli.svg
+      - homepage.href=https://tautulli.${DOMAIN}
+      - homepage.description=Home Tautulli
+      - homepage.widget.type=tautulli
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_TAUTULLI_HTTP}
+      - homepage.widget.key=${TAUTULLI_API_AUTH_TOKEN}
+      - homepage.widget.enableUser=true
+      - homepage.widget.showEpisodeNumber=true
+      - homepage.widget.expandOneStreamToTwoRows=false
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+    ports:
+      - ${PORT_TAUTULLI_HTTP}:8181
+    restart: unless-stopped
+
+networks:
+  default:
+    name: caddy-net
+    external: true

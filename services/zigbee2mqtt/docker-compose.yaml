@@ -1,0 +1,29 @@
+name: "zigbee2mqtt"
+
+services:
+  zigbee2mqtt:
+    image: ghcr.io/koenkk/zigbee2mqtt
+    container_name: zigbee2mqtt
+    restart: unless-stopped
+    networks:
+      - socky_proxy-net
+    volumes:
+      - ${CONFIGDIR}/zigbee2mqtt-data:/app/data
+      - /run/udev:/run/udev:ro
+    environment:
+      - TZ=${TZ}
+    devices:
+      - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2468528-if00:/dev/ttyACM0
+    labels:
+      - homepage.group=Smart Home
+      - homepage.name=Zigbee2MQTT
+      - homepage.icon=zigbee2mqtt.svg
+      - homepage.href=https://zigbee.seq.${DOMAIN}
+      - homepage.description=Sequoia Zigbee handler
+    ports:
+      - ${PORT_ZIGBEE2MQTT:-8085}:8080  # <Host Port>:<Container Port>
+
+networks:
+  socky_proxy-net:
+    name: socky_proxy-net
+    external: true

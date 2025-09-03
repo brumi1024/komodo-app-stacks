@@ -1,0 +1,29 @@
+[[stack]]
+name = "monitoring"
+tags = ["monitoring", "beszel", "server-stats"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/monitoring/docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+PORT_BESZEL_HTTP=[[PORT_BESZEL_HTTP]]
+PORT_BESZEL_LISTEN=[[PORT_BESZEL_LISTEN]]
+
+# Authentication
+BESZEL_AGENT_KEY=[[BESZEL_AGENT_KEY]]
+"""

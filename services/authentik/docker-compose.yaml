@@ -1,0 +1,110 @@
+name: "authentik"
+
+services:
+  postgresql:
+    image: docker.io/library/postgres:16-alpine
+    restart: unless-stopped
+    container_name: authentik-postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - authentik-database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
+      POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
+      POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
+    env_file:
+      - ${REPODIR}/docker.env
+  redis:
+    image: docker.io/library/redis:alpine
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    container_name: authentik-redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - authentik-redis:/data
+  server:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
+    restart: unless-stopped
+    container_name: authentik-server
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+    volumes:
+      - ${CONFIGDIR}/authentik/media:/media
+      - ${CONFIGDIR}/authentik/custom-templates:/templates
+    labels:
+      - homepage.group=Administration
+      - homepage.name=Authentik
+      - homepage.icon=authentik.svg
+      - homepage.href=https://auth.${DOMAIN}
+      - homepage.description=Authentication Service
+      - homepage.widget.type=authentik
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_AUTHENTIK_HTTP}
+      - homepage.widget.key=${AUTHENTIK_HOMEPAGE_TOKEN}
+    env_file:
+      - ${REPODIR}/docker.env
+    ports:
+      - "${PORT_AUTHENTIK_HTTP:-9000}:9000"
+      - "${PORT_AUTHENTIK_HTTPS:-9443}:9443"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
+    restart: unless-stopped
+    container_name: authentik-worker
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIGDIR}/authentik/media:/media
+      - ${CONFIGDIR}/authentik/certs:/certs
+      - ${CONFIGDIR}/authentik/custom-templates:/templates
+    env_file:
+      - ${REPODIR}/docker.env
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  authentik-database:
+    name: authentik-database
+    driver: local
+  authentik-redis:
+    name: authentik-redis
+    driver: local
+
+networks:
+  default:
+    name: caddy-net
+    external: true

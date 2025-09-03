@@ -1,0 +1,24 @@
+[[stack]]
+name = "monitoring-agent"
+tags = ["monitoring", "beszel", "agent"]
+
+[stack.config]
+server = "home-server"  # Can be configured for different servers
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/monitoring-agent/docker-compose.yaml",
+]
+
+environment = """
+# Network configuration
+PORT_BESZEL_LISTEN=[[PORT_BESZEL_LISTEN]]
+
+# Authentication
+BESZEL_AGENT_KEY=[[BESZEL_AGENT_KEY]]
+"""

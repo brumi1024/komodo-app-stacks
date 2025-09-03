@@ -1,0 +1,150 @@
+name: "servarr"
+
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:${PROWLARR_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+    volumes:
+      - ${CONFIGDIR}/prowlarr:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Media Tools
+      - homepage.name=Prowlarr
+      - homepage.icon=prowlarr.svg
+      - homepage.href=https://prowlarr.${DOMAIN}
+      - homepage.description=Indexer
+      - homepage.widget.type=prowlarr
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_PROWLARR_HTTP}
+      - homepage.widget.key=${PROWLARR_API_AUTH_TOKEN}
+    ports:
+      - ${PORT_PROWLARR_HTTP}:9696
+    restart: unless-stopped
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:${OVERSEERR_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: overseerr
+    volumes:
+      - ${CONFIGDIR}/overseerr:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Media Tools
+      - homepage.name=Overseerr
+      - homepage.icon=overseerr.svg
+      - homepage.href=https://overseerr.${DOMAIN}
+      - homepage.description=Request Management
+      - homepage.widget.type=overseerr
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_OVERSEERR_HTTP}
+      - homepage.widget.key=${PLEX_AUTH_TOKEN}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+    ports:
+      - ${PORT_OVERSEERR_HTTP}:5055
+    restart: unless-stopped
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: qbittorrent
+    volumes:
+      - ${CONFIGDIR}/qbittorrent:/config
+      - type: volume
+        source: media
+        target: /data/downloads
+        volume:
+          subpath: downloads
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=File Management
+      - homepage.name=qBittorrent
+      - homepage.icon=qbittorrent.svg
+      - homepage.href=https://qbittorrent.${DOMAIN}
+      - homepage.widget.type=qbittorrent
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_QBITTORRENT_HTTP}
+      - homepage.widget.enableLeechProgress=true
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=${PORT_QBITTORRENT_HTTP}
+      - TORRENTING_PORT=${PORT_QBITTORRENT_TORRENTING}
+      - HOST_NAME=${HOST_NAME}
+    ports:
+      - ${PORT_QBITTORRENT_HTTP}:8080
+      - ${PORT_QBITTORRENT_TORRENTING}:6881
+      - ${PORT_QBITTORRENT_TORRENTING}:6881/udp
+    restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr:${RADARR_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: radarr
+    volumes:
+      - ${CONFIGDIR}/radarr:/config
+      - media:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Media Tools
+      - homepage.name=Radarr
+      - homepage.icon=radarr.svg
+      - homepage.href=https://radarr.${DOMAIN}
+      - homepage.description=Movie Requests
+      - homepage.widget.type=radarr
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_RADARR_HTTP}
+      - homepage.widget.key=${RADARR_API_AUTH_TOKEN}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+    ports:
+      - ${PORT_RADARR_HTTP}:7878
+    restart: unless-stopped
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:${SONARR_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    container_name: sonarr
+    volumes:
+      - ${CONFIGDIR}/sonarr:/config
+      - media:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Media Tools
+      - homepage.name=Sonarr
+      - homepage.icon=sonarr.svg
+      - homepage.href=https://sonarr.${DOMAIN}
+      - homepage.description=TV Show Requests
+      - homepage.widget.type=sonarr
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_SONARR_HTTP}
+      - homepage.widget.key=${SONARR_API_AUTH_TOKEN}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+    ports:
+      - ${PORT_SONARR_HTTP}:8989
+    restart: unless-stopped
+
+networks:
+  default:
+    name: caddy-net
+    external: true
+volumes:
+  media:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS_IP},rw,vers=4.1
+      device: ":/mnt/blackbox/media"

@@ -1,0 +1,62 @@
+name: "frigate"
+
+services:
+  frigate:
+    container_name: frigate
+    privileged: true
+    restart: unless-stopped
+    stop_grace_period: 30s # allow enough time to shut down the various services
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_TAG:-stable}
+    shm_size: "512mb"
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
+    cap_add:
+      - CAP_PERFMON
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${REPODIR}/services/frigate/config/:/config/:rw
+      - media:/media/frigate:rw
+      - ${CONFIGDIR}/frigate/db:/db:rw
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "${PORT_FRIGATE_INTERNAL}:5000"
+      - "1935:1935"
+      - "${PORT_FRIGATE_HTTP}:8971"
+      - "8554:8554" # RTSP feeds
+      - "8555:8555/tcp" # WebRTC over tcp
+      - "8555:8555/udp" # WebRTC over udp
+    labels:
+      - homepage.group=Smart Home
+      - homepage.name=Frigate Sequoia
+      - homepage.icon=frigate.svg
+      - homepage.href=https://frigate.seq.${DOMAIN}
+      - homepage.description=Sequoia Frigate NVR
+      - homepage.widget.type=frigate
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_FRIGATE_INTERNAL}
+    environment:
+      - TZ=${TZ}
+      - HOST_NAME=${HOST_NAME}
+      - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER}
+      - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD}
+      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER}
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
+      - FRIGATE_GO2RTC_RTSP_USERNAME=${FRIGATE_GO2RTC_RTSP_USERNAME}
+      - FRIGATE_GO2RTC_RTSP_PASSWORD=${FRIGATE_GO2RTC_RTSP_PASSWORD}
+      - LIBVA_DRIVER_NAME_JELLYFIN=iHD
+      - PLUS_API_KEY=${PLUS_API_KEY}
+      - FRIGATE_GEMINI_API_KEY=${FRIGATE_GEMINI_API_KEY}
+networks:
+  default:
+    name: caddy-net
+    external: true
+volumes:
+  media:
+    driver_opts:
+      type: cifs
+      o: username=${SEQUOIA_FRIGATE_SMB_USER},password=${SEQUOIA_FRIGATE_SMB_PASSWORD},domain=WORKGROUP,uid=1032,gid=100,vers=3.0
+      device: //${SEQUOIA_NAS_IP}/frigate

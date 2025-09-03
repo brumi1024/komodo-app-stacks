@@ -1,0 +1,35 @@
+[[stack]]
+name = "caddy-vps"
+tags = ["proxy", "reverse-proxy", "vps", "caddy"]
+
+[stack.config]
+server = "vps-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/caddy-vps/docker-compose.yaml",
+]
+
+environment = """
+# Repository directory (for build context and config)
+REPODIR=[[REPODIR]]
+
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Port configuration
+PORT_CADDY_HTTP=[[PORT_CADDY_HTTP]]
+PORT_CADDY_HTTPS=[[PORT_CADDY_HTTPS]]
+PORT_CADDY_ADMIN=[[PORT_CADDY_ADMIN]]
+
+# Cloudflare API token for DNS challenges
+CF_API_TOKEN=[[CF_API_TOKEN]]
+"""

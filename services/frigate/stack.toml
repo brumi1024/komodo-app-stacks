@@ -1,0 +1,50 @@
+[[stack]]
+name = "frigate"
+tags = ["security", "nvr", "ai", "camera"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/frigate/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+HOST_NAME=[[HOST_NAME]]
+CONFIGDIR=[[CONFIGDIR]]
+REPODIR=[[REPODIR]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+TAILNET=[[TAILNET]]
+PORT_FRIGATE_INTERNAL=[[PORT_FRIGATE_INTERNAL]]
+PORT_FRIGATE_HTTP=[[PORT_FRIGATE_HTTP]]
+
+# Application configuration
+FRIGATE_TAG=[[FRIGATE_TAG]]
+
+# Authentication credentials
+FRIGATE_MQTT_USER=[[FRIGATE_MQTT_USER]]
+FRIGATE_MQTT_PASSWORD=[[FRIGATE_MQTT_PASSWORD]]
+FRIGATE_RTSP_USER=[[FRIGATE_RTSP_USER]]
+FRIGATE_RTSP_PASSWORD=[[FRIGATE_RTSP_PASSWORD]]
+FRIGATE_GO2RTC_RTSP_USERNAME=[[FRIGATE_GO2RTC_RTSP_USERNAME]]
+FRIGATE_GO2RTC_RTSP_PASSWORD=[[FRIGATE_GO2RTC_RTSP_PASSWORD]]
+
+# API keys
+PLUS_API_KEY=[[PLUS_API_KEY]]
+FRIGATE_GEMINI_API_KEY=[[FRIGATE_GEMINI_API_KEY]]
+
+# Storage configuration (Sequoia NAS)
+SEQUOIA_NAS_IP=[[SEQUOIA_NAS_IP]]
+SEQUOIA_FRIGATE_SMB_USER=[[SEQUOIA_FRIGATE_SMB_USER]]
+SEQUOIA_FRIGATE_SMB_PASSWORD=[[SEQUOIA_FRIGATE_SMB_PASSWORD]]
+"""

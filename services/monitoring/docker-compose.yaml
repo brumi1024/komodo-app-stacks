@@ -1,0 +1,32 @@
+name: "monitoring"
+
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - ${PORT_BESZEL_HTTP:-8090}:8090
+    environment:
+      - USER_CREATION=true
+    volumes:
+      - ${CONFIGDIR}/beszel/beszel_data:/beszel_data
+      - ${CONFIGDIR}/beszel/beszel_socket:/beszel_socket
+    labels:
+      - homepage.group=Monitoring
+      - homepage.name=Beszel
+      - homepage.icon=beszel.svg
+      - homepage.href=https://beszel.${DOMAIN}
+      - homepage.description=Simple monitoring tool
+  beszel-agent:
+    image: "henrygd/beszel-agent"
+    container_name: "beszel-agent"
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # monitor other disks / partitions by mounting a folder in /extra-filesystems
+      # - /mnt/disk/.beszel:/extra-filesystems/sda1:ro
+    environment:
+      LISTEN: ${PORT_BESZEL_LISTEN}
+      KEY: ${BESZEL_AGENT_KEY}

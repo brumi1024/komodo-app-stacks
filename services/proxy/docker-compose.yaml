@@ -1,0 +1,43 @@
+name: "proxy"
+
+services:
+  socky_proxy:
+    container_name: socky_proxy
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest # A security-enhanced proxy for the Docker Socket.
+    privileged: true
+    networks:
+      - socky_proxy-net
+    ports:
+      - ${PORT_SOCKY_PROXY}:2375
+    environment:
+      # Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc).
+      #   0 - revoke access
+      #   1 - grant access
+      - TZ=${TZ}
+      - CONTAINERS=1 # Allow access to viewing containers
+      - SERVICES=1 # Allow access to viewing services (necessary when using Docker Swarm)
+      - TASKS=1 # Allow access to viewing tasks (necessary when using Docker Swarm)
+      - POST=0 # Disallow any POST operations (effectively read-only)
+      - HOST_NAME=${HOST_NAME}
+    labels:
+      - homepage.group=Administration
+      - homepage.name=${HOST_NAME} Docker Socket Proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: wget --spider http://${HOST_NAME}:${PORT_SOCKY_PROXY}/version || exit 1
+      interval: "30s"
+      timeout: "5s"
+      retries: 3
+      start_period: "30s"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 32M
+    restart: always
+
+networks:
+  socky_proxy-net:
+    name: socky_proxy-net
+    external: true

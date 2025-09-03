@@ -1,0 +1,44 @@
+name: "actualbudget"
+
+services:
+  actual_server:
+    container_name: actual_server
+    image: docker.io/actualbudget/actual-server:${ACTUALBUDGET_TAG:-latest}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    ports:
+      - ${PORT_ACTUAL_HTTP}:5006
+    volumes:
+      - type: volume
+        source: appdata
+        target: /data
+        volume:
+          subpath: actual
+    environment:
+      - TZ=${TZ}
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Actual Budget
+      - homepage.icon=actual-budget.svg
+      - homepage.href=https://actual.${DOMAIN}
+      - homepage.description=Personal Finance
+    healthcheck:
+      # Enable health check for the instance
+      test: ['CMD-SHELL', 'node src/scripts/health-check.js']
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+networks:
+  default:
+    name: caddy-net
+    external: true
+volumes:
+  appdata:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS_IP},rw,vers=4.1
+      device: ":/mnt/blackbox/appdata"

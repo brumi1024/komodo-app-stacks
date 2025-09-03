@@ -1,0 +1,38 @@
+[[stack]]
+name = "tautulli"
+tags = ["media", "monitoring", "plex"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/tautulli/docker-compose.yaml",
+]
+
+environment = """
+# User and group configuration
+PUID=[[PUID]]
+PGID=[[PGID]]
+TZ=[[TZ]]
+
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+HOST_NAME=[[HOST_NAME]]
+TAILNET=[[TAILNET]]
+PORT_TAUTULLI_HTTP=[[PORT_TAUTULLI_HTTP]]
+
+# API configuration
+TAUTULLI_API_AUTH_TOKEN=[[TAUTULLI_API_AUTH_TOKEN]]
+"""

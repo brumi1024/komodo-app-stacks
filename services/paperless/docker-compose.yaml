@@ -1,0 +1,135 @@
+name: "paperless"
+
+services:
+  paperless-broker:
+    container_name: paperless-redis
+    image: docker.io/library/redis:7
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    volumes:
+      - paperless-redisdata:/data
+    healthcheck:
+      interval: 60s
+      retries: 5
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 45s
+
+  paperless-db:
+    container_name: paperless-postgres
+    image: docker.io/library/postgres:16
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    volumes:
+      - paperless-pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${PAPERLESS_DB_NAME}
+      POSTGRES_USER: ${PAPERLESS_DB_USER}
+      PGUSER: ${PAPERLESS_DB_USER}
+      POSTGRES_PASSWORD: ${PAPERLESS_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $PAPERLESS_DB_NAME"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+
+  paperless-webserver:
+    container_name: paperless-ngx
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    depends_on:
+      paperless-db:
+        condition: service_healthy
+      paperless-broker:
+        condition: service_healthy
+    ports:
+      - "${PORT_PAPERLESS_HTTP:-8000}:8000"
+    volumes:
+      - type: volume
+        source: appdata
+        target: /usr/src/paperless/data
+        volume:
+          subpath: paperless
+      - type: volume
+        source: media
+        target: /usr/src/paperless/media
+        volume:
+          subpath: paperless/data
+      - type: volume
+        source: media
+        target: /usr/src/paperless/export
+        volume:
+          subpath: paperless/export
+      - type: volume
+        source: media
+        target: /usr/src/paperless/consume
+        volume:
+          subpath: paperless/consume
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Paperless
+      - homepage.icon=paperless-ngx.svg
+      - homepage.href=https://paperless.${DOMAIN}
+      - homepage.description=Documents
+      - homepage.widget.type=paperlessngx
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_PAPERLESS_HTTP}
+      - homepage.widget.key=${PAPERLESS_API_AUTH_TOKEN}
+    environment:
+      - HOST_NAME=${HOST_NAME}
+      - PAPERLESS_TIME_ZONE=${TZ}
+      - PAPERLESS_OCR_LANGUAGE=eng
+      - PAPERLESS_OCR_LANGUAGES=hun
+      - PAPERLESS_SECRET_KEY=${PAPERLESS_SECRETKEY}
+      - PAPERLESS_DATE_ORDER=MDY
+
+      - PAPERLESS_WEBSERVER_WORKERS=2
+
+      - PAPERLESS_CONSUMER_POLLING=60
+      - PAPERLESS_CONSUMER_POLLING_DELAY=30
+      - PAPERLESS_CONSUMER_POLLING_RETRY_COUNT=3
+
+      - PAPERLESS_REDIS=redis://paperless-broker:6379
+      - PAPERLESS_DBHOST=paperless-db
+      - PAPERLESS_DBNAME=${PAPERLESS_DB_NAME}
+      - PAPERLESS_DBUSER=${PAPERLESS_DB_USER}
+      - PAPERLESS_DBPASS=${PAPERLESS_DB_PASSWORD}
+
+      - PAPERLESS_URL=${PAPERLESS_URL}
+      - PAPERLESS_ALLOWED_HOSTS=paperless.${DOMAIN},paperless.home.${DOMAIN}
+      - PAPERLESS_CSRF_TRUSTED_ORIGINS=${PAPERLESS_URL},https://paperless.home.${DOMAIN}
+      - PAPERLESS_ENABLE_ALLAUTH=true
+      - PAPERLESS_APPS=allauth.socialaccount.providers.openid_connect
+      - PAPERLESS_SOCIALACCOUNT_PROVIDERS=${PAPERLESS_SOCIALACCOUNT_PROVIDERS}
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: caddy-net
+    external: true
+volumes:
+  media:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS_IP},rw,vers=4.1
+      device: ":/mnt/blackbox/documents"
+  appdata:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS_IP},rw,vers=4.1
+      device: ":/mnt/blackbox/appdata"
+  paperless-pgdata:
+    name: paperless-pgdata
+    driver: local
+  paperless-redisdata:
+    name: paperless-redisdata
+    driver: local

@@ -1,0 +1,28 @@
+[[stack]]
+name = "nebula-sync-home"
+tags = ["pihole", "sync", "dns", "networking"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/nebula-sync-home/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+
+# Network configuration
+TAILNET=[[TAILNET]]
+
+# Pi-hole credentials
+PIHOLE_1_APP_PASSWORD=[[PIHOLE_1_APP_PASSWORD]]
+PIHOLE_2_APP_PASSWORD=[[PIHOLE_2_APP_PASSWORD]]
+"""

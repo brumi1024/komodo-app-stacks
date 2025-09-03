@@ -1,0 +1,56 @@
+[[stack]]
+name = "authentik"
+tags = ["authentication", "identity", "sso"]
+
+[stack.config]
+server = "vps-server"  # Authentik runs on VPS
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/authentik/docker-compose.yaml",
+]
+
+environment = """
+# Repository directory
+REPODIR=[[REPODIR]]
+
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+HOST_NAME=[[HOST_NAME]]
+TAILNET=[[TAILNET]]
+
+# Port configuration
+PORT_AUTHENTIK_HTTP=[[PORT_AUTHENTIK_HTTP]]
+PORT_AUTHENTIK_HTTPS=[[PORT_AUTHENTIK_HTTPS]]
+
+# Application configuration
+AUTHENTIK_IMAGE=[[AUTHENTIK_IMAGE]]
+AUTHENTIK_TAG=[[AUTHENTIK_TAG]]
+AUTHENTIK_HOMEPAGE_TOKEN=[[AUTHENTIK_HOMEPAGE_TOKEN]]
+
+# Database configuration
+AUTHENTIK_PG_DB=[[AUTHENTIK_PG_DB]]
+AUTHENTIK_PG_USER=[[AUTHENTIK_PG_USER]]
+AUTHENTIK_PG_PASS=[[AUTHENTIK_PG_PASS]]
+
+# Secret key - important for security
+AUTHENTIK_SECRET_KEY=[[AUTHENTIK_SECRET_KEY]]
+
+# Email configuration
+AUTHENTIK_EMAIL__HOST=[[AUTHENTIK_EMAIL__HOST]]
+AUTHENTIK_EMAIL__PORT=[[AUTHENTIK_EMAIL__PORT]]
+AUTHENTIK_EMAIL__USERNAME=[[AUTHENTIK_EMAIL__USERNAME]]
+AUTHENTIK_EMAIL__PASSWORD=[[AUTHENTIK_EMAIL__PASSWORD]]
+AUTHENTIK_EMAIL__USE_TLS=[[AUTHENTIK_EMAIL__USE_TLS]]
+AUTHENTIK_EMAIL__USE_SSL=[[AUTHENTIK_EMAIL__USE_SSL]]
+AUTHENTIK_EMAIL__TIMEOUT=[[AUTHENTIK_EMAIL__TIMEOUT]]
+AUTHENTIK_EMAIL__FROM=[[AUTHENTIK_EMAIL__FROM]]
+"""

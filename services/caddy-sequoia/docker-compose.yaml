@@ -1,0 +1,40 @@
+name: "reverse_proxy"
+
+services:
+####################
+# Reverse Proxy
+####################
+
+  caddy:
+    container_name: caddy
+    build:
+      context: ${REPODIR}/services/admin/caddy-build
+      dockerfile: Dockerfile
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    ports:
+      - ${PORT_CADDY_HTTP}:80
+      - ${PORT_CADDY_HTTPS}:443
+      - ${PORT_CADDY_HTTPS}:443/udp
+      - ${PORT_CADDY_ADMIN}:2019
+    volumes:
+      - ${REPODIR}/services/admin/sequoia/caddy/config/Caddyfile:/etc/caddy/Caddyfile:ro # Required.
+      - ${CONFIGDIR}/caddy/data:/data # Optional, house for certs. Caddy adds its own /caddy/ directory
+      - ${CONFIGDIR}/caddy/config:/config # Optional, JSON Config files. Caddy adds its own /caddy/ directory
+    labels:
+      - homepage.group=Administration
+      - homepage.name=Caddy Sequoia
+      - homepage.icon=caddy.svg
+      - homepage.description=Sequoia Reverse Proxy
+      - homepage.widget.type=caddy
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_CADDY_ADMIN}
+    env_file:
+      - ${REPODIR}/docker.env
+    healthcheck:
+      test: ["CMD", "caddy", "version"]
+    restart: unless-stopped
+
+networks:
+  default:
+    name: caddy-net
+    external: true

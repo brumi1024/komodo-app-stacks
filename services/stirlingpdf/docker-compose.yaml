@@ -1,0 +1,43 @@
+name: "stirlingpdf"
+
+services:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    container_name: stirling-pdf
+    restart: unless-stopped
+    ports:
+      - ${PORT_STIRLING_HTTP}:8080
+    volumes:
+      - ${CONFIGDIR}/StirlingPDF/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ${CONFIGDIR}/StirlingPDF/extraConfigs:/configs
+      - ${CONFIGDIR}/StirlingPDF/customFiles:/customFiles/
+      - ${CONFIGDIR}/StirlingPDF/logs:/logs/
+      - ${CONFIGDIR}/StirlingPDF/pipeline:/pipeline/
+    environment:
+      - DOCKER_ENABLE_SECURITY=true
+      - LANGS=en_GB,hu
+      - UI_APPNAME=Stirling PDF
+      - UI_HOMEDESCRIPTION=Your locally hosted one-stop-shop for all your PDF needs.
+      - UI_APPNAVBARNAME=Stirling PDF
+      - SECURITY_ENABLELOGIN=true
+      - SECURITY_LOGINMETHOD=oauth2
+      - SECURITY_OAUTH2_ENABLED=true
+      - SECURITY_OAUTH2_ISSUER=${STIRLING_OAUTH_ISSUER}
+      - SECURITY_OAUTH2_CLIENTID=${STIRLING_OAUTH_CLIENT_ID}
+      - SECURITY_OAUTH2_CLIENTSECRET=${STIRLING_OAUTH_CLIENT_SECRET}
+      - SECURITY_OAUTH2_AUTOCREATEUSER=true
+      - SECURITY_OAUTH2_BLOCKREGISTRATION=false
+      - SECURITY_OAUTH2_SCOPES=openid, profile, email
+      - SECURITY_OAUTH2_USEASUSERNAME=email
+      - SECURITY_OAUTH2_PROVIDER=authentik
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Stirling PDF
+      - homepage.icon=stirling-pdf.svg
+      - homepage.href=https://stirling.${DOMAIN}
+      - homepage.description=Your locally hosted one-stop-shop for all your PDF needs.
+
+networks:
+  default:
+    name: caddy-net
+    external: true

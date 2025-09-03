@@ -1,0 +1,25 @@
+[[stack]]
+name = "proxy"
+tags = ["docker", "security", "proxy", "socket"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/proxy/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+HOST_NAME=[[HOST_NAME]]
+
+# Port configuration
+PORT_SOCKY_PROXY=[[PORT_SOCKY_PROXY]]
+"""

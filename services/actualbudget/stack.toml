@@ -1,0 +1,32 @@
+[[stack]]
+name = "actualbudget"
+tags = ["finance", "personal", "budgeting"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/actualbudget/docker-compose.yaml",
+]
+
+environment = """
+# Application configuration
+ACTUALBUDGET_TAG=[[ACTUALBUDGET_TAG]]
+TZ=[[TZ]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+PORT_ACTUAL_HTTP=[[PORT_ACTUAL_HTTP]]
+
+# Storage configuration
+NAS_IP=[[NAS_IP]]
+"""

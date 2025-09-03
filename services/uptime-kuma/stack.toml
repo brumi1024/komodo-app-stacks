@@ -1,0 +1,28 @@
+[[stack]]
+name = "uptime-kuma"
+tags = ["monitoring", "uptime"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/uptime-kuma/docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+TAILNET=[[TAILNET]]
+
+# Port configuration
+PORT_UPTIME_KUMA=8788
+"""

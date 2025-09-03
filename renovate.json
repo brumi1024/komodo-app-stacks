@@ -1,0 +1,103 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "schedule": ["before 6am"],
+  "timezone": "America/New_York",
+  "labels": ["dependencies"],
+  "automerge": false,
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "description": "Auto-merge patch updates for Docker images",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Group Linux Server Docker images",
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["^linuxserver/", "^lscr.io/linuxserver/"],
+      "groupName": "LinuxServer.io images"
+    },
+    {
+      "description": "Group Prometheus stack images",
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["^prom/", "^grafana/"],
+      "groupName": "Prometheus monitoring stack"
+    },
+    {
+      "description": "Group Immich stack images",
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["^ghcr.io/immich-app/"],
+      "groupName": "Immich stack"
+    },
+    {
+      "description": "Group media automation stack",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "lscr.io/linuxserver/prowlarr",
+        "lscr.io/linuxserver/overseerr", 
+        "lscr.io/linuxserver/qbittorrent",
+        "lscr.io/linuxserver/radarr",
+        "lscr.io/linuxserver/sonarr"
+      ],
+      "groupName": "Servarr media automation stack"
+    },
+    {
+      "description": "Group paperless stack images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/paperless-ngx/paperless-ngx",
+        "docker.io/library/postgres",
+        "docker.io/library/redis"
+      ],
+      "groupName": "Paperless document management stack"
+    },
+    {
+      "description": "Group Authentik stack images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/goauthentik/server",
+        "docker.io/library/postgres",
+        "docker.io/library/redis"
+      ],
+      "groupName": "Authentik authentication stack"
+    },
+    {
+      "description": "Group monitoring stack images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "henrygd/beszel",
+        "henrygd/beszel-agent"
+      ],
+      "groupName": "Beszel monitoring stack"
+    },
+    {
+      "description": "Group homepage and dashboard images",
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["^ghcr.io/gethomepage/"],
+      "groupName": "Homepage dashboard"
+    },
+    {
+      "description": "Group VPN sync tools",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/lovelaze/nebula-sync"
+      ],
+      "groupName": "VPN sync tools"
+    },
+    {
+      "description": "Group security proxy tools",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/tecnativa/docker-socket-proxy"
+      ],
+      "groupName": "Security proxy tools"
+    }
+  ],
+  "docker": {
+    "fileMatch": ["(^|/)docker-compose.*\\.ya?ml$"]
+  }
+}

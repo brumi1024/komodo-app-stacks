@@ -1,0 +1,28 @@
+[[stack]]
+name = "zigbee2mqtt"
+tags = ["iot", "smart-home", "zigbee"]
+
+[stack.config]
+server = "home-server"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/homelab-komodo-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/zigbee2mqtt/docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIGDIR=[[CONFIGDIR]]
+
+# System configuration
+TZ=[[TZ]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+PORT_ZIGBEE2MQTT=[[PORT_ZIGBEE2MQTT]]
+"""
