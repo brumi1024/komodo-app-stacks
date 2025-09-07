@@ -16,6 +16,16 @@ file_paths = [
 ]
 
 environment = """
+# System configuration
+TZ=[[TZ]]
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Network and domain configuration
+DOMAIN=[[DOMAIN]]
+HOST_NAME=[[HOST_NAME]]
+TAILNET=[[TAILNET]]
+PORT_IMMICH_HTTP=[[PORT_IMMICH_HTTP]]
+
 # Database configuration
 IMMICH_DB_USERNAME=[[IMMICH_DB_USERNAME]]
 IMMICH_DB_PASSWORD=[[IMMICH_DB_PASSWORD]]
@@ -23,16 +33,6 @@ IMMICH_DB_DATABASE_NAME=[[IMMICH_DB_DATABASE_NAME]]
 
 # API tokens
 IMMICH_API_AUTH_TOKEN=[[IMMICH_API_AUTH_TOKEN]]
-
-# System configuration
-TZ=[[TZ]]
-CONFIGDIR=[[CONFIGDIR]]
-
-# Network and domain configuration
-DOMAIN=[[DOMAIN]]
-HOST_NAME=[[HOST_NAME]]
-TAILNET=[[TAILNET]]
-PORT_IMMICH_HTTP=[[PORT_IMMICH_HTTP]]
 
 # Storage configuration
 NAS_IP=[[NAS_IP]]

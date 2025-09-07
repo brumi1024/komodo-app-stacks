@@ -9,11 +9,8 @@ services:
     ports:
       - ${PORT_ACTUAL_HTTP}:5006
     volumes:
-      - type: volume
-        source: appdata
-        target: /data
-        volume:
-          subpath: actual
+      - ${CONFIG_DIR}//actual-data:/data
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=${TZ}
     labels:
@@ -30,15 +27,3 @@ services:
       retries: 3
       start_period: 20s
     restart: unless-stopped
-
-networks:
-  default:
-    name: caddy-net
-    external: true
-volumes:
-  appdata:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS_IP},rw,vers=4.1
-      device: ":/mnt/blackbox/appdata"

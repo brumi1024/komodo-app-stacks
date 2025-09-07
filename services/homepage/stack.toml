@@ -8,7 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
-repo = "brumi1024/homelab-komodo-stacks"
+repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
@@ -21,21 +21,18 @@ PUID=[[PUID]]
 PGID=[[PGID]]
 TZ=[[TZ]]
 
-# Repository directory (for config mount)
-REPODIR=[[REPODIR]]
-
 # Logging configuration
 LOGGING_DRIVER=[[LOGGING_DRIVER]]
 
 # Application configuration
-HOMEPAGE_TAG=[[HOMEPAGE_TAG]]
+HOMEPAGE_TAG=latest
 HOMEPAGE_ALLOWED_HOSTS=[[HOMEPAGE_ALLOWED_HOSTS]]
 
 # Network and domain configuration
 ADMIN_DOMAIN=[[ADMIN_DOMAIN]]
 DOMAIN=[[DOMAIN]]
 TAILNET=[[TAILNET]]
-PORT_DASH_HTTP=[[PORT_DASH_HTTP]]
+PORT_DASH_HTTP=3000
 PORT_SOCKY_PROXY=[[PORT_SOCKY_PROXY]]
 
 # Proxmox configuration

@@ -8,7 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
-repo = "brumi1024/homelab-komodo-stacks"
+repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
@@ -17,7 +17,7 @@ file_paths = [
 
 environment = """
 # Application configuration
-ACTUALBUDGET_TAG=[[ACTUALBUDGET_TAG]]
+ACTUALBUDGET_TAG=latest
 TZ=[[TZ]]
 
 # Logging configuration
@@ -25,8 +25,8 @@ LOGGING_DRIVER=[[LOGGING_DRIVER]]
 
 # Network and domain configuration
 DOMAIN=[[DOMAIN]]
-PORT_ACTUAL_HTTP=[[PORT_ACTUAL_HTTP]]
+PORT_ACTUAL_HTTP=5006
 
 # Storage configuration
-NAS_IP=[[NAS_IP]]
+CONFIG_DIR=[[CONFIG_DIR]]
 """

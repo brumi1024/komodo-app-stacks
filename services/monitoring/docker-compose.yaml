@@ -10,8 +10,8 @@ services:
     environment:
       - USER_CREATION=true
     volumes:
-      - ${CONFIGDIR}/beszel/beszel_data:/beszel_data
-      - ${CONFIGDIR}/beszel/beszel_socket:/beszel_socket
+      - ${CONFIG_DIR}/beszel/beszel_data:/beszel_data
+      - ${CONFIG_DIR}/beszel/beszel_socket:/beszel_socket
     labels:
       - homepage.group=Monitoring
       - homepage.name=Beszel
@@ -24,6 +24,8 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
+      - ${CONFIG_DIR}/beszel/beszel_data:/beszel_data
+      - ${CONFIG_DIR}/beszel/beszel_socket:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # monitor other disks / partitions by mounting a folder in /extra-filesystems
       # - /mnt/disk/.beszel:/extra-filesystems/sda1:ro

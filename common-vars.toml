@@ -1,0 +1,11 @@
+[[variable]]
+name = "TZ"
+description = "Timezone"
+value = "Europe/Budapest"
+is_secret = false
+
+[[variable]]
+name = "CONFIG_DIR"
+description = "Common config dir for the containers"
+value = "/srv/docker-config"
+is_secret = false

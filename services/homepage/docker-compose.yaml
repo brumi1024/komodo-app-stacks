@@ -1,10 +1,6 @@
 name: "dashboard"
+
 services:
-
-####################
-# Dashboard
-####################
-
   homepage:
     image: ghcr.io/gethomepage/homepage:${HOMEPAGE_TAG:-latest}
     container_name: homepage
@@ -41,7 +37,8 @@ services:
       - HOMEPAGE_VAR_SEQUOIA_PIHOLE_1_APP_PASSWORD=${SEQUOIA_PIHOLE_1_APP_PASSWORD}
       - HOMEPAGE_VAR_SEQUOIA_PIHOLE_2_APP_PASSWORD=${SEQUOIA_PIHOLE_2_APP_PASSWORD}
     volumes:
-      - ${REPODIR}/services/homepage/config:/app/config
+      - ./config:/app/config
+      - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
 
 networks:
