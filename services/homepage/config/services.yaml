@@ -1,0 +1,135 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Home:
+    - Proxmox:
+        icon: proxmox.svg
+        href: https://susanoo.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Susanoo
+        ping: susanoo.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: proxmox
+            url: https://susanoo.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_PROXMOX_HTTPS}}
+            username:  {{HOMEPAGE_VAR_SUSANOO_MONITORING_USER}}
+            password:  {{HOMEPAGE_VAR_SUSANOO_MONITORING_TOKEN}}
+            node: susanoo
+    - TrueNAS:
+        icon: truenas.svg
+        href: https://truenas.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: TrueNAS Scale
+        ping: truenas-scale.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: truenas
+            url: http://truenas-scale.{{HOMEPAGE_VAR_TAILNET}}
+            key: {{HOMEPAGE_VAR_TRUENAS_SCALE_TOKEN}}
+            enablePools: true
+    - Pi-hole 1:
+        icon: pi-hole.svg
+        href: https://pihole1.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Primary Pi-hole instance.
+        ping: pihole1.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: pihole
+            version: 6
+            url: http://pihole1.{{HOMEPAGE_VAR_TAILNET}}
+            key: {{HOMEPAGE_VAR_PIHOLE_1_APP_PASSWORD}}
+    - Pi-hole 2:
+        icon: pi-hole.svg
+        href: https://pihole2.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Secondary Pi-hole instance.
+        ping: main-pi-zero-2.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: pihole
+            version: 6
+            url: http://main-pi-zero-2.{{HOMEPAGE_VAR_TAILNET}}
+            key: {{HOMEPAGE_VAR_PIHOLE_2_APP_PASSWORD}}
+
+- Sequoia:
+    - Proxmox:
+        icon: proxmox.svg
+        href: https://eurus.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Eurus
+        ping: eurus.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: proxmox
+            url: https://eurus.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_PROXMOX_HTTPS}}
+            username:  {{HOMEPAGE_VAR_EURUS_MONITORING_USER}}
+            password:  {{HOMEPAGE_VAR_EURUS_MONITORING_TOKEN}}
+            node: eurus
+    - Synology:
+        icon: synology.svg
+        href: https://zephyrus.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Zephyrus Synology
+        ping: https://zephyrus.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: diskstation
+            url: http://zephyrus.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_ZEPHYRUS_HTTP}}
+            username: remote_stats
+            password: {{HOMEPAGE_VAR_ZEPHYRUS_REMOTE_STATS_PASSWORD}}
+    - Pi-hole Sequoia 1:
+        icon: pi-hole.svg
+        href: https://pihole1.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Primary Pi-hole instance.
+        ping: pihole-seq-1.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: pihole
+            version: 6
+            url: http://pihole-seq-1.{{HOMEPAGE_VAR_TAILNET}}
+            key: {{HOMEPAGE_VAR_SEQUOIA_PIHOLE_1_APP_PASSWORD}}
+    - Pi-hole Sequoia 2:
+        icon: pi-hole.svg
+        href: https://pihole2.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Secondary Pi-hole instance.
+        ping: sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: pihole
+            version: 6
+            url: http://sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}
+            key: {{HOMEPAGE_VAR_SEQUOIA_PIHOLE_2_APP_PASSWORD}}
+
+- Smart Home:
+    - Home Assistant:
+        icon: home-assistant.svg
+        href: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Home Assistant for Home
+        siteMonitor: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
+        widget:
+            type: homeassistant
+            url: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
+            key: {{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}
+    - Home Assistant Sequoia:
+        icon: home-assistant.svg
+        href: https://homeassistant.seq.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Home Assistant for Sequoia
+        siteMonitor: https://homeassistant.seq.{{HOMEPAGE_VAR_DOMAIN}}
+        widget:
+            type: homeassistant
+            url: https://homeassistant.seq.{{HOMEPAGE_VAR_DOMAIN}}
+            key: {{HOMEPAGE_VAR_HOMEASSISTANT_SEQ_KEY}}
+    - Home Assistant Budakalasz:
+        icon: home-assistant.svg
+        href: https://homeassistant.kalasz.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Home Assistant for Budakalasz
+        siteMonitor: https://homeassistant.kalasz.{{HOMEPAGE_VAR_DOMAIN}}
+        widget:
+            type: homeassistant
+            url: https://homeassistant.kalasz.{{HOMEPAGE_VAR_DOMAIN}}
+            key: {{HOMEPAGE_VAR_HOMEASSISTANT_KALASZ_KEY}}
+
+- Administration:
+    - Unifi:
+        icon: unifi.svg
+        href: https://unifi.ui.com/
+        description: Unifi Controller
+
+- Media:
+    - Plex:
+        icon: plex.svg
+        href: https://plex.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Home Plex
+        siteMonitor: http://plex.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_PLEX_HTTP}}
+        widget:
+            type: plex
+            url: http://plex.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_PLEX_HTTP}}
+            key: {{HOMEPAGE_VAR_PLEX_TOKEN}} # see https://www.plexopedia.com/plex-media-server/general/plex-token/

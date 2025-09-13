@@ -6,8 +6,6 @@ services:
     container_name: homepage
     logging:
       driver: ${LOGGING_DRIVER:-local}
-    networks:
-      - socky_proxy-net
     ports:
       - ${PORT_DASH_HTTP}:3000
     environment:
@@ -40,8 +38,3 @@ services:
       - ./config:/app/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
-
-networks:
-  socky_proxy-net:
-    name: socky_proxy-net
-    external: true

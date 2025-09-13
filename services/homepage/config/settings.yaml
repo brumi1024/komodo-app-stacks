@@ -1,0 +1,44 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: Dashboard
+
+background:
+  image: https://images.unsplash.com/photo-1542640244-7e672d6cef4e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb
+  blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 65 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 65 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 60 # 0-100
+
+statusStyle: dot
+
+layout:
+  Home:
+    header: true
+    style: row
+    columns: 4
+  Sequoia:
+    header: true
+    style: row
+    columns: 4
+  Smart Home:
+    header: true
+    style: row
+    columns: 4
+  Administration:
+    header: true
+  Personal Apps:
+    header: true
+  Media:
+    header: true
+  Monitoring:
+    header: true
+  Media Tools:
+    header: true
+    style: row
+    columns: 4
+  File Management:
+    header: true
+    style: row
+    columns: 4

@@ -1,0 +1,18 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/docker/
+
+main-docker:
+  host: docker.{{HOMEPAGE_VAR_TAILNET}}
+  port: {{HOMEPAGE_VAR_PORT_SOCKY_PROXY}}
+
+sequoia-docker:
+  host: docker-seq.{{HOMEPAGE_VAR_TAILNET}}
+  port: {{HOMEPAGE_VAR_PORT_SOCKY_PROXY}}
+
+homelab-vps-docker:
+  host: homelab-vps.{{HOMEPAGE_VAR_TAILNET}}
+  port: {{HOMEPAGE_VAR_PORT_SOCKY_PROXY}}
+
+# my-docker:
+#   socket: /var/run/docker.sock
