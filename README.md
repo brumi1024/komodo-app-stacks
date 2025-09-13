@@ -10,11 +10,16 @@ This repository contains application stacks deployed via Komodo using GitOps. Al
 
 ## Stack Overview
 
-| Stack | Description | Services | Server |
-|-------|-------------|----------|--------|
-| `servarr` | Media automation | Radarr, Sonarr, Jackett, Bazarr | home-server |
-| `monitoring` | System monitoring | Prometheus, Grafana, Node Exporter | home-server |
-| `homepage` | Dashboard | Homepage | home-server |
+| Stack | Description | Services |
+|-------|-------------|----------|
+| `caddy-home/sequoia/vps` | Reverse proxy | Caddy (3 instances) |
+| `nebula-sync-home/sequoia` | Pi-hole sync | Nebula-sync (2 instances) |
+| `servarr` | Media automation | Radarr, Sonarr, Jackett, Bazarr |
+| `monitoring` | System monitoring | Prometheus, Grafana, Node Exporter |
+| `homepage` | Dashboard | Homepage |
+| `paperless` | Document management | Paperless-ngx |
+| `immich` | Photo management | Immich |
+| Others | Various services | actualbudget, authentik, stirlingpdf, tautulli, uptime-kuma, zigbee2mqtt |
 
 ## Prerequisites
 
@@ -26,15 +31,22 @@ This repository contains application stacks deployed via Komodo using GitOps. Al
 
 ```
 komodo-app-stacks/
-├── servarr/
-│   ├── docker-compose.yaml
-│   └── stack.toml
-├── monitoring/
-│   ├── docker-compose.yaml
-│   └── stack.toml
-├── homepage/
-│   ├── docker-compose.yaml
-│   └── stack.toml
+├── services/
+│   ├── caddy/                    # Shared base + instance overrides
+│   │   ├── docker-compose.yaml
+│   │   ├── home/docker-compose.yaml
+│   │   ├── sequoia/docker-compose.yaml
+│   │   └── vps/docker-compose.yaml
+│   ├── caddy-home/stack.toml     # References base + home files
+│   ├── caddy-sequoia/stack.toml
+│   ├── caddy-vps/stack.toml
+│   ├── nebula-sync/              # Shared base + instance overrides
+│   ├── servarr/
+│   │   ├── docker-compose.yaml
+│   │   └── stack.toml
+│   ├── monitoring/
+│   ├── homepage/
+│   └── ...20+ services
 ├── renovate.json
 └── README.md
 ```
@@ -68,9 +80,25 @@ These secrets must be synced by komodo-op before deploying stacks:
 ### Homepage Stack
 - `HOMEPAGE_CONFIG_DIR`: Homepage config directory
 
+## Multi-File Compose Pattern
+
+For services with multiple instances (like Caddy), we use Komodo's multi-file support:
+
+```toml
+file_paths = [
+    "services/caddy/docker-compose.yaml",        # Base configuration
+    "services/caddy/home/docker-compose.yaml",   # Instance-specific overrides
+]
+```
+
+**Benefits:**
+- Single base configuration for common settings
+- Instance-specific overrides for differences only
+- Easy to maintain and add new instances
+
 ## Adding New Stacks
 
-1. **Create directory** for your stack
+1. **Create directory** in `services/` for your stack
 2. **Add docker-compose.yaml** with your services
 3. **Create stack.toml** with deployment configuration
 4. **Reference secrets** using `[[SECRET_NAME]]` syntax
@@ -83,12 +111,12 @@ name = "my-stack"
 tags = ["category", "service-type"]
 
 [stack.config]
-server = "home-server"
+server = "TARGET_SERVER"
 auto_update = true
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
 branch = "main"
-file_paths = ["my-stack/docker-compose.yaml"]
+file_paths = ["services/my-stack/docker-compose.yaml"]
 
 environment = """
 SECRET_VALUE=[[MY_SECRET_FROM_1PASSWORD]]
@@ -107,20 +135,3 @@ CONFIG_DIR=[[MY_CONFIG_DIR]]
 - **Komodo UI**: View deployment status and logs
 - **GitHub Actions**: See webhook delivery status
 - **Container logs**: Check individual service logs in Komodo
-
-## Troubleshooting
-
-### Stack won't deploy
-1. Check if komodo-op is running and syncing secrets
-2. Verify all referenced secrets exist in Komodo global variables
-3. Check Komodo resource sync status
-
-### Missing secrets
-1. Ensure secret exists in 1Password "Homelab" vault
-2. Verify komodo-op has synced recently (check logs)
-3. Check secret name matches exactly in stack.toml
-
-### Docker compose errors
-1. Check image availability and tags
-2. Verify volume paths exist on target server
-3. Review port conflicts with other services
