@@ -3,7 +3,7 @@ name = "paperless"
 tags = ["documents", "ocr", "management"]
 
 [stack.config]
-server = "home-server"
+server = "docker-home"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
@@ -18,6 +18,9 @@ file_paths = [
 environment = """
 # System configuration
 TZ=[[TZ]]
+
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Logging configuration
 LOGGING_DRIVER=[[LOGGING_DRIVER]]

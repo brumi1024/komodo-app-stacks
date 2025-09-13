@@ -31,7 +31,7 @@ services:
       driver: ${LOGGING_DRIVER:-local}
     container_name: overseerr
     volumes:
-      - ${CONFIGDIR}/overseerr:/config
+      - ${CONFIG_DIR}/overseerr:/config
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media Tools
@@ -55,7 +55,7 @@ services:
       driver: ${LOGGING_DRIVER:-local}
     container_name: qbittorrent
     volumes:
-      - ${CONFIGDIR}/qbittorrent:/config
+      - ${CONFIG_DIR}/qbittorrent:/config
       - type: volume
         source: media
         target: /data/downloads
@@ -87,7 +87,7 @@ services:
       driver: ${LOGGING_DRIVER:-local}
     container_name: radarr
     volumes:
-      - ${CONFIGDIR}/radarr:/config
+      - ${CONFIG_DIR}/radarr:/config
       - media:/data
       - /etc/localtime:/etc/localtime:ro
     labels:
@@ -112,7 +112,7 @@ services:
       driver: ${LOGGING_DRIVER:-local}
     container_name: sonarr
     volumes:
-      - ${CONFIGDIR}/sonarr:/config
+      - ${CONFIG_DIR}/sonarr:/config
       - media:/data
       - /etc/localtime:/etc/localtime:ro
     labels:

@@ -3,7 +3,7 @@ name = "caddy-vps"
 tags = ["proxy", "reverse-proxy", "vps", "caddy"]
 
 [stack.config]
-server = "vps-server"
+server = "homelab-vps"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false

@@ -3,7 +3,7 @@ name = "uptime-kuma"
 tags = ["monitoring", "uptime"]
 
 [stack.config]
-server = "home-server"
+server = "homelab-vps"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false

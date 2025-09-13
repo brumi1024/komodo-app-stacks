@@ -40,11 +40,7 @@ services:
     ports:
       - "${PORT_PAPERLESS_HTTP:-8000}:8000"
     volumes:
-      - type: volume
-        source: appdata
-        target: /usr/src/paperless/data
-        volume:
-          subpath: paperless
+      - ${CONFIG_DIR}/paperless:/usr/src/paperless/data
       - type: volume
         source: media
         target: /usr/src/paperless/media
@@ -102,12 +98,6 @@ volumes:
       type: nfs
       o: addr=${NAS_IP},rw,vers=4.1
       device: ":/mnt/blackbox/documents"
-  appdata:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS_IP},rw,vers=4.1
-      device: ":/mnt/blackbox/appdata"
   paperless-pgdata:
     name: paperless-pgdata
     driver: local
