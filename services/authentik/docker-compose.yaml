@@ -18,7 +18,7 @@ services:
       POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
       POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
     env_file:
-      - .env # TODO - not needed anymore?
+      - .env
   redis:
     image: docker.io/library/redis:alpine
     command: --save 60 1 --loglevel warning
