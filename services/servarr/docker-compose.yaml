@@ -132,10 +132,6 @@ services:
       - ${PORT_SONARR_HTTP}:8989
     restart: unless-stopped
 
-networks:
-  default:
-    name: caddy-net
-    external: true
 volumes:
   media:
     driver: local

@@ -36,8 +36,3 @@ services:
       - homepage.icon=stirling-pdf.svg
       - homepage.href=https://stirling.${DOMAIN}
       - homepage.description=Your locally hosted one-stop-shop for all your PDF needs.
-
-networks:
-  default:
-    name: caddy-net
-    external: true
