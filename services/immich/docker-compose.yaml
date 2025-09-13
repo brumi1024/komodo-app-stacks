@@ -19,7 +19,7 @@ services:
       - homepage.href=https://immich.${DOMAIN}
       - homepage.description=Photos
       - homepage.widget.type=immich
-      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_IMMICH_HTTP} # TODO
+      - homepage.widget.url=http://immich.${DOMAIN}
       - homepage.widget.key=${IMMICH_API_AUTH_TOKEN}
       - homepage.widget.version=2
     environment:

@@ -27,7 +27,7 @@ TZ=[[TZ]]
 LOGGING_DRIVER=[[LOGGING_DRIVER]]
 
 # Network and domain configuration
-DOMAIN=[[DOMAIN]]
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 PORT_ACTUAL_HTTP=5006
 
 """

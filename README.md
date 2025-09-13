@@ -25,7 +25,7 @@ This repository contains application stacks deployed via Komodo using GitOps. Al
 ## Directory Structure
 
 ```
-homelab-komodo-stacks/
+komodo-app-stacks/
 ├── servarr/
 │   ├── docker-compose.yaml
 │   └── stack.toml
@@ -85,8 +85,8 @@ tags = ["category", "service-type"]
 [stack.config]
 server = "home-server"
 auto_update = true
-git_account = "benjaminteke"
-repo = "benjaminteke/homelab-komodo-stacks"
+git_account = "brumi1024"
+repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 file_paths = ["my-stack/docker-compose.yaml"]
 

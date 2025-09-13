@@ -1,6 +1,6 @@
 [[stack]]
 name = "immich"
-tags = ["media", "photos", "ai"]
+tags = ["media", "photos"]
 
 [stack.config]
 server = "home-server"
@@ -8,7 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
-repo = "brumi1024/homelab-komodo-stacks"
+repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
@@ -20,23 +20,22 @@ environment = """
 TZ=[[TZ]]
 CONFIG_DIR=[[CONFIG_DIR]]
 
+# Version configuration
+IMMICH_TAG=latest
+
 # Network and domain configuration
-DOMAIN=[[DOMAIN]]
-HOST_NAME=[[HOST_NAME]]
-TAILNET=[[TAILNET]]
-PORT_IMMICH_HTTP=[[PORT_IMMICH_HTTP]]
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+PORT_IMMICH_HTTP=2283
 
 # Database configuration
-IMMICH_DB_USERNAME=[[IMMICH_DB_USERNAME]]
-IMMICH_DB_PASSWORD=[[IMMICH_DB_PASSWORD]]
-IMMICH_DB_DATABASE_NAME=[[IMMICH_DB_DATABASE_NAME]]
+IMMICH_DB_USERNAME=[[OP__KOMODO__IMMICH__IMMICH_DB_USERNAME]]
+IMMICH_DB_PASSWORD=[[OP__KOMODO__IMMICH__IMMICH_DB_PASSWORD]]
+IMMICH_DB_DATABASE_NAME=[[OP__KOMODO__IMMICH__IMMICH_DB_DATABASE_NAME]]
 
 # API tokens
-IMMICH_API_AUTH_TOKEN=[[IMMICH_API_AUTH_TOKEN]]
+IMMICH_API_AUTH_TOKEN=[[OP__KOMODO__IMMICH__IMMICH_API_AUTH_TOKEN]]
 
 # Storage configuration
 NAS_IP=[[NAS_IP]]
-
-# Version configuration
-IMMICH_TAG=[[IMMICH_TAG]]
 """
