@@ -17,11 +17,11 @@ file_paths = [
 
 environment = """
 # Configuration directory
-CONFIGDIR=[[CONFIGDIR]]
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Network and domain configuration
 DOMAIN=[[DOMAIN]]
-PORT_STIRLING_HTTP=[[PORT_STIRLING_HTTP]]
+PORT_STIRLING_HTTP=8082
 
 # OAuth2 configuration for Authentik integration
 STIRLING_OAUTH_ISSUER=[[STIRLING_OAUTH_ISSUER]]

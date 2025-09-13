@@ -17,12 +17,11 @@ file_paths = [
 
 environment = """
 # Configuration directory
-CONFIGDIR=[[CONFIGDIR]]
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Network and domain configuration
 DOMAIN=[[DOMAIN]]
-TAILNET=[[TAILNET]]
 
 # Port configuration
-PORT_UPTIME_KUMA=8788
+PORT_UPTIME_KUMA=3002
 """

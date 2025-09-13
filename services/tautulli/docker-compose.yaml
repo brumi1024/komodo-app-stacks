@@ -7,7 +7,7 @@ services:
       driver: ${LOGGING_DRIVER:-local}
     container_name: tautulli
     volumes:
-      - ${CONFIGDIR}/tautulli:/config
+      - ${CONFIG_DIR}/tautulli:/config
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media
@@ -16,7 +16,7 @@ services:
       - homepage.href=https://tautulli.${DOMAIN}
       - homepage.description=Home Tautulli
       - homepage.widget.type=tautulli
-      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_TAUTULLI_HTTP}
+      - homepage.widget.url=http://tautulli.${DOMAIN}
       - homepage.widget.key=${TAUTULLI_API_AUTH_TOKEN}
       - homepage.widget.enableUser=true
       - homepage.widget.showEpisodeNumber=true
@@ -25,12 +25,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - HOST_NAME=${HOST_NAME}
     ports:
       - ${PORT_TAUTULLI_HTTP}:8181
     restart: unless-stopped
-
-networks:
-  default:
-    name: caddy-net
-    external: true

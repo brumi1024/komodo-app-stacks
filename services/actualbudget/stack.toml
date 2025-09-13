@@ -16,6 +16,9 @@ file_paths = [
 ]
 
 environment = """
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
 # Application configuration
 ACTUALBUDGET_TAG=latest
 TZ=[[TZ]]
@@ -27,6 +30,4 @@ LOGGING_DRIVER=[[LOGGING_DRIVER]]
 DOMAIN=[[DOMAIN]]
 PORT_ACTUAL_HTTP=5006
 
-# Storage configuration
-CONFIG_DIR=[[CONFIG_DIR]]
 """

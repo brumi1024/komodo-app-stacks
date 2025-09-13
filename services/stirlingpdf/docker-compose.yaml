@@ -8,11 +8,11 @@ services:
     ports:
       - ${PORT_STIRLING_HTTP}:8080
     volumes:
-      - ${CONFIGDIR}/StirlingPDF/trainingData:/usr/share/tessdata # Required for extra OCR languages
-      - ${CONFIGDIR}/StirlingPDF/extraConfigs:/configs
-      - ${CONFIGDIR}/StirlingPDF/customFiles:/customFiles/
-      - ${CONFIGDIR}/StirlingPDF/logs:/logs/
-      - ${CONFIGDIR}/StirlingPDF/pipeline:/pipeline/
+      - ${CONFIG_DIR}/StirlingPDF/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ${CONFIG_DIR}/StirlingPDF/extraConfigs:/configs
+      - ${CONFIG_DIR}/StirlingPDF/customFiles:/customFiles/
+      - ${CONFIG_DIR}/StirlingPDF/logs:/logs/
+      - ${CONFIG_DIR}/StirlingPDF/pipeline:/pipeline/
     environment:
       - DOCKER_ENABLE_SECURITY=true
       - LANGS=en_GB,hu

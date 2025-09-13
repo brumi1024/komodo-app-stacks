@@ -5,10 +5,8 @@ services:
     image: ghcr.io/koenkk/zigbee2mqtt
     container_name: zigbee2mqtt
     restart: unless-stopped
-    networks:
-      - socky_proxy-net
     volumes:
-      - ${CONFIGDIR}/zigbee2mqtt-data:/app/data
+      - ${CONFIG_DIR}/zigbee2mqtt-data:/app/data
       - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
@@ -22,8 +20,3 @@ services:
       - homepage.description=Sequoia Zigbee handler
     ports:
       - ${PORT_ZIGBEE2MQTT:-8085}:8080  # <Host Port>:<Container Port>
-
-networks:
-  socky_proxy-net:
-    name: socky_proxy-net
-    external: true

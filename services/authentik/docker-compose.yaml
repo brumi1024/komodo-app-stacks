@@ -18,7 +18,7 @@ services:
       POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
       POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
     env_file:
-      - ${REPODIR}/docker.env
+      - .env # TODO - not needed anymore?
   redis:
     image: docker.io/library/redis:alpine
     command: --save 60 1 --loglevel warning
@@ -44,8 +44,8 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
     volumes:
-      - ${CONFIGDIR}/authentik/media:/media
-      - ${CONFIGDIR}/authentik/custom-templates:/templates
+      - ${CONFIG_DIR}/authentik/media:/media
+      - ${CONFIG_DIR}/authentik/custom-templates:/templates
     labels:
       - homepage.group=Administration
       - homepage.name=Authentik
@@ -53,10 +53,10 @@ services:
       - homepage.href=https://auth.${DOMAIN}
       - homepage.description=Authentication Service
       - homepage.widget.type=authentik
-      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_AUTHENTIK_HTTP}
+      - homepage.widget.url=https://auth.${DOMAIN}
       - homepage.widget.key=${AUTHENTIK_HOMEPAGE_TOKEN}
     env_file:
-      - ${REPODIR}/docker.env
+      - .env
     ports:
       - "${PORT_AUTHENTIK_HTTP:-9000}:9000"
       - "${PORT_AUTHENTIK_HTTPS:-9443}:9443"
@@ -85,11 +85,11 @@ services:
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${CONFIGDIR}/authentik/media:/media
-      - ${CONFIGDIR}/authentik/certs:/certs
-      - ${CONFIGDIR}/authentik/custom-templates:/templates
+      - ${CONFIG_DIR}/authentik/media:/media
+      - ${CONFIG_DIR}/authentik/certs:/certs
+      - ${CONFIG_DIR}/authentik/custom-templates:/templates
     env_file:
-      - ${REPODIR}/docker.env
+      - .env
     depends_on:
       postgresql:
         condition: service_healthy
@@ -103,8 +103,3 @@ volumes:
   authentik-redis:
     name: authentik-redis
     driver: local
-
-networks:
-  default:
-    name: caddy-net
-    external: true

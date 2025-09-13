@@ -4,8 +4,6 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma:1
     container_name: uptime-kuma
-    networks:
-      - socky_proxy-net
     volumes:
       - ${CONFIGDIR}/uptime-kuma-data:/app/data
     labels:
@@ -15,13 +13,8 @@ services:
       - homepage.href=https://uptime.${DOMAIN}
       - homepage.description=Uptime monitor
       - homepage.widget.type=uptimekuma
-      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_UPTIME_KUMA}
+      - homepage.widget.url=http://uptime.${DOMAIN}
       - homepage.widget.slug=services
     ports:
       - ${PORT_UPTIME_KUMA:-3002}:3001  # <Host Port>:<Container Port>
     restart: always
-
-networks:
-  socky_proxy-net:
-    name: socky_proxy-net
-    external: true
