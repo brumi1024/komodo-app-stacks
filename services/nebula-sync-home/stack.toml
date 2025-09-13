@@ -12,7 +12,8 @@ repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/nebula-sync-home/docker-compose.yaml",
+    "services/nebula-sync/docker-compose.yaml",
+    "services/nebula-sync/home/docker-compose.yaml",
 ]
 
 environment = """
@@ -23,6 +24,6 @@ TZ=[[TZ]]
 TAILNET=[[TAILNET]]
 
 # Pi-hole credentials
-PIHOLE_1_APP_PASSWORD=[[PIHOLE_1_APP_PASSWORD]]
-PIHOLE_2_APP_PASSWORD=[[PIHOLE_2_APP_PASSWORD]]
+PIHOLE_1_APP_PASSWORD=[[OP__KOMODO__HOMEPAGE__PIHOLE_1_APP_PASSWORD]]
+PIHOLE_2_APP_PASSWORD=[[OP__KOMODO__HOMEPAGE__PIHOLE_2_APP_PASSWORD]]
 """

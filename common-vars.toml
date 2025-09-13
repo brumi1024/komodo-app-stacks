@@ -15,3 +15,27 @@ name = "LOGGING_DRIVER"
 description = "Logging driver"
 value = "local"
 is_secret = false
+
+[[variable]]
+name = "CADDY_VERSION"
+description = "Caddy version"
+value = "2.10.2"
+is_secret = false
+
+[[variable]]
+name = "PORT_CADDY_HTTP"
+description = "Caddy HTTP port"
+value = "80"
+is_secret = false
+
+[[variable]]
+name = "PORT_CADDY_HTTPS"
+description = "Caddy HTTPS port"
+value = "443"
+is_secret = false
+
+[[variable]]
+name = "PORT_CADDY_ADMIN"
+description = "Caddy admin port"
+value = "2019"
+is_secret = false

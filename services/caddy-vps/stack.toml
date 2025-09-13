@@ -12,15 +12,19 @@ repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/caddy-vps/docker-compose.yaml",
+    "services/caddy/docker-compose.yaml",
+    "services/caddy/vps/docker-compose.yaml",
 ]
 
 environment = """
-# Repository directory (for build context and config)
-REPODIR=[[REPODIR]]
+# Caddy instance identifier for data/config directories
+CADDY_INSTANCE=caddy-vps
+
+# Caddy version for build
+CADDY_VERSION=[[CADDY_VERSION]]
 
 # Configuration directory
-CONFIGDIR=[[CONFIGDIR]]
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Logging configuration
 LOGGING_DRIVER=[[LOGGING_DRIVER]]

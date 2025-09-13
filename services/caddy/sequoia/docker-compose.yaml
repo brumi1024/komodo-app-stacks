@@ -1,0 +1,9 @@
+name: "caddy-sequoia"
+
+services:
+  caddy:
+    container_name: caddy-sequoia
+    labels:
+      - homepage.name=Caddy Sequoia
+      - homepage.description=Sequoia Reverse Proxy
+      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_CADDY_ADMIN}

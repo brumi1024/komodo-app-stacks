@@ -1,0 +1,5 @@
+services:
+  nebula-sync:
+    environment:
+      - PRIMARY=http://pihole-seq-1.${TAILNET}|${SEQUOIA_PIHOLE_1_APP_PASSWORD}
+      - REPLICAS=http://sequoia-rpi-4.${TAILNET}|${SEQUOIA_PIHOLE_2_APP_PASSWORD}

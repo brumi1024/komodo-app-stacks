@@ -1,0 +1,5 @@
+services:
+  nebula-sync:
+    environment:
+      - PRIMARY=http://pihole1.${TAILNET}|${PIHOLE_1_APP_PASSWORD}
+      - REPLICAS=http://main-pi-zero-2.${TAILNET}|${PIHOLE_2_APP_PASSWORD}

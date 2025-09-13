@@ -12,7 +12,8 @@ repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/nebula-sync-sequoia/docker-compose.yaml",
+    "services/nebula-sync/docker-compose.yaml",
+    "services/nebula-sync/sequoia/docker-compose.yaml",
 ]
 
 environment = """
@@ -20,9 +21,9 @@ environment = """
 TZ=[[TZ]]
 
 # Network configuration
-TAILNET=[[TAILNET]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 
 # Pi-hole credentials for Sequoia
-SEQUOIA_PIHOLE_1_APP_PASSWORD=[[SEQUOIA_PIHOLE_1_APP_PASSWORD]]
-SEQUOIA_PIHOLE_2_APP_PASSWORD=[[SEQUOIA_PIHOLE_2_APP_PASSWORD]]
+SEQUOIA_PIHOLE_1_APP_PASSWORD=[[OP__KOMODO__HOMEPAGE__SEQUOIA_PIHOLE_1_APP_PASSWORD]]
+SEQUOIA_PIHOLE_2_APP_PASSWORD=[[OP__KOMODO__HOMEPAGE__SEQUOIA_PIHOLE_2_APP_PASSWORD]]
 """

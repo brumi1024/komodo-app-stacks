@@ -1,0 +1,9 @@
+name: "caddy-vps"
+
+services:
+  caddy:
+    container_name: caddy-vps
+    labels:
+      - homepage.name=Caddy VPS
+      - homepage.description=VPS Reverse Proxy
+      - homepage.widget.url=http://localhost:${PORT_CADDY_ADMIN}

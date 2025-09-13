@@ -1,0 +1,37 @@
+name: ${CADDY_PROJECT_NAME:-caddy_reverse_proxy}
+
+services:
+####################
+# Caddy Reverse Proxy
+####################
+
+  caddy:
+    container_name: ${CADDY_CONTAINER_NAME:-caddy}
+    build:
+      context: ./caddy-build
+      dockerfile: Dockerfile
+      args:
+        CADDY_VERSION: ${CADDY_VERSION:-2.8.1}
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    ports:
+      - ${PORT_CADDY_HTTP}:80
+      - ${PORT_CADDY_HTTPS}:443
+      - ${PORT_CADDY_HTTPS}:443/udp
+      - ${PORT_CADDY_ADMIN}:2019
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
+      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
+    labels:
+      - homepage.group=Administration
+      - homepage.name=${CADDY_HOMEPAGE_NAME:-Caddy}
+      - homepage.icon=caddy.svg
+      - homepage.description=${CADDY_HOMEPAGE_DESCRIPTION:-Reverse Proxy}
+      - homepage.widget.type=caddy
+      - homepage.widget.url=${CADDY_WIDGET_URL}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "caddy", "version"]
+    restart: unless-stopped

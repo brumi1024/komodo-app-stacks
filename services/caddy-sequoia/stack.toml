@@ -12,22 +12,26 @@ repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/caddy-sequoia/docker-compose.yaml",
+    "services/caddy/docker-compose.yaml",
+    "services/caddy/sequoia/docker-compose.yaml",
 ]
 
 environment = """
-# Repository directory (for build context and config)
-REPODIR=[[REPODIR]]
+# Caddy instance identifier for data/config directories
+CADDY_INSTANCE=caddy-sequoia
+
+# Caddy version for build
+CADDY_VERSION=[[CADDY_VERSION]]
 
 # Configuration directory
-CONFIGDIR=[[CONFIGDIR]]
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Logging configuration
 LOGGING_DRIVER=[[LOGGING_DRIVER]]
 
 # Network configuration
 HOST_NAME=[[HOST_NAME]]
-TAILNET=[[TAILNET]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 
 # Port configuration
 PORT_CADDY_HTTP=[[PORT_CADDY_HTTP]]

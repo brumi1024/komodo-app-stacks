@@ -12,15 +12,19 @@ repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/caddy-home/docker-compose.yaml",
+    "services/caddy/docker-compose.yaml",
+    "services/caddy/home/docker-compose.yaml",
 ]
 
 environment = """
-# Repository directory (for build context and config)
-REPODIR=[[REPODIR]]
+# Caddy instance identifier for data/config directories
+CADDY_INSTANCE=caddy-home
+
+# Caddy version for build
+CADDY_VERSION=[[CADDY_VERSION]]
 
 # Configuration directory
-CONFIGDIR=[[CONFIGDIR]]
+CONFIG_DIR=[[CONFIG_DIR]]
 
 # Logging configuration
 LOGGING_DRIVER=[[LOGGING_DRIVER]]
@@ -35,5 +39,5 @@ PORT_CADDY_HTTPS=[[PORT_CADDY_HTTPS]]
 PORT_CADDY_ADMIN=[[PORT_CADDY_ADMIN]]
 
 # Cloudflare API token for DNS challenges
-CF_API_TOKEN=[[CF_API_TOKEN]]
+CF_API_TOKEN=[[OP__KOMODO__CADDY__CF_API_TOKEN]]
 """
