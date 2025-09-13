@@ -21,7 +21,7 @@ environment = """
 TZ=[[TZ]]
 
 # Network configuration
-TAILNET=[[TAILNET]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 
 # Pi-hole credentials
 PIHOLE_1_APP_PASSWORD=[[OP__KOMODO__HOMEPAGE__PIHOLE_1_APP_PASSWORD]]
