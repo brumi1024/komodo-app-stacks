@@ -9,3 +9,9 @@ name = "CONFIG_DIR"
 description = "Common config dir for the containers"
 value = "/srv/docker-config"
 is_secret = false
+
+[[variable]]
+name = "LOGGING_DRIVER"
+description = "Logging driver"
+value = "local"
+is_secret = false
