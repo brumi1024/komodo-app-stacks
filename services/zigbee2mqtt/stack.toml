@@ -24,5 +24,5 @@ TZ=[[TZ]]
 
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
-PORT_ZIGBEE2MQTT=[[PORT_ZIGBEE2MQTT]]
+PORT_ZIGBEE2MQTT=8085
 """

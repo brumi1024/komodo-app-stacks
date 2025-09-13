@@ -5,7 +5,7 @@ services:
     image: louislam/uptime-kuma:1
     container_name: uptime-kuma
     volumes:
-      - ${CONFIGDIR}/uptime-kuma-data:/app/data
+      - ${CONFIG_DIR}/uptime-kuma-data:/app/data
     labels:
       - homepage.group=Monitoring
       - homepage.name=Uptime Kuma
@@ -16,5 +16,5 @@ services:
       - homepage.widget.url=http://uptime.${DOMAIN}
       - homepage.widget.slug=services
     ports:
-      - ${PORT_UPTIME_KUMA:-3002}:3001  # <Host Port>:<Container Port>
+      - ${PORT_UPTIME_KUMA:-3002}:3001
     restart: always

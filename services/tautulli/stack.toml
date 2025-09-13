@@ -17,8 +17,8 @@ file_paths = [
 
 environment = """
 # User and group configuration
-PUID=[[PUID]]
-PGID=[[PGID]]
+PUID=[[OP__KOMODO__COMMON__PUID]]
+PGID=[[OP__KOMODO__COMMON__PGID]]
 TZ=[[TZ]]
 
 # Configuration directory
@@ -32,5 +32,5 @@ DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 PORT_TAUTULLI_HTTP=8181
 
 # API configuration
-TAUTULLI_API_AUTH_TOKEN=[[TAUTULLI_API_AUTH_TOKEN]]
+TAUTULLI_API_AUTH_TOKEN=[[OP__KOMODO__TAUTULLI__TAUTULLI_API_AUTH_TOKEN]]
 """
