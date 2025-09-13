@@ -9,7 +9,7 @@ services:
     ports:
       - ${PORT_ACTUAL_HTTP}:5006
     volumes:
-      - ${CONFIG_DIR}/actual-data:/data
+      - ${CONFIG_DIR}/actual:/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=${TZ}

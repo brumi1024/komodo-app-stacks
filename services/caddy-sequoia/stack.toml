@@ -3,7 +3,7 @@ name = "caddy-sequoia"
 tags = ["proxy", "reverse-proxy", "sequoia", "caddy"]
 
 [stack.config]
-server = "sequoia-server"
+server = "docker-seq"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
