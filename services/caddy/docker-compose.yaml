@@ -30,8 +30,6 @@ services:
       - homepage.description=${CADDY_HOMEPAGE_DESCRIPTION:-Reverse Proxy}
       - homepage.widget.type=caddy
       - homepage.widget.url=${CADDY_WIDGET_URL}
-    env_file:
-      - .env
     healthcheck:
       test: ["CMD", "caddy", "version"]
     restart: unless-stopped
