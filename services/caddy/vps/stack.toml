@@ -18,7 +18,7 @@ file_paths = [
 
 environment = """
 # Caddy instance identifier for data/config directories
-CADDY_INSTANCE=caddy-vps
+CADDY_INSTANCE=vps
 
 # Caddy version for build
 CADDY_VERSION=[[CADDY_VERSION]]

@@ -20,7 +20,7 @@ services:
       - ${PORT_CADDY_HTTPS}:443/udp
       - ${PORT_CADDY_ADMIN}:2019
     volumes:
-      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
     labels:
