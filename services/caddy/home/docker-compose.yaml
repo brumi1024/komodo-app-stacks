@@ -3,6 +3,8 @@ name: "caddy-home"
 services:
   caddy:
     container_name: caddy-home
+    env_file:
+      - .env
     labels:
       - homepage.name=Caddy Home
       - homepage.description=Home Reverse Proxy
