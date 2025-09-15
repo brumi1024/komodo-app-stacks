@@ -1,5 +1,5 @@
 [[stack]]
-name = "authentik"
+name = "auth"
 tags = ["authentication", "identity", "sso"]
 
 [stack.config]
