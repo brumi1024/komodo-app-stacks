@@ -4,7 +4,6 @@ tags = ["authentication", "identity", "sso"]
 
 [stack.config]
 server = "homelab-vps"
-project_name = "auth-vps"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
