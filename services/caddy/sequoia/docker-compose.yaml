@@ -3,8 +3,6 @@ name: "caddy-sequoia"
 services:
   caddy:
     container_name: caddy-sequoia
-    env_file:
-      - .env
     labels:
       - homepage.name=Caddy Sequoia
       - homepage.description=Sequoia Reverse Proxy

@@ -9,12 +9,12 @@ auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
-run_directory = "services/caddy/home"
+run_directory = "services/caddy"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/caddy/docker-compose.yaml",
-    "services/caddy/home/docker-compose.yaml",
+    "docker-compose.yaml",
+    "home/docker-compose.yaml",
 ]
 
 environment = """
