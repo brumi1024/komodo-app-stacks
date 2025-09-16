@@ -19,7 +19,7 @@ file_paths = [
 
 environment = """
 # Caddy instance identifier for data/config directories
-CADDY_INSTANCE=caddy-sequoia
+CADDY_INSTANCE=sequoia
 
 # Caddy version for build
 CADDY_VERSION=[[CADDY_VERSION]]
