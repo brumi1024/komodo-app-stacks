@@ -1,6 +1,6 @@
 [[stack]]
 name = "nebula-sync-sequoia"
-tags = ["pihole", "sync", "dns", "networking", "sequoia"]
+tags = ["pihole", "dns", "networking", "sequoia"]
 
 [stack.config]
 server = "docker-seq"

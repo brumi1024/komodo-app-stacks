@@ -1,6 +1,6 @@
 [[stack]]
 name = "nebula-sync-home"
-tags = ["pihole", "sync", "dns", "networking"]
+tags = ["pihole", "dns", "networking"]
 
 [stack.config]
 server = "docker-home"

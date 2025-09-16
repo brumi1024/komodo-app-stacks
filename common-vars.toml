@@ -22,6 +22,7 @@ description = "Caddy version"
 value = "2.10.2"
 is_secret = false
 
+# Port configuration
 [[variable]]
 name = "PORT_CADDY_HTTP"
 description = "Caddy HTTP port"
@@ -50,4 +51,136 @@ is_secret = false
 name = "PORT_AUTHENTIK_HTTPS"
 description = "Authentik HTTPS port"
 value = "9443"
+is_secret = false
+
+[[variable]]
+name = "PORT_PROXMOX_HTTPS"
+description = "Proxmox HTTPS port"
+value = "8006"
+is_secret = false
+
+[[variable]]
+name = "PORT_PBS_HTTPS"
+description = "PBS HTTPS port"
+value = "8007"
+is_secret = false
+
+[[variable]]
+name = "PORT_ACTUAL_HTTP"
+description = "Actualbudget HTTP port"
+value = "5006"
+is_secret = false
+
+[[variable]]
+name = "PORT_DASH_HTTP"
+description = "Dashboard HTTP port"
+value = "3000"
+is_secret = false
+
+[[variable]]
+name = "PORT_BESZEL_HTTP"
+description = "Beszel HTTP port"
+value = "8090"
+is_secret = false
+
+[[variable]]
+name = "PORT_HOMEASSISTANT_HTTP"
+description = "HA HTTP port"
+value = "8123"
+is_secret = false
+
+[[variable]]
+name = "PORT_SCRIPTED_HTTPS"
+description = "Scrypted HTTPS port"
+value = "39207"
+is_secret = false
+
+[[variable]]
+name = "PORT_IMMICH_HTTP"
+description = "Immich HTTP port"
+value = "2283"
+is_secret = false
+
+[[variable]]
+name = "PORT_PAPERLESS_HTTP"
+description = "Paperless HTTP port"
+value = "8000"
+is_secret = false
+
+[[variable]]
+name = "PORT_PROWLARR_HTTP"
+description = "Prowlarr HTTP port"
+value = "9696"
+is_secret = false
+
+[[variable]]
+name = "PORT_OVERSEERR_HTTP"
+description = "Overseerr HTTP port"
+value = "5055"
+is_secret = false
+
+[[variable]]
+name = "PORT_QBITTORRENT_HTTP"
+description = "Qbittorrent HTTP port"
+value = "8080"
+is_secret = false
+
+[[variable]]
+name = "PORT_QBITTORRENT_TORRENTING"
+description = "Qbittorrent torrenting HTTP port"
+value = "6881"
+is_secret = false
+
+[[variable]]
+name = "PORT_RADARR_HTTP"
+description = "Radarr HTTP port"
+value = "7878"
+is_secret = false
+
+[[variable]]
+name = "PORT_SONARR_HTTP"
+description = "Sonarr HTTP port"
+value = "8989"
+is_secret = false
+
+[[variable]]
+name = "PORT_STIRLING_HTTP"
+description = "Stirling HTTP port"
+value = "8082"
+is_secret = false
+
+[[variable]]
+name = "PORT_TAUTULLI_HTTP"
+description = "Tautulli HTTP port"
+value = "8181"
+is_secret = false
+
+[[variable]]
+name = "PORT_PLEX_HTTP"
+description = "Plex HTTP port"
+value = "32400"
+is_secret = false
+
+[[variable]]
+name = "PORT_UPTIME_KUMA"
+description = "Uptime HTTP port"
+value = "3002"
+is_secret = false
+
+[[variable]]
+name = "PORT_ZEPHYRUS_HTTP"
+description = "Zephyrus HTTP port"
+value = "5000"
+is_secret = false
+
+[[variable]]
+name = "PORT_ZIGBEE2MQTT"
+description = "Zigbee2MQTT HTTP port"
+value = "8085"
+is_secret = false
+
+[[variable]]
+name = "PORT_SOCKY_PROXY"
+description = "Socky proxy port"
+value = "12375"
 is_secret = false
