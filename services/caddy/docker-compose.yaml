@@ -23,6 +23,8 @@ services:
       - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
+    env_file:
+      - .env
     labels:
       - homepage.group=Administration
       - homepage.name=${CADDY_HOMEPAGE_NAME:-Caddy}
