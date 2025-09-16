@@ -1,4 +1,4 @@
-name: "authentik"
+name: "auth"
 
 services:
   postgresql:
