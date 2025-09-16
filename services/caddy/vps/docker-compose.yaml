@@ -3,8 +3,6 @@ name: "caddy-vps"
 services:
   caddy:
     container_name: caddy-vps
-    env_file:
-      - .env
     labels:
       - homepage.name=Caddy VPS
       - homepage.description=VPS Reverse Proxy
