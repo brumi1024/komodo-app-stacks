@@ -13,8 +13,8 @@ run_directory = "services/caddy/vps"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/caddy/docker-compose.yaml",
-    "services/caddy/vps/docker-compose.yaml",
+    "../docker-compose.yaml",
+    "docker-compose.yaml",
 ]
 
 environment = """
