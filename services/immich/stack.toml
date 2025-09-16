@@ -21,7 +21,7 @@ TZ=[[TZ]]
 CONFIG_DIR=[[CONFIG_DIR]]
 
 # Version configuration
-IMMICH_TAG=latest
+IMMICH_TAG=release
 
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
