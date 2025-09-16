@@ -39,3 +39,15 @@ name = "PORT_CADDY_ADMIN"
 description = "Caddy admin port"
 value = "2019"
 is_secret = false
+
+[[variable]]
+name = "PORT_AUTHENTIK_HTTP"
+description = "Authentik HTTP port"
+value = "9000"
+is_secret = false
+
+[[variable]]
+name = "PORT_AUTHENTIK_HTTPS"
+description = "Authentik HTTPS port"
+value = "9443"
+is_secret = false
