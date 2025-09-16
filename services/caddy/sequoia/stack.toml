@@ -9,6 +9,7 @@ auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
+run_directory = "services/caddy/sequoia"
 branch = "main"
 reclone = false
 file_paths = [
