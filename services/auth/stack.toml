@@ -1,5 +1,5 @@
 [[stack]]
-name = "authentik"
+name = "auth"
 tags = ["authentication", "identity", "sso"]
 
 [stack.config]
@@ -9,11 +9,11 @@ auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
-run_directory = "services/authentik"
+run_directory = "services/auth"
 branch = "main"
 reclone = false
 file_paths = [
-    "services/authentik/docker-compose.yaml",
+    "docker-compose.yaml",
 ]
 
 environment = """
@@ -24,8 +24,8 @@ CONFIG_DIR=[[CONFIG_DIR]]
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 
 # Port configuration
-PORT_AUTHENTIK_HTTP=9000
-PORT_AUTHENTIK_HTTPS=9443
+PORT_AUTHENTIK_HTTP=[[PORT_AUTHENTIK_HTTP]]
+PORT_AUTHENTIK_HTTPS=[[PORT_AUTHENTIK_HTTPS]]
 
 # Application configuration
 AUTHENTIK_IMAGE=ghcr.io/goauthentik/server
