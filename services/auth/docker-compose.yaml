@@ -4,7 +4,7 @@ services:
   postgresql:
     image: docker.io/library/postgres:16-alpine
     restart: unless-stopped
-    container_name: authentik-postgresql
+    container_name: auth-postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       start_period: 20s
@@ -12,7 +12,7 @@ services:
       retries: 5
       timeout: 5s
     volumes:
-      - authentik-database:/var/lib/postgresql/data
+      - auth-database:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
       POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
@@ -23,7 +23,7 @@ services:
     image: docker.io/library/redis:alpine
     command: --save 60 1 --loglevel warning
     restart: unless-stopped
-    container_name: authentik-redis
+    container_name: auth-redis
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       start_period: 20s
@@ -31,11 +31,11 @@ services:
       retries: 5
       timeout: 3s
     volumes:
-      - authentik-redis:/data
+      - auth-redis:/data
   server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
     restart: unless-stopped
-    container_name: authentik-server
+    container_name: auth-server
     command: server
     environment:
       AUTHENTIK_REDIS__HOST: redis
@@ -68,7 +68,7 @@ services:
   worker:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
     restart: unless-stopped
-    container_name: authentik-worker
+    container_name: auth-worker
     command: worker
     environment:
       AUTHENTIK_REDIS__HOST: redis
@@ -97,9 +97,7 @@ services:
         condition: service_healthy
 
 volumes:
-  authentik-database:
-    name: authentik-database
+  auth-database:
     driver: local
-  authentik-redis:
-    name: authentik-redis
+  auth-redis:
     driver: local
