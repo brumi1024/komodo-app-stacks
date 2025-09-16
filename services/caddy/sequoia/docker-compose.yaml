@@ -7,3 +7,7 @@ services:
       - homepage.name=Caddy Sequoia
       - homepage.description=Sequoia Reverse Proxy
       - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_CADDY_ADMIN}
+networks:
+  default:
+    name: caddy-net
+    enable_ipv6: true

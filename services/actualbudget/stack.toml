@@ -6,13 +6,11 @@ tags = ["finance", "personal", "budgeting"]
 server = "docker-home"
 poll_for_updates = true
 auto_update = true
-destroy_before_deploy = false
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
-branch = "main"
-reclone = false
+run_directory="services/actualbudget"
 file_paths = [
-    "services/actualbudget/docker-compose.yaml",
+  "docker-compose.yaml"
 ]
 
 environment = """
