@@ -1,5 +1,5 @@
 [[stack]]
-name = "auth"
+name = "authentik"
 tags = ["authentication", "identity", "sso"]
 
 [stack.config]
@@ -9,7 +9,7 @@ auto_update = true
 destroy_before_deploy = false
 git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
-run_directory = "services/auth"
+run_directory = "services/authentik"
 branch = "main"
 reclone = false
 file_paths = [
