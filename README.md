@@ -40,7 +40,7 @@ komodo-app-stacks/
 │   │   └── stack.toml
 │   ├── monitoring/
 │   ├── homepage/
-│   └── ...20+ services
+│   └── ...other services
 ├── renovate.json
 └── README.md
 ```
@@ -53,30 +53,9 @@ komodo-app-stacks/
 4. **Auto-deploy** occurs if enabled in stack.toml
 5. **Services start** with secrets from Komodo global variables
 
-## Required 1Password Secrets
-
-These secrets must be synced by komodo-op before deploying stacks:
-
-### Media Stack (servarr)
-- `MEDIA_CONFIG_DIR`: Configuration directory path
-- `MEDIA_DOWNLOADS_DIR`: Downloads directory path  
-- `MEDIA_MOVIES_DIR`: Movies directory path
-- `MEDIA_TV_DIR`: TV shows directory path
-- `RADARR_API_KEY`: Radarr API key
-- `SONARR_API_KEY`: Sonarr API key
-- `JACKETT_API_KEY`: Jackett API key
-
-### Monitoring Stack
-- `MONITORING_CONFIG_DIR`: Monitoring config directory
-- `MONITORING_DATA_DIR`: Monitoring data directory
-- `GRAFANA_ADMIN_PASSWORD`: Grafana admin password
-
-### Homepage Stack
-- `HOMEPAGE_CONFIG_DIR`: Homepage config directory
-
 ## Multi-File Compose Pattern
 
-For services with multiple instances (like Caddy), we use Komodo's multi-file support:
+For services with multiple instances (like Caddy), Komodo's multi compose file support is leveraged:
 
 ```toml
 file_paths = [
