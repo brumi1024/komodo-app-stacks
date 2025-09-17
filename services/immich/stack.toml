@@ -1,7 +1,6 @@
 [[stack]]
 name = "immich"
 tags = ["media", "photos"]
-deploy = true
 
 [stack.config]
 server = "docker"
