@@ -74,7 +74,7 @@
 
 homeassistant.home.{$DOMAIN} {
   import cloudflare
-  reverse_proxy homeassistant:{$PORT_HOMEASSISTANT_HTTP}
+  reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
 # Media Stack
@@ -82,54 +82,54 @@ homeassistant.home.{$DOMAIN} {
 prowlarr.home.{$DOMAIN} {
     import authenticate_with_tailscale_bypass
     import cloudflare
-    reverse_proxy docker:{$PORT_PROWLARR_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_PROWLARR_HTTP}
 }
 
 sonarr.home.{$DOMAIN} {
     import authenticate_with_tailscale_bypass
     import cloudflare
-    reverse_proxy docker:{$PORT_SONARR_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_SONARR_HTTP}
 }
 
 radarr.home.{$DOMAIN} {
     import authenticate_with_tailscale_bypass
     import cloudflare
-    reverse_proxy docker:{$PORT_RADARR_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_RADARR_HTTP}
 }
 
 overseerr.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_OVERSEERR_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_OVERSEERR_HTTP}
 }
 
 tautulli.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_TAUTULLI_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_TAUTULLI_HTTP}
 }
 
 qbittorrent.home.{$DOMAIN} {
     import authenticate_with_tailscale_bypass
     import cloudflare
-    reverse_proxy docker:{$PORT_QBITTORRENT_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_QBITTORRENT_HTTP}
 }
 
 plex.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy plex:{$PORT_PLEX_HTTP}
+    reverse_proxy plex.{$TAILNET}:{$PORT_PLEX_HTTP}
 }
 
 # Services
 paperless.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_PAPERLESS_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
 }
 
 stirling.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_STIRLING_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_STIRLING_HTTP}
 }
 
 immich.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_IMMICH_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_IMMICH_HTTP}
 }
