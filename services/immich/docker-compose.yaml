@@ -22,12 +22,8 @@ services:
       - homepage.widget.url=http://immich.${DOMAIN}
       - homepage.widget.key=${IMMICH_API_AUTH_TOKEN}
       - homepage.widget.version=2
-    environment:
-      - DB_USERNAME=${IMMICH_DB_USERNAME}
-      - DB_PASSWORD=${IMMICH_DB_PASSWORD}
-      - DB_DATABASE_NAME=${IMMICH_DB_DATABASE_NAME}
-      - TZ=${TZ}
-      - IMMICH_VERSION=${IMMICH_TAG:-release}
+    env_file:
+      - .env
     ports:
       - '${PORT_IMMICH_HTTP:-2283}:2283'
     depends_on:
@@ -48,11 +44,7 @@ services:
     volumes:
       - model-cache:/cache
     environment:
-      - DB_USERNAME=${IMMICH_DB_USERNAME}
-      - DB_PASSWORD=${IMMICH_DB_PASSWORD}
-      - DB_DATABASE_NAME=${IMMICH_DB_DATABASE_NAME}
-      - TZ=${TZ}
-      - IMMICH_VERSION=${IMMICH_TAG:-release}
+      - .env
     restart: always
     healthcheck:
       disable: false
