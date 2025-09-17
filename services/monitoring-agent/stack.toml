@@ -3,7 +3,7 @@ name = "monitoring-agent"
 tags = ["monitoring", "beszel", "agent"]
 
 [stack.config]
-server = "home-server"  # Can be configured for different servers
+server = "docker"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
