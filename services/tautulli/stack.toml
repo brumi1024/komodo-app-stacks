@@ -3,7 +3,7 @@ name = "tautulli"
 tags = ["media", "monitoring", "plex"]
 
 [stack.config]
-server = "docker-home"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false

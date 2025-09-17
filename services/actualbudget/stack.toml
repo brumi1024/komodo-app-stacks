@@ -3,7 +3,7 @@ name = "actualbudget"
 tags = ["finance", "personal", "budgeting"]
 
 [stack.config]
-server = "docker-home"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 git_account = "brumi1024"

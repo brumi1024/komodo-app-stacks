@@ -3,7 +3,7 @@ name = "nebula-sync-home"
 tags = ["pihole", "dns", "networking"]
 
 [stack.config]
-server = "docker-home"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false

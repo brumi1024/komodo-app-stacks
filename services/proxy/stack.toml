@@ -3,7 +3,7 @@ name = "proxy"
 tags = ["docker", "security", "proxy", "socket"]
 
 [stack.config]
-server = "home-server"
+server = "docker"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
