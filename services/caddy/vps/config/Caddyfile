@@ -73,7 +73,7 @@
 komodo.{$DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy docker:9120
+    reverse_proxy docker.${TAILNET}:9120
 }
 
 beszel.{$DOMAIN} {
@@ -102,7 +102,7 @@ dash.{$DOMAIN} {
 
 actual.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker:{$PORT_ACTUAL_HTTP}
+    reverse_proxy docker.${TAILNET}:{$PORT_ACTUAL_HTTP}
 }
 
 ##########################
@@ -203,10 +203,10 @@ homeassistant.kalasz.{$DOMAIN} {
 # Home Assistant - Sequoia
 *.home.{$DOMAIN} {
   import cloudflare
-  reverse_proxy http://docker.{$TAILNET}:80
+  reverse_proxy http://docker.{$TAILNET}:{$PORT_CADDY_HTTP}
 }
 
 *.seq.{$DOMAIN} {
   import cloudflare
-  reverse_proxy http://docker-seq.{$TAILNET}:80
+  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
 }
