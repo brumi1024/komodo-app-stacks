@@ -2,12 +2,6 @@
 
 This repository contains application stacks deployed via Komodo using GitOps. All stacks depend on secrets being synchronized from 1Password by the `komodo-op` service.
 
-## Architecture
-
-```
-1Password Vault → komodo-op → Komodo Global Variables → Application Stacks
-```
-
 ## Stack Overview
 
 | Stack | Description | Services |
