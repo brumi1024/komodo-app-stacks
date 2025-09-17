@@ -20,7 +20,6 @@ file_paths = [
 environment = """
 # System configuration
 TZ=[[TZ]]
-CONFIG_DIR=[[CONFIG_DIR]]
 
 # Version configuration
 IMMICH_TAG=release
@@ -40,4 +39,5 @@ IMMICH_API_AUTH_TOKEN=[[OP__KOMODO__IMMICH__IMMICH_API_AUTH_TOKEN]]
 
 # Storage configuration
 NAS_IP=[[OP__KOMODO__COMMON__HOME_NAS_IP]]
+DB_DATA_LOCATION=[[CONFIG_DIR]]/immich/postgres
 """
