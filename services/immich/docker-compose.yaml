@@ -63,6 +63,7 @@ services:
       POSTGRES_USER: ${IMMICH_DB_USERNAME}
       POSTGRES_DB: ${IMMICH_DB_DATABASE_NAME}
       POSTGRES_INITDB_ARGS: '--data-checksums'
+      DB_PORT: ${DB_PORT}
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
       # DB_STORAGE_TYPE: 'HDD'
     volumes:
