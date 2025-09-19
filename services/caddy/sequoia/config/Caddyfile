@@ -10,9 +10,8 @@
         {$DOMAIN} seq *.seq
       }
       versions ipv6
-      ip_source simple_http https://icanhazip.com
-      ip_source simple_http https://api64.ipify.org
-      ip_source upnp
+      ip_source simple_http https://ipv6.icanhazip.com
+      ip_source simple_http https://api6.ipify.org
     }
 
     admin 0.0.0.0:{$PORT_CADDY_ADMIN}
@@ -93,6 +92,35 @@ scrypted.seq.{$DOMAIN} {
         transport http {
             tls
             tls_insecure_skip_verify
+        }
+    }
+}
+
+##########################
+# Internal HTTP Blocks   #
+# For VPS proxy traffic  #
+##########################
+
+# HTTP listeners for traffic proxied from VPS via Tailscale
+:80 {
+    # Handle subdomain-based routing from VPS proxy
+    @homeassistant host homeassistant.seq.{$DOMAIN}
+    handle @homeassistant {
+        reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+    }
+
+    @zephyrus host zephyrus.seq.{$DOMAIN}
+    handle @zephyrus {
+        reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+    }
+
+    @scrypted host scrypted.seq.{$DOMAIN}
+    handle @scrypted {
+        reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRIPTED_HTTPS} {
+            transport http {
+                tls
+                tls_insecure_skip_verify
+            }
         }
     }
 }

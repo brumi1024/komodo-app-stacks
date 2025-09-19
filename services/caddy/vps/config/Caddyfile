@@ -9,6 +9,7 @@
       domains {
         {$DOMAIN} @ * *.seq
       }
+      versions ipv4
     }
 
     admin 0.0.0.0:{$PORT_CADDY_ADMIN}
@@ -208,5 +209,5 @@ homeassistant.kalasz.{$DOMAIN} {
 
 *.seq.{$DOMAIN} {
   import cloudflare
-  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
+  reverse_proxy http://docker-seq.{$TAILNET}:80
 }
