@@ -74,7 +74,7 @@
 komodo.{$DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy docker.${TAILNET}:9120
+    reverse_proxy docker.{$TAILNET}:9120
 }
 
 beszel.{$DOMAIN} {
@@ -103,7 +103,7 @@ dash.{$DOMAIN} {
 
 actual.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker.${TAILNET}:{$PORT_ACTUAL_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_ACTUAL_HTTP}
 }
 
 ##########################
