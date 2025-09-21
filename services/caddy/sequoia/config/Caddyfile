@@ -74,14 +74,53 @@
 # Sequoia Site Services  #
 ##########################
 
-# Home Assistant - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
-homeassistant.seq.{$DOMAIN}, homeassistant.seq.{$DOMAIN}:80 {
+# Home Assistant
+homeassistant.seq.{$DOMAIN} {
   import cloudflare
   reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
-# Synology NAS - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
-zephyrus.seq.{$DOMAIN}, zephyrus.seq.{$DOMAIN}:80 {
+# Synology NAS
+zephyrus.seq.{$DOMAIN} {
     import cloudflare
     reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+}
+
+# Scrypted
+scrypted.seq.{$DOMAIN} {
+    import cloudflare
+    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
+        transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}
+
+##########################
+# HTTP Port 80 Listener  #
+# For VPS proxy traffic  #
+##########################
+
+:80 {
+    # Handle VPS proxied traffic for seq services
+    @homeassistant host homeassistant.seq.{$DOMAIN}
+    handle @homeassistant {
+        reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+    }
+
+    @zephyrus host zephyrus.seq.{$DOMAIN}
+    handle @zephyrus {
+        reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+    }
+
+    @scrypted host scrypted.seq.{$DOMAIN}
+    handle @scrypted {
+        reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
+            transport http {
+                tls
+                tls_insecure_skip_verify
+            }
+        }
+    }
 }

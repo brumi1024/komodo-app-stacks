@@ -203,5 +203,5 @@ homeassistant.kalasz.{$DOMAIN} {
 
 *.seq.{$DOMAIN} {
   import cloudflare
-  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
+  reverse_proxy http://docker-seq.{$TAILNET}:80
 }
