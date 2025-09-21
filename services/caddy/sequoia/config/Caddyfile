@@ -30,6 +30,7 @@
   encode zstd gzip
 }
 
+
 (log_common) {
   log {
     output file /var/log/caddy/caddy_access.log
@@ -73,21 +74,39 @@
 # Sequoia Site Services  #
 ##########################
 
-# Home Assistant
-homeassistant.seq.{$DOMAIN} {
-  import cloudflare
+# Home Assistant - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
+homeassistant.seq.{$DOMAIN}, homeassistant.seq.{$DOMAIN}:80 {
+  # TLS only for HTTPS (direct IPv6 connections)
+  tls {
+    dns cloudflare {$CF_API_TOKEN}
+    resolvers 1.1.1.1 1.0.0.1
+  }
+
+  encode zstd gzip
   reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
-# Synology NAS
-zephyrus.seq.{$DOMAIN} {
-    import cloudflare
+# Synology NAS - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
+zephyrus.seq.{$DOMAIN}, zephyrus.seq.{$DOMAIN}:80 {
+    # TLS only for HTTPS (direct IPv6 connections)
+    tls {
+        dns cloudflare {$CF_API_TOKEN}
+        resolvers 1.1.1.1 1.0.0.1
+    }
+
+    encode zstd gzip
     reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
 }
 
-# Scrypted
-scrypted.seq.{$DOMAIN} {
-    import cloudflare
+# Scrypted - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
+scrypted.seq.{$DOMAIN}, scrypted.seq.{$DOMAIN}:80 {
+    # TLS only for HTTPS (direct IPv6 connections)
+    tls {
+        dns cloudflare {$CF_API_TOKEN}
+        resolvers 1.1.1.1 1.0.0.1
+    }
+
+    encode zstd gzip
     reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRIPTED_HTTPS} {
         transport http {
             tls
@@ -96,31 +115,3 @@ scrypted.seq.{$DOMAIN} {
     }
 }
 
-##########################
-# Internal HTTP Blocks   #
-# For VPS proxy traffic  #
-##########################
-
-# HTTP listeners for traffic proxied from VPS via Tailscale
-:80 {
-    # Handle subdomain-based routing from VPS proxy
-    @homeassistant host homeassistant.seq.{$DOMAIN}
-    handle @homeassistant {
-        reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
-    }
-
-    @zephyrus host zephyrus.seq.{$DOMAIN}
-    handle @zephyrus {
-        reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
-    }
-
-    @scrypted host scrypted.seq.{$DOMAIN}
-    handle @scrypted {
-        reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRIPTED_HTTPS} {
-            transport http {
-                tls
-                tls_insecure_skip_verify
-            }
-        }
-    }
-}
