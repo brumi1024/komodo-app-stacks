@@ -92,7 +92,7 @@ is_secret = false
 [[variable]]
 name = "PORT_SCRIPTED_HTTPS"
 description = "Scrypted HTTPS port"
-value = "39207"
+value = "37965"
 is_secret = false
 
 [[variable]]
