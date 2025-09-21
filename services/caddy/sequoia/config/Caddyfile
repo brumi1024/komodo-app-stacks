@@ -89,7 +89,7 @@ zephyrus.seq.{$DOMAIN} {
 # Scrypted
 scrypted.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRIPTED_HTTPS} {
+    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
         transport http {
             tls
             tls_insecure_skip_verify

@@ -90,7 +90,7 @@ value = "8123"
 is_secret = false
 
 [[variable]]
-name = "PORT_SCRIPTED_HTTPS"
+name = "PORT_SCRYPTED_HTTPS"
 description = "Scrypted HTTPS port"
 value = "37965"
 is_secret = false
