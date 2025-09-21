@@ -204,7 +204,7 @@ homeassistant.kalasz.{$DOMAIN} {
 # Home Assistant - Sequoia
 *.home.{$DOMAIN} {
   import cloudflare
-  reverse_proxy http://docker.{$TAILNET}:{$PORT_CADDY_HTTP}
+  reverse_proxy https://docker.{$TAILNET}:{$PORT_CADDY_HTTPS}
 }
 
 *.seq.{$DOMAIN} {
