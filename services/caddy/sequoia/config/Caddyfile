@@ -85,14 +85,3 @@ zephyrus.seq.{$DOMAIN}, zephyrus.seq.{$DOMAIN}:80 {
     import cloudflare
     reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
 }
-
-# Scrypted - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
-scrypted.seq.{$DOMAIN}, scrypted.seq.{$DOMAIN}:80 {
-    import cloudflare
-    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRIPTED_HTTPS} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
-}
