@@ -14,7 +14,12 @@ reclone = false
 file_paths = [
     "services/homepage/docker-compose.yaml",
 ]
-
+config_files = [
+  { path = "services/homepage/config/docker.yaml" },
+  { path = "services/homepage/config/services.yaml" },
+  { path = "services/homepage/config/settings.yaml" },
+  { path = "services/homepage/config/widgets.yaml" }
+]
 environment = """
 # User and group configuration
 PUID=[[OP__KOMODO__COMMON__PUID]]
