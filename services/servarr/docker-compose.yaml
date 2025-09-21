@@ -77,7 +77,7 @@ services:
       - WEBUI_PORT=${PORT_QBITTORRENT_HTTP}
       - TORRENTING_PORT=${PORT_QBITTORRENT_TORRENTING}
     ports:
-      - ${PORT_QBITTORRENT_HTTP}:8080
+      - ${PORT_QBITTORRENT_HTTP}:${PORT_QBITTORRENT_HTTP} # Due to issues with CSRF both sides needs to be changed
       - ${PORT_QBITTORRENT_TORRENTING}:6881
       - ${PORT_QBITTORRENT_TORRENTING}:6881/udp
     restart: unless-stopped
