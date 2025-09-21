@@ -7,7 +7,7 @@
     dynamic_dns {
       provider cloudflare {$CF_API_TOKEN}
       domains {
-        {$DOMAIN} @ * *.seq
+        {$DOMAIN} @ * seq *.seq
       }
       versions ipv4
     }
