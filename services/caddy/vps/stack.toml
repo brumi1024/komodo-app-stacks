@@ -16,7 +16,9 @@ file_paths = [
     "docker-compose.yaml",
     "vps/docker-compose.yaml",
 ]
-
+config_files = [
+  { path = "vps/config/Caddyfile", requires = "Restart" }
+]
 environment = """
 # Caddy instance identifier for data/config directories
 CADDY_INSTANCE=vps

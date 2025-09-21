@@ -16,7 +16,9 @@ file_paths = [
     "docker-compose.yaml",
     "home/docker-compose.yaml",
 ]
-
+config_files = [
+  { path = "home/config/Caddyfile", requires = "Restart" }
+]
 environment = """
 # Caddy instance identifier for data/config directories
 CADDY_INSTANCE=home

@@ -16,7 +16,9 @@ file_paths = [
     "docker-compose.yaml",
     "sequoia/docker-compose.yaml",
 ]
-
+config_files = [
+  { path = "sequoia/config/Caddyfile", requires = "Restart" }
+]
 environment = """
 # Caddy instance identifier for data/config directories
 CADDY_INSTANCE=sequoia
