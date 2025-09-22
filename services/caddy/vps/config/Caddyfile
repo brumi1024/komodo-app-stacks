@@ -204,6 +204,6 @@ homeassistant.kalasz.{$DOMAIN} {
 *.seq.{$DOMAIN} {
   import cloudflare
   reverse_proxy https://docker-seq.{$TAILNET}:443 {
-    header_up Host {http.request.host}
+    header_up Host {http.reverse_proxy.upstream.hostport}
   }
 }
