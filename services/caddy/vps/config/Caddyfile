@@ -201,7 +201,22 @@ homeassistant.kalasz.{$DOMAIN} {
   reverse_proxy http://homeassistant-kalasz.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
-# Scrypted
+#####################################################
+# Sequoia Site Services - Required by IPv4 clients  #
+#####################################################
+
+# Home Assistant
+homeassistant.seq.{$DOMAIN} {
+    import cloudflare
+    reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+}
+
+# Synology NAS
+zephyrus.seq.{$DOMAIN} {
+    import cloudflare
+    reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+}
+
 scrypted.seq.{$DOMAIN} {
     import cloudflare
     reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
@@ -211,8 +226,3 @@ scrypted.seq.{$DOMAIN} {
         }
     }
 }
-
-#*.seq.{$DOMAIN} {
-#  import cloudflare
-#  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
-#}
