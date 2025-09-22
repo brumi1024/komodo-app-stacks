@@ -77,13 +77,13 @@
 # Home Assistant
 homeassistant.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+    reverse_proxy http://homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
 # Synology NAS
 zephyrus.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+    reverse_proxy http://zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
 }
 
 scrypted.seq.{$DOMAIN} {
