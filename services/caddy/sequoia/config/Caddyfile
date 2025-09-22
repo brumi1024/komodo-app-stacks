@@ -74,14 +74,14 @@
 # Sequoia Site Services  #
 ##########################
 
-# Home Assistant
-homeassistant.seq.{$DOMAIN} {
+# Home Assistant - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
+homeassistant.seq.{$DOMAIN}, homeassistant.seq.{$DOMAIN}:80 {
     import cloudflare
     reverse_proxy homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
-# Synology NAS
-zephyrus.seq.{$DOMAIN} {
+# Synology NAS - Handle both HTTP (from VPS) and HTTPS (direct IPv6)
+zephyrus.seq.{$DOMAIN}, zephyrus.seq.{$DOMAIN}:80 {
     import cloudflare
     reverse_proxy zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
 }
