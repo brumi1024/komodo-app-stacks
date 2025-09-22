@@ -3,7 +3,8 @@ name = "zigbee2mqtt"
 tags = ["iot", "smart-home", "zigbee"]
 
 [stack.config]
-server = "sequoia-rpi-4"
+server = "docker-seq"
+#server = "sequoia-rpi-4"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
