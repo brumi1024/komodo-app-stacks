@@ -212,7 +212,7 @@ scrypted.seq.{$DOMAIN} {
     }
 }
 
-*.seq.{$DOMAIN} {
-  import cloudflare
-  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
-}
+#*.seq.{$DOMAIN} {
+#  import cloudflare
+#  reverse_proxy http://docker-seq.{$TAILNET}:{$PORT_CADDY_HTTP}
+#}
