@@ -11,9 +11,10 @@ git_account = "brumi1024"
 repo = "brumi1024/komodo-app-stacks"
 branch = "main"
 reclone = false
+run_directory = "services/nebula-sync"
 file_paths = [
-    "services/nebula-sync/docker-compose.yaml",
-    "services/nebula-sync/sequoia/docker-compose.yaml",
+    "docker-compose.yaml",
+    "sequoia/docker-compose.yaml",
 ]
 
 environment = """
