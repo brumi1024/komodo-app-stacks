@@ -1,9 +1,9 @@
 [[stack]]
-name = "proxy"
+name = "proxy-sequoia"
 tags = ["docker", "security", "proxy", "socket"]
 
 [stack.config]
-server = "docker"
+server = "docker-seq"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
@@ -16,9 +16,9 @@ file_paths = [
 ]
 
 environment = """
+PROXY_INSTANCE=sequoia
 # System configuration
 TZ=[[TZ]]
-HOST_NAME=[[HOST_NAME]]
 
 # Port configuration
 PORT_SOCKY_PROXY=[[PORT_SOCKY_PROXY]]
