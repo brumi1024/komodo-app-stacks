@@ -13,7 +13,7 @@ run_directory = "services/immich"
 branch = "main"
 reclone = false
 file_paths = [
-    "docker-compose.yaml",
+    "docker-compose.yaml"
 ]
 
 environment = """
