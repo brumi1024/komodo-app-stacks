@@ -114,8 +114,8 @@ value = "9696"
 is_secret = false
 
 [[variable]]
-name = "PORT_OVERSEERR_HTTP"
-description = "Overseerr HTTP port"
+name = "PORT_SEERR_HTTP"
+description = "Seerr HTTP port"
 value = "5055"
 is_secret = false
 

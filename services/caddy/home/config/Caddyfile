@@ -97,9 +97,9 @@ radarr.home.{$DOMAIN} {
     reverse_proxy docker.{$TAILNET}:{$PORT_RADARR_HTTP}
 }
 
-overseerr.home.{$DOMAIN} {
+seerr.home.{$DOMAIN} {
     import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_OVERSEERR_HTTP}
+    reverse_proxy docker.{$TAILNET}:{$PORT_SEERR_HTTP}
 }
 
 tautulli.home.{$DOMAIN} {

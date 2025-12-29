@@ -25,29 +25,35 @@ services:
     ports:
       - ${PORT_PROWLARR_HTTP}:9696
     restart: unless-stopped
-  overseerr:
-    image: lscr.io/linuxserver/overseerr:${OVERSEERR_TAG:-latest}
+  seerr:
+    image: ghcr.io/fallenbagel/jellyseerr:${SEERR_TAG:-latest}
     logging:
       driver: ${LOGGING_DRIVER:-local}
-    container_name: overseerr
+    init: true
+    container_name: jellyseerr
     volumes:
-      - ${CONFIG_DIR}/overseerr:/config
+      - ${CONFIG_DIR}/seerr:/config
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media Tools
-      - homepage.name=Overseerr
-      - homepage.icon=overseerr.svg
-      - homepage.href=https://overseerr.${DOMAIN}
+      - homepage.name=Seerr
+      - homepage.icon=jellyseerr.svg
+      - homepage.href=https://seerr.${DOMAIN}
       - homepage.description=Request Management
-      - homepage.widget.type=overseerr
-      - homepage.widget.url=http://overseerr.${DOMAIN}
+      - homepage.widget.type=seerr
+      - homepage.widget.url=http://seerr.${DOMAIN}
       - homepage.widget.key=${PLEX_AUTH_TOKEN}
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
       - TZ=${TZ}
+      - PORT=${PORT_SEERR_HTTP}
     ports:
-      - ${PORT_OVERSEERR_HTTP}:5055
+      - ${PORT_SEERR_HTTP}:5055
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
     restart: unless-stopped
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_TAG:-latest}
