@@ -32,7 +32,7 @@ services:
     init: true
     container_name: jellyseerr
     volumes:
-      - ${CONFIG_DIR}/seerr:/config
+      - ${CONFIG_DIR}/seerr:/app/config
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media Tools
