@@ -17,10 +17,10 @@ services:
       - homepage.group=Media Tools
       - homepage.name=Prowlarr
       - homepage.icon=prowlarr.svg
-      - homepage.href=https://prowlarr.${DOMAIN}
+      - homepage.href=https://prowlarr.home.${DOMAIN}
       - homepage.description=Indexer
       - homepage.widget.type=prowlarr
-      - homepage.widget.url=http://prowlarr.${DOMAIN}
+      - homepage.widget.url=http://prowlarr.home.${DOMAIN}
       - homepage.widget.key=${PROWLARR_API_AUTH_TOKEN}
     ports:
       - ${PORT_PROWLARR_HTTP}:9696
@@ -38,10 +38,10 @@ services:
       - homepage.group=Media Tools
       - homepage.name=Seerr
       - homepage.icon=jellyseerr.svg
-      - homepage.href=https://seerr.${DOMAIN}
+      - homepage.href=https://seerr.home.${DOMAIN}
       - homepage.description=Request Management
       - homepage.widget.type=seerr
-      - homepage.widget.url=http://seerr.${DOMAIN}
+      - homepage.widget.url=http://seerr.home.${DOMAIN}
       - homepage.widget.key=${PLEX_AUTH_TOKEN}
     environment:
       - TZ=${TZ}
@@ -72,9 +72,9 @@ services:
       - homepage.group=File Management
       - homepage.name=qBittorrent
       - homepage.icon=qbittorrent.svg
-      - homepage.href=https://qbittorrent.${DOMAIN}
+      - homepage.href=https://qbittorrent.home.${DOMAIN}
       - homepage.widget.type=qbittorrent
-      - homepage.widget.url=http://qbittorrent.${DOMAIN}
+      - homepage.widget.url=http://qbittorrent.home.${DOMAIN}
       - homepage.widget.enableLeechProgress=true
     environment:
       - PUID=${PUID}
@@ -100,10 +100,10 @@ services:
       - homepage.group=Media Tools
       - homepage.name=Radarr
       - homepage.icon=radarr.svg
-      - homepage.href=https://radarr.${DOMAIN}
+      - homepage.href=https://radarr.home.${DOMAIN}
       - homepage.description=Movie Requests
       - homepage.widget.type=radarr
-      - homepage.widget.url=http://radarr.${DOMAIN}
+      - homepage.widget.url=http://radarr.home.${DOMAIN}
       - homepage.widget.key=${RADARR_API_AUTH_TOKEN}
     environment:
       - PUID=${PUID}
@@ -125,10 +125,10 @@ services:
       - homepage.group=Media Tools
       - homepage.name=Sonarr
       - homepage.icon=sonarr.svg
-      - homepage.href=https://sonarr.${DOMAIN}
+      - homepage.href=https://sonarr.home.${DOMAIN}
       - homepage.description=TV Show Requests
       - homepage.widget.type=sonarr
-      - homepage.widget.url=http://sonarr.${DOMAIN}
+      - homepage.widget.url=http://sonarr.home.${DOMAIN}
       - homepage.widget.key=${SONARR_API_AUTH_TOKEN}
     environment:
       - PUID=${PUID}

@@ -16,10 +16,10 @@ services:
       - homepage.group=Personal Apps
       - homepage.name=Immich
       - homepage.icon=immich.svg
-      - homepage.href=https://immich.${DOMAIN}
+      - homepage.href=https://immich.home.${DOMAIN}
       - homepage.description=Photos
       - homepage.widget.type=immich
-      - homepage.widget.url=http://immich.${DOMAIN}
+      - homepage.widget.url=http://immich.home.${DOMAIN}
       - homepage.widget.key=${IMMICH_API_AUTH_TOKEN}
       - homepage.widget.version=2
     env_file:

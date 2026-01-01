@@ -95,3 +95,13 @@ scrypted.seq.{$DOMAIN} {
         }
     }
 }
+
+z2m.seq.{$DOMAIN} {
+    import cloudflare
+    reverse_proxy https://sequoia-rpi-4.{$TAILNET}:{$PORT_ZIGBEE2MQTT} {
+        transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}

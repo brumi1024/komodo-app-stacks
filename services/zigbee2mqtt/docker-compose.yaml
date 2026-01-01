@@ -16,7 +16,7 @@ services:
       - homepage.group=Smart Home
       - homepage.name=Zigbee2MQTT
       - homepage.icon=zigbee2mqtt.svg
-      - homepage.href=https://zigbee.seq.${DOMAIN}
+      - homepage.href=https://z2m.seq.${DOMAIN}
       - homepage.description=Sequoia Zigbee handler
     ports:
       - ${PORT_ZIGBEE2MQTT:-8085}:8080  # <Host Port>:<Container Port>

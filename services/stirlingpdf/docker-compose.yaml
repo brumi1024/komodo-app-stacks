@@ -34,5 +34,5 @@ services:
       - homepage.group=Personal Apps
       - homepage.name=Stirling PDF
       - homepage.icon=stirling-pdf.svg
-      - homepage.href=https://stirling.${DOMAIN}
+      - homepage.href=https://stirling.home.${DOMAIN}
       - homepage.description=Your locally hosted one-stop-shop for all your PDF needs.
