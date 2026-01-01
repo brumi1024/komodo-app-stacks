@@ -117,6 +117,17 @@ susanoo.{$ADMIN_DOMAIN} {
     reverse_proxy https://susanoo.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
+pbs.{$ADMIN_DOMAIN} {
+    import cloudflare
+    import log_common
+    reverse_proxy https://proxmox-backup-server.{$TAILNET}:{$PORT_PBS_HTTPS} {
+        transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}
+
 truenas.{$ADMIN_DOMAIN} {
     import cloudflare
     import log_common
@@ -154,10 +165,10 @@ eurus.{$ADMIN_DOMAIN} {
     reverse_proxy https://eurus.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
-pbs.{$ADMIN_DOMAIN} {
+pbs.seq.{$ADMIN_DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy https://proxmox-backup-server.{$TAILNET}:{$PORT_PBS_HTTPS} {
+    reverse_proxy https://proxmox-backup-server-seq.{$TAILNET}:{$PORT_PBS_HTTPS} {
         transport http {
             tls
             tls_insecure_skip_verify
