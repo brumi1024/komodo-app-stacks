@@ -25,4 +25,6 @@ TZ=[[TZ]]
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 PORT_ZIGBEE2MQTT=[[PORT_ZIGBEE2MQTT]]
+
+ZIGBEE_STICK_SERIAL=usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2468622-if00
 """
