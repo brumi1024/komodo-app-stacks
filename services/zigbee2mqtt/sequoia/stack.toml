@@ -1,0 +1,28 @@
+[[stack]]
+name = "zigbee2mqtt-seq"
+tags = ["iot", "smart-home", "zigbee"]
+
+[stack.config]
+server = "sequoia-rpi-4"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/komodo-app-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/zigbee2mqtt/docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# System configuration
+TZ=[[TZ]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+PORT_ZIGBEE2MQTT=[[PORT_ZIGBEE2MQTT]]
+"""
