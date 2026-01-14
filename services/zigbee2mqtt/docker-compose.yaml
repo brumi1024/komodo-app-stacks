@@ -11,7 +11,7 @@ services:
     environment:
       - TZ=${TZ}
     devices:
-      - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2468528-if00:/dev/ttyACM0
+      - /dev/serial/by-id/${ZIGBEE_STICK_SERIAL}:/dev/ttyACM0
     labels:
       - homepage.group=Smart Home
       - homepage.name=Zigbee2MQTT
