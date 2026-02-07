@@ -24,6 +24,9 @@ services:
       - homepage.widget.key=${PROWLARR_API_AUTH_TOKEN}
     ports:
       - ${PORT_PROWLARR_HTTP}:9696
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     restart: unless-stopped
   seerr:
     image: ghcr.io/fallenbagel/jellyseerr:${SEERR_TAG:-latest}
