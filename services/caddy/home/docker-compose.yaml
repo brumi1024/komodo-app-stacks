@@ -5,6 +5,11 @@ services:
     container_name: caddy-home
     env_file:
       - .env
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./config/tesla.pem:/config/tesla.pem:ro
+      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
+      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
     labels:
       - homepage.name=Caddy Home
       - homepage.description=Home Reverse Proxy
