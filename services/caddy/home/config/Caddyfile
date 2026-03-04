@@ -73,14 +73,15 @@
 # Home Assistant
 
 homeassistant.home.{$DOMAIN} {
-  import cloudflare
-  handle {
-      reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
-  }
+    import cloudflare
 
-  handle /.well-known/appspecific/com.tesla.3p.public-key.pem {
-      root * /srv
-      file_server
+    handle /.well-known/appspecific/com.tesla.3p.public-key.pem {
+        root * /srv
+        file_server
+    }
+    
+    handle {
+        reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
     }
 }
 
