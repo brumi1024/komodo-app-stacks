@@ -13,6 +13,7 @@ branch = "main"
 reclone = false
 file_paths = [
     "services/zigbee2mqtt/docker-compose.yaml",
+    "services/zigbee2mqtt/sequoia/docker-compose.yaml",
 ]
 
 environment = """

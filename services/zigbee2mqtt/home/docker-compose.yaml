@@ -1,0 +1,10 @@
+services:
+  zigbee2mqtt:
+    container_name: zigbee2mqtt-home
+    restart: unless-stopped
+    labels:
+      - homepage.group=Smart Home
+      - homepage.name=Zigbee2MQTT
+      - homepage.icon=zigbee2mqtt.svg
+      - homepage.href=https://z2m.home.${DOMAIN}
+      - homepage.description=Home Zigbee handler

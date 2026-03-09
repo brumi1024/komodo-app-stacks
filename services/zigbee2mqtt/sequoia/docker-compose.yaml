@@ -1,0 +1,12 @@
+services:
+  zigbee2mqtt:
+    container_name: zigbee2mqtt-sequoia
+    restart: unless-stopped
+    devices:
+      - /dev/serial/by-id/${ZIGBEE_STICK_SERIAL}:/dev/ttyACM0
+    labels:
+      - homepage.group=Smart Home
+      - homepage.name=Zigbee2MQTT
+      - homepage.icon=zigbee2mqtt.svg
+      - homepage.href=https://z2m.seq.${DOMAIN}
+      - homepage.description=Sequoia Zigbee handler
