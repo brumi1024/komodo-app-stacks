@@ -1,5 +1,5 @@
 [[stack]]
-name = "zigbee2mqtt"
+name = "zigbee2mqtt-home"
 tags = ["iot", "smart-home", "zigbee"]
 
 [stack.config]
