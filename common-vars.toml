@@ -19,7 +19,19 @@ is_secret = false
 [[variable]]
 name = "CADDY_VERSION"
 description = "Caddy version"
-value = "2.10.2"
+value = "2.11.2"
+is_secret = false
+
+[[variable]]
+name = "ZIGBEE2MQTT_ADAPTER_HOST"
+description = "Zigbee2MQTT adapter host"
+value = "192.168.0.123"
+is_secret = false
+
+[[variable]]
+name = "ZIGBEE2MQTT_ADAPTER_PORT"
+description = "Zigbee2MQTT adapter port"
+value = "7638"
 is_secret = false
 
 # Port configuration

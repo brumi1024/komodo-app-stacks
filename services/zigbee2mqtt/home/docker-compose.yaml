@@ -2,6 +2,13 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt-home
     restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=tcp://${ZIGBEE2MQTT_ADAPTER_HOST}:${ZIGBEE2MQTT_ADAPTER_PORT}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE=115200
+      - ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER=zstack
+      - ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE__LED=false
+      - ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT__POWER=20
     labels:
       - homepage.group=Smart Home
       - homepage.name=Zigbee2MQTT
