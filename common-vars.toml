@@ -25,13 +25,13 @@ is_secret = false
 [[variable]]
 name = "ZIGBEE2MQTT_ADAPTER_HOST"
 description = "Zigbee2MQTT adapter host"
-value = "192.168.0.123"
+value = "192.168.0.124"
 is_secret = false
 
 [[variable]]
 name = "ZIGBEE2MQTT_ADAPTER_PORT"
 description = "Zigbee2MQTT adapter port"
-value = "7638"
+value = "6638"
 is_secret = false
 
 # Port configuration
