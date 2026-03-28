@@ -25,7 +25,7 @@ is_secret = false
 [[variable]]
 name = "ZIGBEE2MQTT_ADAPTER_HOST"
 description = "Zigbee2MQTT adapter host"
-value = "192.168.0.28"
+value = "192.168.0.18"
 is_secret = false
 
 [[variable]]
