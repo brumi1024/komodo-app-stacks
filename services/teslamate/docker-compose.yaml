@@ -1,0 +1,75 @@
+name: "teslamate"
+
+services:
+  teslamate:
+    image: teslamate/teslamate:${TESLAMATE_TAG:-latest}
+    container_name: teslamate
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    depends_on:
+      - teslamate-db
+      - teslamate-mosquitto
+    cap_drop:
+      - all
+    environment:
+      - ENCRYPTION_KEY=${TESLAMATE_ENCRYPTION_KEY}
+      - DATABASE_USER=${TESLAMATE_DB_USER}
+      - DATABASE_PASS=${TESLAMATE_DB_PASSWORD}
+      - DATABASE_NAME=${TESLAMATE_DB_NAME}
+      - DATABASE_HOST=teslamate-db
+      - MQTT_HOST=teslamate-mosquitto
+      - TZ=${TZ}
+    ports:
+      - ${PORT_TESLAMATE_HTTP:-4000}:4000
+    volumes:
+      - ${CONFIG_DIR}/teslamate/import:/opt/app/import
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=TeslaMate
+      - homepage.icon=teslamate.png
+      - homepage.href=https://teslamate.${DOMAIN}
+      - homepage.description=Tesla data logger
+
+  teslamate-db:
+    image: postgres:18-trixie
+    container_name: teslamate-postgres
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${TESLAMATE_DB_USER}
+      - POSTGRES_PASSWORD=${TESLAMATE_DB_PASSWORD}
+      - POSTGRES_DB=${TESLAMATE_DB_NAME}
+    volumes:
+      - ${CONFIG_DIR}/teslamate/postgres:/var/lib/postgresql
+
+  teslamate-grafana:
+    image: teslamate/grafana:${TESLAMATE_GRAFANA_TAG:-latest}
+    container_name: teslamate-grafana
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    depends_on:
+      - teslamate-db
+    environment:
+      - DATABASE_USER=${TESLAMATE_DB_USER}
+      - DATABASE_PASS=${TESLAMATE_DB_PASSWORD}
+      - DATABASE_NAME=${TESLAMATE_DB_NAME}
+      - DATABASE_HOST=teslamate-db
+      - TZ=${TZ}
+    ports:
+      - ${PORT_TESLAMATE_GRAFANA_HTTP:-3004}:3000
+    volumes:
+      - ${CONFIG_DIR}/teslamate/grafana:/var/lib/grafana
+
+  teslamate-mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: teslamate-mosquitto
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    restart: unless-stopped
+    command: mosquitto -c /mosquitto-no-auth.conf
+    volumes:
+      - ${CONFIG_DIR}/teslamate/mosquitto/config:/mosquitto/config
+      - ${CONFIG_DIR}/teslamate/mosquitto/data:/mosquitto/data

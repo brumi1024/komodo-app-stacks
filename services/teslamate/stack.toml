@@ -1,0 +1,44 @@
+[[stack]]
+name = "teslamate"
+tags = ["tesla", "personal", "logging"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+git_account = "brumi1024"
+repo = "brumi1024/komodo-app-stacks"
+branch = "main"
+reclone = false
+file_paths = [
+    "services/teslamate/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+PORT_TESLAMATE_HTTP=[[PORT_TESLAMATE_HTTP]]
+PORT_TESLAMATE_GRAFANA_HTTP=[[PORT_TESLAMATE_GRAFANA_HTTP]]
+
+# Version configuration
+TESLAMATE_TAG=latest
+TESLAMATE_GRAFANA_TAG=latest
+
+# Database configuration
+TESLAMATE_DB_NAME=teslamate
+TESLAMATE_DB_USER=teslamate
+TESLAMATE_DB_PASSWORD=[[OP__KOMODO__TESLAMATE__TESLAMATE_DB_PASSWORD]]
+
+# Application configuration
+TESLAMATE_ENCRYPTION_KEY=[[OP__KOMODO__TESLAMATE__TESLAMATE_ENCRYPTION_KEY]]
+"""

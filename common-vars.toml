@@ -192,6 +192,18 @@ value = "8085"
 is_secret = false
 
 [[variable]]
+name = "PORT_TESLAMATE_HTTP"
+description = "TeslaMate HTTP port"
+value = "4000"
+is_secret = false
+
+[[variable]]
+name = "PORT_TESLAMATE_GRAFANA_HTTP"
+description = "TeslaMate Grafana HTTP port"
+value = "3004"
+is_secret = false
+
+[[variable]]
 name = "PORT_SOCKY_PROXY"
 description = "Socky proxy port"
 value = "12375"
