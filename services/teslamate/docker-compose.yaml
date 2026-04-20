@@ -62,7 +62,6 @@ services:
       - ${PORT_TESLAMATE_GRAFANA_HTTP:-3004}:3000
     volumes:
       - ${CONFIG_DIR}/teslamate/grafana:/var/lib/grafana
-    user: "0"
 
   teslamate-mosquitto:
     image: eclipse-mosquitto:2
