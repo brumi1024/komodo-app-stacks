@@ -7,11 +7,8 @@ server = "docker"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
-git_account = "brumi1024"
-repo = "brumi1024/komodo-app-stacks"
+linked_repo = "app-stacks"
 run_directory = "services/caddy"
-branch = "main"
-reclone = false
 file_paths = [
     "docker-compose.yaml",
     "home/docker-compose.yaml",
