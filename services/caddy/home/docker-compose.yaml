@@ -7,7 +7,6 @@ services:
       - .env
     volumes:
       - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./${CADDY_INSTANCE:-caddy}/config/data/tesla.pem:/srv/.well-known/appspecific/com.tesla.3p.public-key.pem:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
     labels:
