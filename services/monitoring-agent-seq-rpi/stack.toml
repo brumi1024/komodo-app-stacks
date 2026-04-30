@@ -1,0 +1,23 @@
+[[stack]]
+name = "monitoring-agent-seq-rpi"
+tags = ["monitoring", "beszel", "agent", "sequoia"]
+
+[stack.config]
+server = "sequoia-rpi-4"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+file_paths = [
+    "services/monitoring-agent/docker-compose.yaml",
+]
+
+environment = """
+# Network configuration
+PORT_BESZEL_LISTEN=[[OP__KOMODO__MONITORING__PORT_BESZEL_LISTEN]]
+
+# Authentication — distinct key per node, generated when adding the
+# system in Beszel UI. Stored in 1Password as
+# Komodo / MONITORING / BESZEL_AGENT_KEY_SEQUOIA_RPI.
+BESZEL_AGENT_KEY=[[OP__KOMODO__MONITORING__BESZEL_AGENT_KEY]]
+"""

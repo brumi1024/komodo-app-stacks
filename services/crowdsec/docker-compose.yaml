@@ -1,0 +1,37 @@
+name: "crowdsec"
+
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: unless-stopped
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    environment:
+      TZ: ${TZ}
+      # Pre-install collections relevant to this homelab's edge node:
+      # caddy parser + base HTTP CTI scenarios + Linux baselines.
+      COLLECTIONS: "crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/linux"
+      # Enrol against CrowdSec Console (free) for shared blocklists.
+      # Set ENROLL_KEY via 1Password (OP__KOMODO__CROWDSEC__ENROLL_KEY) after first boot.
+      ENROLL_KEY: ${CROWDSEC_ENROLL_KEY:-}
+      ENROLL_INSTANCE_NAME: homelab-vps
+      ENROLL_TAGS: "homelab caddy vps"
+    volumes:
+      - ${CONFIG_DIR}/crowdsec/data:/var/lib/crowdsec/data
+      - ${CONFIG_DIR}/crowdsec/config:/etc/crowdsec
+      # Read-only mount of caddy-vps access logs so the agent can parse them.
+      # caddy-vps writes to /var/log/caddy/caddy_access.log inside its container,
+      # which is bind-mounted from this host path:
+      - ${CONFIG_DIR}/caddy-vps/logs:/var/log/caddy:ro
+    healthcheck:
+      test: ["CMD", "cscli", "version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      - homepage.group=Security
+      - homepage.name=CrowdSec
+      - homepage.icon=crowdsec.svg
+      - homepage.description=Edge intrusion detection / IP reputation

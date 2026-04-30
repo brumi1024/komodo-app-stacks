@@ -1,0 +1,11 @@
+name: "autokuma-sequoia"
+
+services:
+  autokuma:
+    env_file:
+      - .env
+    labels:
+      - homepage.group=Monitoring
+      - homepage.name=AutoKuma Sequoia
+      - homepage.icon=uptime-kuma.svg
+      - homepage.description=Auto-managed Kuma monitors (docker-seq)

@@ -23,6 +23,9 @@ services:
       - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
+      # Access logs persisted to host so log-readers (CrowdSec, fail2ban, etc.)
+      # can tail them. Path matches the `log_common` snippet's output target.
+      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/logs:/var/log/caddy
     env_file:
       - .env
     labels:

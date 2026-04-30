@@ -1,0 +1,11 @@
+name: "autokuma-sequoia-rpi"
+
+services:
+  autokuma:
+    env_file:
+      - .env
+    labels:
+      - homepage.group=Monitoring
+      - homepage.name=AutoKuma Sequoia RPi
+      - homepage.icon=uptime-kuma.svg
+      - homepage.description=Auto-managed Kuma monitors (sequoia-rpi-4)

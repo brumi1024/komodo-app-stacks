@@ -2,8 +2,6 @@
 # Global options #
 ##################
 {
-    metrics
-
     dynamic_dns {
       provider cloudflare {$CF_API_TOKEN}
       domains {
@@ -12,7 +10,7 @@
       versions ipv4
     }
 
-    admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+    admin 127.0.0.1:{$PORT_CADDY_ADMIN}
 }
 
 

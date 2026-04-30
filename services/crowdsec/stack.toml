@@ -1,0 +1,25 @@
+[[stack]]
+name = "crowdsec"
+tags = ["security", "edge", "vps"]
+
+[stack.config]
+server = "homelab-vps"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+file_paths = [
+    "services/crowdsec/docker-compose.yaml",
+]
+
+environment = """
+# System
+TZ=[[TZ]]
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Console enrolment key (free tier — get one at https://app.crowdsec.net/).
+# After first deploy, run `cscli console enroll` inside the container if you
+# prefer that path; otherwise set this and the agent self-enrols on boot.
+CROWDSEC_ENROLL_KEY=[[OP__KOMODO__CROWDSEC__ENROLL_KEY]]
+"""

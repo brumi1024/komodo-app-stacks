@@ -1,0 +1,11 @@
+name: "autokuma-home"
+
+services:
+  autokuma:
+    env_file:
+      - .env
+    labels:
+      - homepage.group=Monitoring
+      - homepage.name=AutoKuma Home
+      - homepage.icon=uptime-kuma.svg
+      - homepage.description=Auto-managed Kuma monitors (home node)

@@ -1,0 +1,30 @@
+[[stack]]
+name = "autokuma-vps"
+tags = ["monitoring", "uptime", "autokuma", "vps"]
+
+[stack.config]
+server = "homelab-vps"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+run_directory = "services/autokuma"
+file_paths = [
+    "docker-compose.yaml",
+    "vps/docker-compose.yaml",
+]
+
+environment = """
+# Instance identifier (drives container_name + AUTOKUMA__TAG_NAME)
+AUTOKUMA_INSTANCE=vps
+AUTOKUMA_PROJECT_NAME=autokuma-vps
+
+# Logging
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Central Uptime Kuma — co-located on this node; still reach over Tailscale
+# FQDN for uniformity (resolves to localhost for the VPS-local instance).
+KUMA_URL=http://homelab-vps.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_UPTIME_KUMA]]
+KUMA_USERNAME=[[OP__KOMODO__UPTIME_KUMA__USERNAME]]
+KUMA_PASSWORD=[[OP__KOMODO__UPTIME_KUMA__PASSWORD]]
+"""

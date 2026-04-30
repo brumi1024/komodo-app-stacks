@@ -4,7 +4,6 @@ services:
   socky_proxy:
     container_name: socky_proxy
     image: ghcr.io/tecnativa/docker-socket-proxy:latest # A security-enhanced proxy for the Docker Socket.
-    privileged: true
     networks:
       - socky_proxy-net
     ports:

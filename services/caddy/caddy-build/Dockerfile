@@ -4,7 +4,9 @@ FROM caddy:${CADDY_VERSION}-builder-alpine AS builder
 
 RUN xcaddy build \
     --with github.com/mholt/caddy-dynamicdns \
-    --with github.com/caddy-dns/cloudflare
+    --with github.com/caddy-dns/cloudflare \
+    --with github.com/mholt/caddy-ratelimit \
+    --with github.com/hslatman/caddy-crowdsec-bouncer/http
 
 FROM caddy:${CADDY_VERSION} AS caddy
 

@@ -2,8 +2,6 @@
 # Global options #
 ##################
 {
-    metrics
-
     dynamic_dns {
       provider cloudflare {$CF_API_TOKEN}
       domains {

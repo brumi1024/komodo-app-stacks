@@ -1,0 +1,30 @@
+[[stack]]
+name = "autokuma-home"
+tags = ["monitoring", "uptime", "autokuma", "home"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+run_directory = "services/autokuma"
+file_paths = [
+    "docker-compose.yaml",
+    "home/docker-compose.yaml",
+]
+
+environment = """
+# Instance identifier (drives container_name + AUTOKUMA__TAG_NAME)
+AUTOKUMA_INSTANCE=home
+AUTOKUMA_PROJECT_NAME=autokuma-home
+
+# Logging
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Central Uptime Kuma — reached over Tailscale, bypassing Caddy/Authentik
+# so AutoKuma can authenticate natively against Kuma's API.
+KUMA_URL=http://homelab-vps.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_UPTIME_KUMA]]
+KUMA_USERNAME=[[OP__KOMODO__UPTIME_KUMA__USERNAME]]
+KUMA_PASSWORD=[[OP__KOMODO__UPTIME_KUMA__PASSWORD]]
+"""
