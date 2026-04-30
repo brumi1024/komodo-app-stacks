@@ -72,15 +72,12 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
-    # `user: root` and the docker socket volume are optional.
-    # See more for the docker socket integration here:
-    # https://goauthentik.io/docs/outposts/integrations/docker
-    # Removing `user: root` also prevents the worker from fixing the permissions
-    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
-    # (1000:1000 by default)
-    user: root
+    # Worker runs as the default authentik user (UID 1000). The docker socket
+    # mount and `user: root` were removed — only needed if you want Authentik
+    # to manage Docker outposts itself, which this homelab does not.
+    # The bind-mount directories must exist on the host with 1000:1000 ownership;
+    # ensure that's true before redeploy.
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - ${CONFIG_DIR}/authentik/media:/media
       - ${CONFIG_DIR}/authentik/certs:/certs
       - ${CONFIG_DIR}/authentik/custom-templates:/templates
