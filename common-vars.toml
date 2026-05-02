@@ -180,6 +180,12 @@ value = "3002"
 is_secret = false
 
 [[variable]]
+name = "PORT_NTFY_HTTP"
+description = "Ntfy HTTP port"
+value = "8088"
+is_secret = false
+
+[[variable]]
 name = "PORT_ZEPHYRUS_HTTP"
 description = "Zephyrus HTTP port"
 value = "5000"

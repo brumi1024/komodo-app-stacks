@@ -12,6 +12,10 @@ run_directory = "services/immich"
 file_paths = [
     "docker-compose.yaml"
 ]
+# Wait for NFS (port 2049) on the home NAS before deploy. The 'photos' volume
+# mounts NFS from the NAS at container start; deploying onto a stale/down NAS
+# brings up containers against an empty path. Fails after 60s.
+pre_deploy = { path = "", command = "timeout 60 bash -c 'until (echo > /dev/tcp/[[OP__KOMODO__COMMON__HOME_NAS_IP]]/2049) 2>/dev/null; do sleep 2; done'" }
 
 environment = """
 # System configuration

@@ -1,0 +1,39 @@
+name: "ntfy"
+
+services:
+  ntfy:
+    image: binwiederhier/ntfy:v2
+    container_name: ntfy
+    command: serve
+    restart: unless-stopped
+    logging:
+      driver: ${LOGGING_DRIVER:-local}
+    ports:
+      - ${PORT_NTFY_HTTP:-8088}:80
+    volumes:
+      - ${CONFIG_DIR}/ntfy/cache:/var/cache/ntfy
+      - ${CONFIG_DIR}/ntfy/etc:/etc/ntfy
+    environment:
+      TZ: ${TZ}
+      NTFY_BASE_URL: https://ntfy.${DOMAIN}
+      NTFY_LISTEN_HTTP: ":80"
+      NTFY_BEHIND_PROXY: "true"
+      NTFY_CACHE_FILE: /var/cache/ntfy/cache.db
+      NTFY_CACHE_DURATION: "720h"
+      NTFY_ATTACHMENT_CACHE_DIR: /var/cache/ntfy/attachments
+      NTFY_AUTH_FILE: /var/cache/ntfy/auth.db
+      NTFY_AUTH_DEFAULT_ACCESS: deny-all
+      NTFY_ENABLE_SIGNUP: "false"
+      NTFY_ENABLE_LOGIN: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/v1/health | grep -Eo '\"healthy\"\\s*:\\s*true'"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    labels:
+      - homepage.group=Monitoring
+      - homepage.name=Ntfy
+      - homepage.icon=ntfy.svg
+      - homepage.href=https://ntfy.${DOMAIN}
+      - homepage.description=Push notifications

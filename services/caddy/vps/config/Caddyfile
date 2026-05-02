@@ -88,6 +88,12 @@ uptime.{$DOMAIN} {
     reverse_proxy homelab-vps.{$TAILNET}:{$PORT_UPTIME_KUMA}
 }
 
+ntfy.{$DOMAIN} {
+    import cloudflare
+    import log_common
+    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_NTFY_HTTP}
+}
+
 auth.{$DOMAIN} {
     import cloudflare
     reverse_proxy homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP}

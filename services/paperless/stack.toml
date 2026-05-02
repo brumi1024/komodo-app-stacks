@@ -11,6 +11,10 @@ linked_repo = "app-stacks"
 file_paths = [
     "services/paperless/docker-compose.yaml",
 ]
+# Wait for NFS (port 2049) on the home NAS before deploy. The 'media' volume
+# mounts NFS from the NAS at container start; deploying onto a stale/down NAS
+# brings up paperless against an empty documents path. Fails after 60s.
+pre_deploy = { path = "", command = "timeout 60 bash -c 'until (echo > /dev/tcp/[[OP__KOMODO__COMMON__HOME_NAS_IP]]/2049) 2>/dev/null; do sleep 2; done'" }
 
 environment = """
 # System configuration
