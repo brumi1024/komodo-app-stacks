@@ -36,3 +36,8 @@ services:
       - homepage.icon=stirling-pdf.svg
       - homepage.href=https://stirling.home.${DOMAIN}
       - homepage.description=Your locally hosted one-stop-shop for all your PDF needs.
+      # AutoKuma → central Uptime Kuma. Login redirect to OAuth (302).
+      - kuma.stirlingpdf.http.name=Stirling PDF
+      - kuma.stirlingpdf.http.url=http://docker.${TAILNET}:${PORT_STIRLING_HTTP}
+      - kuma.stirlingpdf.http.interval=60
+      - 'kuma.stirlingpdf.http.accepted_statuscodes=["200-299","301","302"]'

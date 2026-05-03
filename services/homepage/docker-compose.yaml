@@ -38,3 +38,8 @@ services:
       - ./config:/app/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    labels:
+      # AutoKuma → central Uptime Kuma.
+      - kuma.homepage.http.name=Homepage
+      - kuma.homepage.http.url=http://homelab-vps.${TAILNET}:${PORT_DASH_HTTP}
+      - kuma.homepage.http.interval=60

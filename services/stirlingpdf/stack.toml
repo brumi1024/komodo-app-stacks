@@ -18,6 +18,7 @@ CONFIG_DIR=[[CONFIG_DIR]]
 
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 PORT_STIRLING_HTTP=[[PORT_STIRLING_HTTP]]
 
 # OAuth2 configuration for Authentik integration

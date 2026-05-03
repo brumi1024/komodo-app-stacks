@@ -30,6 +30,11 @@ services:
       - homepage.icon=teslamate.png
       - homepage.href=https://teslamate.${DOMAIN}
       - homepage.description=Tesla data logger
+      # AutoKuma → central Uptime Kuma.
+      - kuma.teslamate.http.name=TeslaMate
+      - kuma.teslamate.http.url=http://docker.${TAILNET}:${PORT_TESLAMATE_HTTP}
+      - kuma.teslamate.http.interval=60
+      - 'kuma.teslamate.http.accepted_statuscodes=["200-299","301","302"]'
 
   teslamate-db:
     image: postgres:18-trixie
@@ -62,6 +67,11 @@ services:
       - ${PORT_TESLAMATE_GRAFANA_HTTP:-3004}:3000
     volumes:
       - ${CONFIG_DIR}/teslamate/grafana:/var/lib/grafana
+    labels:
+      # /api/health is Grafana's unauth health endpoint.
+      - kuma.teslamate-grafana.http.name=TeslaMate Grafana
+      - kuma.teslamate-grafana.http.url=http://docker.${TAILNET}:${PORT_TESLAMATE_GRAFANA_HTTP}/api/health
+      - kuma.teslamate-grafana.http.interval=60
 
   teslamate-mosquitto:
     image: eclipse-mosquitto:2

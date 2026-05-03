@@ -19,6 +19,7 @@ CONFIG_DIR=[[CONFIG_DIR]]
 
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 
 # Port configuration
 PORT_AUTHENTIK_HTTP=[[PORT_AUTHENTIK_HTTP]]

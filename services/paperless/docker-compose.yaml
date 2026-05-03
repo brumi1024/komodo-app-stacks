@@ -65,6 +65,10 @@ services:
       - homepage.widget.type=paperlessngx
       - homepage.widget.url=https://paperless.${DOMAIN}
       - homepage.widget.key=${PAPERLESS_API_AUTH_TOKEN}
+      # AutoKuma → central Uptime Kuma. /api/ returns 200 unauthenticated.
+      - kuma.paperless.http.name=Paperless
+      - kuma.paperless.http.url=http://docker.${TAILNET}:${PORT_PAPERLESS_HTTP}/api/
+      - kuma.paperless.http.interval=60
     environment:
       - PAPERLESS_TIME_ZONE=${TZ}
       - PAPERLESS_OCR_LANGUAGE=eng

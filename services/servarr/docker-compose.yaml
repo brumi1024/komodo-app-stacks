@@ -22,6 +22,10 @@ services:
       - homepage.widget.type=prowlarr
       - homepage.widget.url=http://prowlarr.home.${DOMAIN}
       - homepage.widget.key=${PROWLARR_API_AUTH_TOKEN}
+      # AutoKuma → central Uptime Kuma.
+      - kuma.prowlarr.http.name=Prowlarr
+      - kuma.prowlarr.http.url=http://docker.${TAILNET}:${PORT_PROWLARR_HTTP}/ping
+      - kuma.prowlarr.http.interval=60
     ports:
       - ${PORT_PROWLARR_HTTP}:9696
     dns:
@@ -46,6 +50,10 @@ services:
       - homepage.widget.type=seerr
       - homepage.widget.url=http://seerr.home.${DOMAIN}
       - homepage.widget.key=${PLEX_AUTH_TOKEN}
+      # AutoKuma → central Uptime Kuma. /api/v1/status is unauth + 200.
+      - kuma.seerr.http.name=Jellyseerr
+      - kuma.seerr.http.url=http://docker.${TAILNET}:${PORT_SEERR_HTTP}/api/v1/status
+      - kuma.seerr.http.interval=60
     environment:
       - TZ=${TZ}
       - PORT=${PORT_SEERR_HTTP}
@@ -79,6 +87,11 @@ services:
       - homepage.widget.type=qbittorrent
       - homepage.widget.url=http://qbittorrent.home.${DOMAIN}
       - homepage.widget.enableLeechProgress=true
+      # AutoKuma → central Uptime Kuma. WebUI redirects unauth to /login (200).
+      - kuma.qbittorrent.http.name=qBittorrent
+      - kuma.qbittorrent.http.url=http://docker.${TAILNET}:${PORT_QBITTORRENT_HTTP}
+      - kuma.qbittorrent.http.interval=60
+      - 'kuma.qbittorrent.http.accepted_statuscodes=["200-299","301","302","401","403"]'
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -108,6 +121,10 @@ services:
       - homepage.widget.type=radarr
       - homepage.widget.url=http://radarr.home.${DOMAIN}
       - homepage.widget.key=${RADARR_API_AUTH_TOKEN}
+      # AutoKuma → central Uptime Kuma.
+      - kuma.radarr.http.name=Radarr
+      - kuma.radarr.http.url=http://docker.${TAILNET}:${PORT_RADARR_HTTP}/ping
+      - kuma.radarr.http.interval=60
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -133,6 +150,10 @@ services:
       - homepage.widget.type=sonarr
       - homepage.widget.url=http://sonarr.home.${DOMAIN}
       - homepage.widget.key=${SONARR_API_AUTH_TOKEN}
+      # AutoKuma → central Uptime Kuma.
+      - kuma.sonarr.http.name=Sonarr
+      - kuma.sonarr.http.url=http://docker.${TAILNET}:${PORT_SONARR_HTTP}/ping
+      - kuma.sonarr.http.interval=60
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

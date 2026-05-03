@@ -21,6 +21,11 @@ services:
       - homepage.widget.enableUser=true
       - homepage.widget.showEpisodeNumber=true
       - homepage.widget.expandOneStreamToTwoRows=false
+      # AutoKuma → central Uptime Kuma. Root redirects to /home (302).
+      - kuma.tautulli.http.name=Tautulli
+      - kuma.tautulli.http.url=http://docker.${TAILNET}:${PORT_TAUTULLI_HTTP}
+      - kuma.tautulli.http.interval=60
+      - 'kuma.tautulli.http.accepted_statuscodes=["200-299","301","302"]'
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

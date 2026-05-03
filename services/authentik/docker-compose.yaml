@@ -52,6 +52,10 @@ services:
       - homepage.widget.type=authentik
       - homepage.widget.url=https://auth.${DOMAIN}
       - homepage.widget.key=${AUTHENTIK_HOMEPAGE_TOKEN}
+      # AutoKuma → central Uptime Kuma. /-/health/live/ is unauth + 200.
+      - kuma.authentik.http.name=Authentik
+      - kuma.authentik.http.url=http://homelab-vps.${TAILNET}:${PORT_AUTHENTIK_HTTP}/-/health/live/
+      - kuma.authentik.http.interval=60
     env_file:
       - .env
     ports:

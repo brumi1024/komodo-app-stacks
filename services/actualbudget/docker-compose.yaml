@@ -19,6 +19,11 @@ services:
       - homepage.icon=actual-budget.svg
       - homepage.href=https://actual.${DOMAIN}
       - homepage.description=Personal Finance
+      # AutoKuma → central Uptime Kuma. Reached over Tailnet by the Kuma
+      # container on homelab-vps; alerts via the "ntfy" notification.
+      - kuma.actualbudget.http.name=Actual Budget
+      - kuma.actualbudget.http.url=http://docker.${TAILNET}:${PORT_ACTUAL_HTTP}
+      - kuma.actualbudget.http.interval=60
     healthcheck:
       # Enable health check for the instance
       test: ['CMD-SHELL', 'node src/scripts/health-check.js']
