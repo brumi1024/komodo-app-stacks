@@ -18,11 +18,10 @@ services:
       - homepage.icon=beszel.svg
       - homepage.href=https://beszel.${DOMAIN}
       - homepage.description=Simple monitoring tool
-      # AutoKuma → central Uptime Kuma. Beszel returns 200 on /.
+      # AutoKuma → central Uptime Kuma. Beszel /api/health returns 200.
       - kuma.beszel.http.name=Beszel
-      - kuma.beszel.http.url=http://homelab-vps.${TAILNET}:${PORT_BESZEL_HTTP}
+      - kuma.beszel.http.url=http://homelab-vps.${TAILNET}:${PORT_BESZEL_HTTP}/api/health
       - kuma.beszel.http.interval=60
-      - 'kuma.beszel.http.accepted_statuscodes=["200-299","301","302"]'
   beszel-agent:
     image: "henrygd/beszel-agent"
     container_name: "beszel-agent"

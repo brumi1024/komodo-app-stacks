@@ -87,11 +87,10 @@ services:
       - homepage.widget.type=qbittorrent
       - homepage.widget.url=http://qbittorrent.home.${DOMAIN}
       - homepage.widget.enableLeechProgress=true
-      # AutoKuma → central Uptime Kuma. WebUI redirects unauth to /login (200).
+      # AutoKuma → central Uptime Kuma. /api/v2/app/version returns 200 unauth-needed
       - kuma.qbittorrent.http.name=qBittorrent
       - kuma.qbittorrent.http.url=http://docker.${TAILNET}:${PORT_QBITTORRENT_HTTP}
       - kuma.qbittorrent.http.interval=60
-      - 'kuma.qbittorrent.http.accepted_statuscodes=["200-299","301","302","401","403"]'
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

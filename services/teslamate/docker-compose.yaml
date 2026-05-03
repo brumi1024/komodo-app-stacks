@@ -30,11 +30,10 @@ services:
       - homepage.icon=teslamate.png
       - homepage.href=https://teslamate.${DOMAIN}
       - homepage.description=Tesla data logger
-      # AutoKuma → central Uptime Kuma.
+      # AutoKuma → central Uptime Kuma. Phoenix /sign_in returns 200 unauth.
       - kuma.teslamate.http.name=TeslaMate
-      - kuma.teslamate.http.url=http://docker.${TAILNET}:${PORT_TESLAMATE_HTTP}
+      - kuma.teslamate.http.url=http://docker.${TAILNET}:${PORT_TESLAMATE_HTTP}/sign_in
       - kuma.teslamate.http.interval=60
-      - 'kuma.teslamate.http.accepted_statuscodes=["200-299","301","302"]'
 
   teslamate-db:
     image: postgres:18-trixie
