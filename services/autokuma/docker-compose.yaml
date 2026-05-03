@@ -3,14 +3,12 @@ name: ${AUTOKUMA_PROJECT_NAME:-autokuma}
 services:
   autokuma:
     container_name: autokuma-${AUTOKUMA_INSTANCE:-home}
-    image: ghcr.io/bigboot/autokuma:uptime-kuma-v1-latest
+    image: ghcr.io/bigboot/autokuma:latest
     restart: unless-stopped
     logging:
       driver: ${LOGGING_DRIVER:-local}
     environment:
       AUTOKUMA__KUMA__URL: ${KUMA_URL}
-      AUTOKUMA__KUMA__USERNAME: ${KUMA_USERNAME}
-      AUTOKUMA__KUMA__PASSWORD: ${KUMA_PASSWORD}
       # Per-instance tag — must be unique across nodes so each AutoKuma
       # only manages monitors it created, never reconciling siblings'.
       AUTOKUMA__TAG_NAME: autokuma-${AUTOKUMA_INSTANCE:-home}
