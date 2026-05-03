@@ -16,6 +16,11 @@ services:
       AUTOKUMA__TAG_NAME: autokuma-${AUTOKUMA_INSTANCE:-home}
       AUTOKUMA__DOCKER__LABEL_PREFIX: kuma
       AUTOKUMA__ON_DELETE: delete
+      # Default monitor settings applied to every monitor this instance creates.
+      # The "ntfy" notification provider is registered by autokuma-vps via labels
+      # on the ntfy container; all instances reference it here by id.
+      AUTOKUMA__DEFAULT_SETTINGS: |-
+        *.notification_name_list: '["ntfy"]'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     deploy:

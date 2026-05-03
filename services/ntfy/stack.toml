@@ -27,4 +27,9 @@ DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 
 # Port configuration
 PORT_NTFY_HTTP=[[PORT_NTFY_HTTP]]
+
+# AutoKuma → Uptime Kuma → Ntfy credentials. Embedded in container labels
+# so autokuma-vps can register the notification provider in Uptime Kuma.
+NTFY_NOTIFY_USERNAME=[[OP__KOMODO__ALERTER__NTFY_USERNAME]]
+NTFY_NOTIFY_PASSWORD=[[OP__KOMODO__ALERTER__NTFY_PASSWORD]]
 """

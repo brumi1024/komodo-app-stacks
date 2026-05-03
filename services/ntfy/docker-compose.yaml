@@ -37,3 +37,9 @@ services:
       - homepage.icon=ntfy.svg
       - homepage.href=https://ntfy.${DOMAIN}
       - homepage.description=Push notifications
+      # AutoKuma picks these labels up (autokuma-vps shares this host) and
+      # registers an "ntfy" notification provider in Uptime Kuma. Other
+      # autokuma instances reference it by id via DEFAULT_SETTINGS.
+      - kuma.ntfy.notification.name=Ntfy
+      - kuma.ntfy.notification.active=true
+      - 'kuma.ntfy.notification.config={"type":"ntfy","serverUrl":"https://ntfy.${DOMAIN}","ntfyTopic":"homelab-alerts","ntfyAuthenticationMethod":"usernameAndPassword","ntfyUsername":"${NTFY_NOTIFY_USERNAME}","ntfyPassword":"${NTFY_NOTIFY_PASSWORD}","ntfyPriority":4}'
