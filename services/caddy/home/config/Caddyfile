@@ -134,3 +134,9 @@ immich.home.{$DOMAIN} {
     import cloudflare
     reverse_proxy docker.{$TAILNET}:{$PORT_IMMICH_HTTP}
 }
+
+evcc.home.{$DOMAIN} {
+    import authenticate_with_tailscale_bypass
+    import cloudflare
+    reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
+}

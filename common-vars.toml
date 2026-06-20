@@ -198,6 +198,18 @@ value = "8085"
 is_secret = false
 
 [[variable]]
+name = "PORT_EVCC_HTTP"
+description = "evcc HTTP port"
+value = "7070"
+is_secret = false
+
+[[variable]]
+name = "PORT_EVCC_OCPP"
+description = "evcc OCPP server port"
+value = "8887"
+is_secret = false
+
+[[variable]]
 name = "PORT_TESLAMATE_HTTP"
 description = "TeslaMate HTTP port"
 value = "4000"

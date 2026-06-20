@@ -1,0 +1,30 @@
+[[stack]]
+name = "evcc"
+tags = ["ev", "charging", "smart-home"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+file_paths = [
+    "services/evcc/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Logging configuration
+LOGGING_DRIVER=[[LOGGING_DRIVER]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+PORT_EVCC_HTTP=[[PORT_EVCC_HTTP]]
+PORT_EVCC_OCPP=[[PORT_EVCC_OCPP]]
+"""
