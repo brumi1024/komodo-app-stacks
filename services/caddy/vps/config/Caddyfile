@@ -10,6 +10,11 @@
       versions ipv4
     }
 
+    # TODO: Re-enable HTTP/3 after isolating the Home Assistant iOS/mobile asset loading failures.
+    servers :443 {
+      protocols h1 h2
+    }
+
     admin 127.0.0.1:{$PORT_CADDY_ADMIN}
 }
 
