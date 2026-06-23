@@ -12,6 +12,11 @@
       ip_source simple_http https://api6.ipify.org
     }
 
+    # TODO: Re-enable HTTP/3 after isolating the Home Assistant iOS/mobile asset loading failures.
+    servers :443 {
+      protocols h1 h2
+    }
+
     admin 0.0.0.0:{$PORT_CADDY_ADMIN}
 }
 
