@@ -5,14 +5,19 @@
     dynamic_dns {
       provider cloudflare {$CF_API_TOKEN}
       domains {
-        {$DOMAIN} @ * *.seq
+        {$DOMAIN} @ * *.seq *.kalasz
       }
       versions ipv4
     }
 
-    # TODO: Re-enable HTTP/3 after isolating the Home Assistant iOS/mobile asset loading failures.
-    servers :443 {
-      protocols h1 h2
+    dynamic_dns {
+      provider cloudflare {$CF_API_TOKEN}
+      domains {
+        {$DOMAIN} @ * *.kalasz
+      }
+      versions ipv6
+      ip_source simple_http https://ipv6.icanhazip.com
+      ip_source simple_http https://api6.ipify.org
     }
 
     admin 127.0.0.1:{$PORT_CADDY_ADMIN}
