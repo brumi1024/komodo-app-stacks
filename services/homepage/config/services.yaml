@@ -91,12 +91,12 @@
 - Smart Home:
     - Home Assistant:
         icon: home-assistant.svg
-        href: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
+        href: https://homeassistant.home.{{HOMEPAGE_VAR_DOMAIN}}
         description: Home Assistant for Home
         siteMonitor: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
         widget:
             type: homeassistant
-            url: https://homeassistant.{{HOMEPAGE_VAR_DOMAIN}}
+            url: https://homeassistant.home.{{HOMEPAGE_VAR_DOMAIN}}
             key: {{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}
     - Home Assistant Sequoia:
         icon: home-assistant.svg
