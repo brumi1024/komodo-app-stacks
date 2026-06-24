@@ -228,21 +228,43 @@ homeassistant.kalasz.{$DOMAIN} {
 # Home Assistant
 homeassistant.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy http://homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+    reverse_proxy {
+        dynamic a seq-origin-v6.{$DOMAIN} 443 {
+            versions ipv6
+        }
+        header_up Host homeassistant.seq.{$DOMAIN}
+        transport http {
+            tls
+            tls_server_name homeassistant.seq.{$DOMAIN}
+        }
+    }
 }
 
 # Synology NAS
 zephyrus.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy http://zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+    reverse_proxy {
+        dynamic a seq-origin-v6.{$DOMAIN} 443 {
+            versions ipv6
+        }
+        header_up Host zephyrus.seq.{$DOMAIN}
+        transport http {
+            tls
+            tls_server_name zephyrus.seq.{$DOMAIN}
+        }
+    }
 }
 
 scrypted.seq.{$DOMAIN} {
     import cloudflare
-    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
+    reverse_proxy {
+        dynamic a seq-origin-v6.{$DOMAIN} 443 {
+            versions ipv6
+        }
+        header_up Host scrypted.seq.{$DOMAIN}
         transport http {
             tls
-            tls_insecure_skip_verify
+            tls_server_name scrypted.seq.{$DOMAIN}
         }
     }
 }
