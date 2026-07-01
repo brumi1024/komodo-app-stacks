@@ -10,6 +10,12 @@
     }
 
     admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+
+    # Home Assistant mobile clients currently stall on HTTP/3 asset requests
+    # through this edge; keep the Home edge on TCP transports until isolated.
+    servers :443 {
+      protocols h1 h2
+    }
 }
 
 
@@ -72,6 +78,7 @@
 
 homeassistant.home.{$DOMAIN} {
     import cloudflare
+    header Alt-Svc "clear"
 
     handle {
         reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
