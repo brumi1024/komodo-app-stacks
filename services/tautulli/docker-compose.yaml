@@ -3,8 +3,6 @@ name: "tautulli"
 services:
   tautulli:
     image: ghcr.io/tautulli/tautulli
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     container_name: tautulli
     volumes:
       - ${CONFIG_DIR}/tautulli:/config

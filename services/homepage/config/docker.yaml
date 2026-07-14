@@ -11,8 +11,8 @@ sequoia-docker:
   port: {{HOMEPAGE_VAR_PORT_SOCKY_PROXY}}
 
 homelab-vps-docker:
-  host: homelab-vps.{{HOMEPAGE_VAR_TAILNET}}
-  port: {{HOMEPAGE_VAR_PORT_SOCKY_PROXY}}
+  host: socky_proxy
+  port: 2375
 
 # my-docker:
 #   socket: /var/run/docker.sock

@@ -2,6 +2,7 @@ name: "authentik"
 
 services:
   postgresql:
+    container_name: authentik-postgresql
     image: docker.io/library/postgres:16-alpine
     restart: unless-stopped
     healthcheck:
@@ -16,33 +17,22 @@ services:
       POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
       POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
       POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
-    env_file:
-      - .env
-  redis:
-    image: docker.io/library/redis:alpine
-    command: --save 60 1 --loglevel warning
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 3s
-    volumes:
-      - authentik-redis:/data
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
+    container_name: authentik-server
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.4}
     restart: unless-stopped
     command: server
     environment:
-      AUTHENTIK_REDIS__HOST: redis
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
     volumes:
-      - ${CONFIG_DIR}/authentik/media:/media
+      - ${CONFIG_DIR}/authentik/data:/data
       - ${CONFIG_DIR}/authentik/custom-templates:/templates
+    networks:
+      - default
+      - vps-ingress
     labels:
       - homepage.group=Administration
       - homepage.name=Authentik
@@ -52,37 +42,26 @@ services:
       - homepage.widget.type=authentik
       - homepage.widget.url=https://auth.${DOMAIN}
       - homepage.widget.key=${AUTHENTIK_HOMEPAGE_TOKEN}
-      # AutoKuma → central Uptime Kuma. /-/health/live/ is unauth + 200.
       - kuma.authentik.http.name=Authentik
-      - kuma.authentik.http.url=http://homelab-vps.${TAILNET}:${PORT_AUTHENTIK_HTTP}/-/health/live/
+      - kuma.authentik.http.url=http://authentik-server:9000/-/health/live/
       - kuma.authentik.http.interval=60
     env_file:
       - .env
-    ports:
-      - "${PORT_AUTHENTIK_HTTP:-9000}:9000"
-      - "${PORT_AUTHENTIK_HTTPS:-9443}:9443"
     depends_on:
       postgresql:
         condition: service_healthy
-      redis:
-        condition: service_healthy
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.1}
+    container_name: authentik-worker
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.4}
     restart: unless-stopped
     command: worker
     environment:
-      AUTHENTIK_REDIS__HOST: redis
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
-    # Worker runs as the default authentik user (UID 1000). The docker socket
-    # mount and `user: root` were removed — only needed if you want Authentik
-    # to manage Docker outposts itself, which this homelab does not.
-    # The bind-mount directories must exist on the host with 1000:1000 ownership;
-    # ensure that's true before redeploy.
     volumes:
-      - ${CONFIG_DIR}/authentik/media:/media
+      - ${CONFIG_DIR}/authentik/data:/data
       - ${CONFIG_DIR}/authentik/certs:/certs
       - ${CONFIG_DIR}/authentik/custom-templates:/templates
     env_file:
@@ -90,11 +69,12 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-      redis:
-        condition: service_healthy
 
 volumes:
   authentik-database:
     driver: local
-  authentik-redis:
-    driver: local
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress

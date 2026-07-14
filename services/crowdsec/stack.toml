@@ -15,7 +15,6 @@ file_paths = [
 environment = """
 # System
 TZ=[[TZ]]
-LOGGING_DRIVER=[[LOGGING_DRIVER]]
 CONFIG_DIR=[[CONFIG_DIR]]
 
 # Console enrolment key (free tier — get one at https://app.crowdsec.net/).

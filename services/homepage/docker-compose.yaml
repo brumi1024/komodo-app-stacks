@@ -4,13 +4,9 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:${HOMEPAGE_TAG:-latest}
     container_name: homepage
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
-    ports:
-      - ${PORT_DASH_HTTP}:3000
     environment:
       - PUID=${PUID}
-      - PGI=${PGID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - HOMEPAGE_ALLOWED_HOSTS=${HOMEPAGE_ALLOWED_HOSTS}
       - HOMEPAGE_VAR_ADMIN_DOMAIN=${ADMIN_DOMAIN}
@@ -37,9 +33,19 @@ services:
     volumes:
       - ./config:/app/config
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - vps-ingress
+      - monitoring-control
     restart: unless-stopped
     labels:
-      # AutoKuma → central Uptime Kuma.
       - kuma.homepage.http.name=Homepage
-      - kuma.homepage.http.url=http://homelab-vps.${TAILNET}:${PORT_DASH_HTTP}
+      - kuma.homepage.http.url=http://homepage:3000
       - kuma.homepage.http.interval=60
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress
+  monitoring-control:
+    external: true
+    name: monitoring-control

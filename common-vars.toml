@@ -11,12 +11,6 @@ value = "/srv/docker-config"
 is_secret = false
 
 [[variable]]
-name = "LOGGING_DRIVER"
-description = "Logging driver"
-value = "local"
-is_secret = false
-
-[[variable]]
 name = "CADDY_VERSION"
 description = "Caddy version"
 value = "2.11.2"
@@ -51,18 +45,6 @@ is_secret = false
 name = "PORT_CADDY_ADMIN"
 description = "Caddy admin port"
 value = "2019"
-is_secret = false
-
-[[variable]]
-name = "PORT_AUTHENTIK_HTTP"
-description = "Authentik HTTP port"
-value = "9000"
-is_secret = false
-
-[[variable]]
-name = "PORT_AUTHENTIK_HTTPS"
-description = "Authentik HTTPS port"
-value = "9443"
 is_secret = false
 
 [[variable]]
@@ -171,18 +153,6 @@ is_secret = false
 name = "PORT_PLEX_HTTP"
 description = "Plex HTTP port"
 value = "32400"
-is_secret = false
-
-[[variable]]
-name = "PORT_UPTIME_KUMA"
-description = "Uptime HTTP port"
-value = "3002"
-is_secret = false
-
-[[variable]]
-name = "PORT_NTFY_HTTP"
-description = "Ntfy HTTP port"
-value = "8088"
 is_secret = false
 
 [[variable]]

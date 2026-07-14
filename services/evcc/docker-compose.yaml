@@ -6,8 +6,6 @@ services:
     image: evcc/evcc:latest
     command:
       - evcc
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     ports:
       - "${PORT_EVCC_HTTP:-7070}:7070/tcp"
       - "${PORT_EVCC_OCPP:-8887}:8887/tcp"

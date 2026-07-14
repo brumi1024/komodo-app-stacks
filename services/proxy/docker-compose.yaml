@@ -3,19 +3,18 @@ name: "proxy"
 services:
   socky_proxy:
     container_name: socky_proxy
-    image: ghcr.io/tecnativa/docker-socket-proxy:latest # A security-enhanced proxy for the Docker Socket.
+    image: ghcr.io/tecnativa/docker-socket-proxy:0.4.2
     networks:
       - socky_proxy-net
-    ports:
-      - ${PORT_SOCKY_PROXY}:2375
     environment:
       # Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc).
       #   0 - revoke access
       #   1 - grant access
       - TZ=${TZ}
       - CONTAINERS=1 # Allow access to viewing containers
-      - SERVICES=1 # Allow access to viewing services (necessary when using Docker Swarm)
-      - TASKS=1 # Allow access to viewing tasks (necessary when using Docker Swarm)
+      - INFO=1 # AutoKuma includes Docker host metadata while rendering labels
+      - SERVICES=0
+      - TASKS=0
       - POST=0 # Disallow any POST operations (effectively read-only)
     labels:
       - homepage.group=Administration
@@ -23,7 +22,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
-      test: wget --spider https://host.docker.internal:${PORT_SOCKY_PROXY}/version || exit 1
+      test: ["CMD-SHELL", "wget --spider http://127.0.0.1:2375/version || exit 1"]
       interval: "30s"
       timeout: "5s"
       retries: 3
@@ -32,8 +31,8 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 32M
-    restart: always
+          memory: 64M
+    restart: unless-stopped
 
 networks:
   socky_proxy-net:

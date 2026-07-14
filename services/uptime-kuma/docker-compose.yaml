@@ -15,6 +15,11 @@ services:
       - homepage.widget.type=uptimekuma
       - homepage.widget.url=http://uptime.${DOMAIN}
       - homepage.widget.slug=services
-    ports:
-      - ${PORT_UPTIME_KUMA:-3002}:3001
-    restart: always
+    networks:
+      - vps-ingress
+    restart: unless-stopped
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress

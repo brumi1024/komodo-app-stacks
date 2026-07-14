@@ -10,6 +10,7 @@ destroy_before_deploy = false
 linked_repo = "app-stacks"
 file_paths = [
     "services/proxy/docker-compose.yaml",
+    "services/proxy/vps/docker-compose.yaml",
 ]
 
 environment = """

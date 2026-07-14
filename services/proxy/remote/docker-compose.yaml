@@ -1,0 +1,4 @@
+services:
+  socky_proxy:
+    ports:
+      - "${PORT_SOCKY_PROXY:?PORT_SOCKY_PROXY is required}:2375"

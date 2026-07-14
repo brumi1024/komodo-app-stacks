@@ -1,0 +1,10 @@
+services:
+  socky_proxy:
+    networks:
+      - socky_proxy-net
+      - monitoring-control
+
+networks:
+  monitoring-control:
+    external: true
+    name: monitoring-control

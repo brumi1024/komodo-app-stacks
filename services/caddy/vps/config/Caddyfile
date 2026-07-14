@@ -20,7 +20,9 @@
       ip_source simple_http https://api6.ipify.org
     }
 
-    admin 127.0.0.1:{$PORT_CADDY_ADMIN}
+    # The admin API is reachable only on Docker networks because it is not
+    # published by Compose. Homepage uses it for the Caddy widget.
+    admin 0.0.0.0:2019
 }
 
 
@@ -44,10 +46,10 @@
 
 (authenticate) {
       # always forward outpost path to actual outpost
-      reverse_proxy /outpost.goauthentik.io/* http://homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP}
+      reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
 
       # forward authentication to outpost
-      forward_auth http://homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP} {
+      forward_auth http://authentik-server:9000 {
           uri /outpost.goauthentik.io/auth/caddy
 
           # capitalization of the headers is important, otherwise they will be empty
@@ -82,37 +84,44 @@
 komodo.{$DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy docker.{$TAILNET}:9120
+    reverse_proxy komodo-core:9120 docker.{$TAILNET}:9120 {
+        lb_policy first
+        health_uri /
+        health_interval 10s
+        health_timeout 3s
+        fail_duration 30s
+        lb_try_duration 5s
+    }
 }
 
 beszel.{$DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_BESZEL_HTTP}
+    reverse_proxy beszel:8090
 }
 
 uptime.{$DOMAIN} {
     import cloudflare
     import log_common
     import authenticate_with_tailscale_bypass
-    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_UPTIME_KUMA}
+    reverse_proxy uptime-kuma:3001
 }
 
 ntfy.{$DOMAIN} {
     import cloudflare
     import log_common
-    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_NTFY_HTTP}
+    reverse_proxy ntfy:80
 }
 
 auth.{$DOMAIN} {
     import cloudflare
-    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP}
+    reverse_proxy authentik-server:9000
 }
 
 dash.{$DOMAIN} {
     import authenticate_with_tailscale_bypass
     import cloudflare
-    reverse_proxy homelab-vps.{$TAILNET}:{$PORT_DASH_HTTP}
+    reverse_proxy homepage:3000
 }
 
 actual.{$DOMAIN} {

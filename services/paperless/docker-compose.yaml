@@ -4,8 +4,6 @@ services:
   paperless-broker:
     container_name: paperless-redis
     image: docker.io/library/redis:8
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     restart: unless-stopped
     volumes:
       - paperless-redisdata:/data
@@ -18,8 +16,6 @@ services:
   paperless-db:
     container_name: paperless-postgres
     image: docker.io/library/postgres:17
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     restart: unless-stopped
     volumes:
       - paperless-pgdata:/var/lib/postgresql/data
@@ -31,8 +27,6 @@ services:
   paperless-webserver:
     container_name: paperless-ngx
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     restart: unless-stopped
     depends_on:
       - paperless-db

@@ -4,8 +4,6 @@ services:
   actual_server:
     container_name: actual_server
     image: docker.io/actualbudget/actual-server:${ACTUALBUDGET_TAG:-latest}
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     ports:
       - ${PORT_ACTUAL_HTTP}:5006
     volumes:

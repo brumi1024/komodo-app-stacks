@@ -19,12 +19,21 @@ environment = """
 AUTOKUMA_INSTANCE=vps
 AUTOKUMA_PROJECT_NAME=autokuma-vps
 
-# Logging
-LOGGING_DRIVER=[[LOGGING_DRIVER]]
+# Persistent state
+CONFIG_DIR=[[CONFIG_DIR]]
 
-# Central Uptime Kuma — co-located on this node; still reach over Tailscale
-# FQDN for uniformity (resolves to localhost for the VPS-local instance).
-KUMA_URL=http://homelab-vps.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_UPTIME_KUMA]]
-KUMA_USERNAME=[[OP__KOMODO__UPTIME_KUMA__USERNAME]]
-KUMA_PASSWORD=[[OP__KOMODO__UPTIME_KUMA__PASSWORD]]
+# Central Uptime Kuma is co-located on the private VPS ingress network.
+AUTOKUMA__KUMA__URL=http://uptime-kuma:3001
+AUTOKUMA__KUMA__USERNAME=[[OP__KOMODO__UPTIME_KUMA__USERNAME]]
+AUTOKUMA__KUMA__PASSWORD=[[OP__KOMODO__UPTIME_KUMA__PASSWORD]]
+AUTOKUMA__KUMA__CALL_TIMEOUT=60
+AUTOKUMA__KUMA__CONNECT_TIMEOUT=60
+AUTOKUMA__DELETE_GRACE_PERIOD=86400
+AUTOKUMA__ENV__NTFY_DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+AUTOKUMA__ENV__NTFY_USERNAME=[[OP__KOMODO__ALERTER__NTFY_USERNAME]]
+AUTOKUMA__ENV__NTFY_PASSWORD=[[OP__KOMODO__ALERTER__NTFY_PASSWORD]]
+
+# Docker hosts scanned through read-only socket proxies. AutoKuma expects
+# semicolon-separated URLs when configured from environment variables.
+AUTOKUMA__DOCKER__HOSTS=tcp://docker.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_SOCKY_PROXY]];tcp://docker-seq.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_SOCKY_PROXY]];tcp://sequoia-rpi-4.[[OP__KOMODO__COMMON__TAILNET]]:[[PORT_SOCKY_PROXY]];tcp://socky_proxy:2375
 """

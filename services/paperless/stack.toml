@@ -23,9 +23,6 @@ TZ=[[TZ]]
 # Configuration directory
 CONFIG_DIR=[[CONFIG_DIR]]
 
-# Logging configuration
-LOGGING_DRIVER=[[LOGGING_DRIVER]]
-
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 TAILNET=[[OP__KOMODO__COMMON__TAILNET]]

@@ -2,8 +2,6 @@ name: "autokuma-vps"
 
 services:
   autokuma:
-    env_file:
-      - .env
     labels:
       - homepage.group=Monitoring
       - homepage.name=AutoKuma VPS

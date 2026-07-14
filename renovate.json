@@ -1,19 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "schedule": ["before 6am"],
-  "timezone": "America/New_York",
+  "timezone": "Europe/Budapest",
   "labels": ["dependencies"],
   "automerge": false,
+  "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 5,
   "packageRules": [
     {
-      "description": "Auto-merge patch updates for Docker images",
+      "description": "Keep patch updates individually reviewable",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["patch"],
-      "automerge": true
+      "automerge": false
     },
     {
       "description": "Group Linux Server Docker images",
@@ -60,10 +61,20 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": [
         "ghcr.io/goauthentik/server",
-        "docker.io/library/postgres",
-        "docker.io/library/redis"
+        "docker.io/library/postgres"
       ],
       "groupName": "Authentik authentication stack"
+    },
+    {
+      "description": "Never auto-merge database major updates",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "docker.io/library/postgres",
+        "docker.io/library/redis",
+        "docker.io/valkey/valkey"
+      ],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     },
     {
       "description": "Group monitoring stack images",

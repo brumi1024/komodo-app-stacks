@@ -1,9 +1,9 @@
 [[stack]]
-name = "proxy-sequoia"
-tags = ["docker", "security", "proxy", "socket"]
+name = "proxy-sequoia-rpi"
+tags = ["docker", "security", "proxy", "socket", "sequoia"]
 
 [stack.config]
-server = "docker-seq"
+server = "sequoia-rpi-4"
 poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
@@ -14,7 +14,7 @@ file_paths = [
 ]
 
 environment = """
-PROXY_INSTANCE=sequoia
+PROXY_INSTANCE=sequoia-rpi
 # System configuration
 TZ=[[TZ]]
 

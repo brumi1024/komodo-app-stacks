@@ -37,10 +37,10 @@
 
 (authenticate) {
       # always forward outpost path to actual outpost
-      reverse_proxy /outpost.goauthentik.io/* http://homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP}
+      reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
 
       # forward authentication to outpost
-      forward_auth http://homelab-vps.{$TAILNET}:{$PORT_AUTHENTIK_HTTP} {
+      forward_auth https://auth.{$DOMAIN} {
           uri /outpost.goauthentik.io/auth/caddy
 
           # capitalization of the headers is important, otherwise they will be empty

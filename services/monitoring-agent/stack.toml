@@ -13,6 +13,7 @@ file_paths = [
 ]
 
 environment = """
+
 # Network configuration
 PORT_BESZEL_LISTEN=[[OP__KOMODO__MONITORING__PORT_BESZEL_LISTEN]]
 

@@ -2,27 +2,49 @@ name: ${AUTOKUMA_PROJECT_NAME:-autokuma}
 
 services:
   autokuma:
-    container_name: autokuma-${AUTOKUMA_INSTANCE:-home}
-    image: ghcr.io/bigboot/autokuma:latest
+    container_name: autokuma-${AUTOKUMA_INSTANCE:-vps}
+    image: ghcr.io/bigboot/autokuma:${AUTOKUMA_TAG:-2.1.0-rc.2}
     restart: unless-stopped
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     environment:
-      AUTOKUMA__KUMA__URL: ${KUMA_URL}
-      # Per-instance tag — must be unique across nodes so each AutoKuma
-      # only manages monitors it created, never reconciling siblings'.
-      AUTOKUMA__TAG_NAME: autokuma-${AUTOKUMA_INSTANCE:-home}
+      AUTOKUMA__KUMA__URL: ${AUTOKUMA__KUMA__URL}
+      AUTOKUMA__KUMA__USERNAME: ${AUTOKUMA__KUMA__USERNAME}
+      AUTOKUMA__KUMA__PASSWORD: ${AUTOKUMA__KUMA__PASSWORD}
+      AUTOKUMA__KUMA__CALL_TIMEOUT: ${AUTOKUMA__KUMA__CALL_TIMEOUT:-60}
+      AUTOKUMA__KUMA__CONNECT_TIMEOUT: ${AUTOKUMA__KUMA__CONNECT_TIMEOUT:-60}
+      AUTOKUMA__DOCKER__HOSTS: ${AUTOKUMA__DOCKER__HOSTS}
+      AUTOKUMA__TAG_NAME: autokuma-${AUTOKUMA_INSTANCE:-vps}
       AUTOKUMA__DOCKER__LABEL_PREFIX: kuma
       AUTOKUMA__ON_DELETE: delete
+      AUTOKUMA__DELETE_GRACE_PERIOD: ${AUTOKUMA__DELETE_GRACE_PERIOD:-86400}
+      AUTOKUMA__STATIC_MONITORS: /static-monitors
+      AUTOKUMA__FILES__PREPROCESS: "true"
+      AUTOKUMA__ENV__NTFY_DOMAIN: ${AUTOKUMA__ENV__NTFY_DOMAIN}
+      AUTOKUMA__ENV__NTFY_USERNAME: ${AUTOKUMA__ENV__NTFY_USERNAME}
+      AUTOKUMA__ENV__NTFY_PASSWORD: ${AUTOKUMA__ENV__NTFY_PASSWORD}
       # Default monitor settings applied to every monitor this instance creates.
-      # The "ntfy" notification provider is registered by autokuma-vps via labels
-      # on the ntfy container; all instances reference it here by id.
+      # The static ntfy provider is reconciled from config/ntfy.json.
       AUTOKUMA__DEFAULT_SETTINGS: |-
         *.notification_name_list: '["ntfy"]'
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE:-vps}/data:/data
+      - ./config:/static-monitors:ro
+    networks:
+      - vps-ingress
+      - monitoring-control
+    labels:
+      - kuma.autokuma.http.name=AutoKuma
+      - kuma.autokuma.http.url=http://autokuma-vps:8090/health
+      - kuma.autokuma.http.interval=60
     deploy:
       resources:
         limits:
           cpus: '0.5'
-          memory: 64M
+          memory: 256M
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress
+  monitoring-control:
+    external: true
+    name: monitoring-control

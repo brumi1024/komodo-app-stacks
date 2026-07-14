@@ -3,11 +3,18 @@ name: "caddy-vps"
 services:
   caddy:
     container_name: caddy-vps
+    networks:
+      - default
+      - vps-ingress
     labels:
       - homepage.name=Caddy VPS
       - homepage.description=VPS Reverse Proxy
-      - homepage.widget.url=http://localhost:${PORT_CADDY_ADMIN}
+      - homepage.widget.type=caddy
+      - homepage.widget.url=http://caddy-vps:2019
 
 networks:
   default:
     enable_ipv6: true
+  vps-ingress:
+    external: true
+    name: vps-ingress

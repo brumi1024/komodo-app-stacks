@@ -12,4 +12,3 @@ services:
     labels:
       - homepage.name=Caddy Home
       - homepage.description=Home Reverse Proxy
-      - homepage.widget.url=http://${HOST_NAME}.${TAILNET}:${PORT_CADDY_ADMIN}

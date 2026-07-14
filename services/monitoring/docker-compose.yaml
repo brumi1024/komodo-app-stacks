@@ -5,22 +5,21 @@ services:
     image: henrygd/beszel:latest
     container_name: beszel
     restart: unless-stopped
-    ports:
-      - ${PORT_BESZEL_HTTP:-8090}:8090
     environment:
       - USER_CREATION=true
     volumes:
       - ${CONFIG_DIR}/beszel/beszel_data:/beszel_data
       - ${CONFIG_DIR}/beszel/beszel_socket:/beszel_socket
+    networks:
+      - vps-ingress
     labels:
       - homepage.group=Monitoring
       - homepage.name=Beszel
       - homepage.icon=beszel.svg
       - homepage.href=https://beszel.${DOMAIN}
       - homepage.description=Simple monitoring tool
-      # AutoKuma → central Uptime Kuma. Beszel /api/health returns 200.
       - kuma.beszel.http.name=Beszel
-      - kuma.beszel.http.url=http://homelab-vps.${TAILNET}:${PORT_BESZEL_HTTP}/api/health
+      - kuma.beszel.http.url=http://beszel:8090/api/health
       - kuma.beszel.http.interval=60
   beszel-agent:
     image: "henrygd/beszel-agent"
@@ -36,3 +35,8 @@ services:
     environment:
       LISTEN: ${PORT_BESZEL_LISTEN}
       KEY: ${BESZEL_AGENT_KEY}
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress

@@ -5,8 +5,6 @@ services:
     image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
     restart: unless-stopped
-    logging:
-      driver: ${LOGGING_DRIVER:-local}
     environment:
       TZ: ${TZ}
       # Pre-install collections relevant to this homelab's edge node:

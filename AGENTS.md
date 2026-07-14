@@ -21,8 +21,8 @@ rules that aren't spelled out there.
 
 1. Create `services/<name>/docker-compose.yaml` and `services/<name>/stack.toml`.
 2. Use the `paperless` or `tautulli` stack as a template.
-3. Every service block should set: `container_name`, `restart`, and
-   `logging.driver: ${LOGGING_DRIVER:-local}`.
+3. Every service block should set `container_name` and `restart`.
+   Container logging policy is configured once on each Docker daemon rather than repeated in stack files.
 4. Persistent data goes under `${CONFIG_DIR}/<stack>/...`. NFS volumes use
    `addr=${NAS_IP},rw,vers=4.1` (see `immich`, `paperless`).
 5. User-facing services get `homepage.*` labels; internal-only sidecars do not.

@@ -13,10 +13,11 @@ file_paths = [
 ]
 
 environment = """
+
 # Network configuration
 PORT_BESZEL_LISTEN=[[OP__KOMODO__MONITORING__PORT_BESZEL_LISTEN]]
 
-# Authentication — distinct key per node, generated when adding the
+# Authentication - distinct key per node, generated when adding the
 # system in Beszel UI. Stored in 1Password as
 # Komodo / MONITORING / BESZEL_AGENT_KEY_SEQUOIA.
 BESZEL_AGENT_KEY=[[OP__KOMODO__MONITORING__BESZEL_AGENT_KEY]]

@@ -1,110 +1,66 @@
 # Homelab Komodo Stacks
 
-This repository contains application stacks deployed via Komodo using GitOps. All stacks depend on secrets being synchronized from 1Password by the `komodo-op` service.
+This repository is the declarative source for application stacks managed by Komodo.
+Secrets are rendered from Komodo variables populated from 1Password and must never be committed here.
 
-## Stack Overview
+## Service model
 
-| Stack | Description | Services |
-|-------|-------------|----------|
-| `caddy-home/sequoia/vps` | Reverse proxy | Caddy (3 instances) |
-| `nebula-sync-home/sequoia` | Pi-hole sync | Nebula-sync (2 instances) |
-| `servarr` | Media automation | Radarr, Sonarr, Jackett, Bazarr |
-| `monitoring` | System monitoring | Prometheus, Grafana, Node Exporter |
-| `homepage` | Dashboard | Homepage |
-| `paperless` | Document management | Paperless-ngx |
-| `immich` | Photo management | Immich |
-| Others | Various services | actualbudget, authentik, stirlingpdf, tautulli, uptime-kuma, zigbee2mqtt |
+The VPS is the stable public entry point and runs Caddy, Komodo Core, Authentik, Uptime Kuma, AutoKuma, ntfy, Homepage, and Beszel.
+Caddy is the only VPS application that publishes public HTTP ports.
+VPS-hosted applications communicate over the private `vps-ingress` Docker network, so their startup does not depend on a Tailscale address being present.
 
-## Prerequisites
+One AutoKuma instance on the VPS reconciles all Uptime Kuma monitors.
+It reads local container labels over the private `monitoring-control` network and remote labels through read-only Docker socket proxies over Tailscale.
+The remote proxy ports must be protected by the host firewall so only the VPS can reach them.
 
-1. **komodo-op deployed**: Must be running and syncing secrets from 1Password
-2. **Komodo resource sync**: Must be configured to monitor this repository
-3. **Required secrets**: All referenced secrets must exist in 1Password
+Remote applications continue to use full MagicDNS names when traffic crosses hosts.
+Do not bind containers to a Tailscale IP because that creates a boot-order dependency on `tailscaled`.
 
-## Directory Structure
+## Repository layout
 
-```
-komodo-app-stacks/
-├── services/
-│   ├── caddy/                    # Shared base + instance overrides
-│   │   ├── docker-compose.yaml
-│   │   ├── home/docker-compose.yaml
-│   │   ├── sequoia/docker-compose.yaml
-│   │   └── vps/docker-compose.yaml
-│   ├── caddy-home/stack.toml     # References base + home files
-│   ├── caddy-sequoia/stack.toml
-│   ├── caddy-vps/stack.toml
-│   ├── nebula-sync/              # Shared base + instance overrides
-│   ├── servarr/
-│   │   ├── docker-compose.yaml
-│   │   └── stack.toml
-│   ├── monitoring/
-│   ├── homepage/
-│   └── ...other services
-├── renovate.json
-└── README.md
+Each `services/*/stack.toml` file declares a Komodo stack.
+Most stacks use one Compose file, while repeated services use a shared base plus a site-specific override.
+
+```text
+services/
+  autokuma/       Central monitor reconciliation
+  caddy/          Shared reverse-proxy base and site overrides
+  proxy/          Read-only Docker API proxies
+  monitoring/     Beszel server and VPS agent
+  */stack.toml    Komodo resource declaration
+scripts/
+  validate_stacks.py
 ```
 
-## Deployment Flow
+## Validation
 
-1. **Push changes** to this repository
-2. **GitHub webhook** triggers Komodo resource sync
-3. **Komodo syncs** new configurations
-4. **Auto-deploy** occurs if enabled in stack.toml
-5. **Services start** with secrets from Komodo global variables
+Run the same validation used by CI before committing:
 
-## Multi-File Compose Pattern
-
-For services with multiple instances (like Caddy), Komodo's multi compose file support is leveraged:
-
-```toml
-file_paths = [
-    "services/caddy/docker-compose.yaml",        # Base configuration
-    "services/caddy/home/docker-compose.yaml",   # Instance-specific overrides
-]
+```bash
+python3 scripts/validate_stacks.py
 ```
 
-**Benefits:**
-- Single base configuration for common settings
-- Instance-specific overrides for differences only
-- Easy to maintain and add new instances
+The validator parses every TOML resource, verifies referenced files, renders every Compose combination without resolving secrets, and rejects hard-coded Tailscale host addresses.
 
-## Adding New Stacks
+## Change workflow
 
-1. **Create directory** in `services/` for your stack
-2. **Add docker-compose.yaml** with your services
-3. **Create stack.toml** with deployment configuration
-4. **Reference secrets** using `[[SECRET_NAME]]` syntax
-5. **Commit and push** - auto-deployment will occur
+1. Change the Compose and `stack.toml` files together.
+2. Run `python3 scripts/validate_stacks.py`.
+3. Review stateful-service release notes and backup requirements.
+4. Commit the smallest coherent change.
+5. Push only when the change is ready for Komodo resource synchronization.
+6. Confirm health checks and external monitoring before removing the previous deployment.
 
-### Example stack.toml
-```toml
-[[stack]]
-name = "my-stack"
-tags = ["category", "service-type"]
+Resource sync does not automatically make a stateful migration safe.
+Database backups, data-directory moves, and control-plane relocation must use an explicit migration runbook with a tested rollback path.
 
-[stack.config]
-server = "TARGET_SERVER"
-auto_update = true
-git_account = "brumi1024"
-repo = "brumi1024/komodo-app-stacks"
-branch = "main"
-file_paths = ["services/my-stack/docker-compose.yaml"]
+## Adding a stack
 
-environment = """
-SECRET_VALUE=[[MY_SECRET_FROM_1PASSWORD]]
-CONFIG_DIR=[[MY_CONFIG_DIR]]
-"""
-```
+Use an existing nearby service as the template.
+Every long-running container should have an explicit restart policy.
+Logging policy is owned by the Docker daemon rather than repeated in every stack.
+Use named volumes or host paths under `CONFIG_DIR` for persistent state.
+Prefer private Docker networking for same-host traffic and full MagicDNS names for cross-host traffic.
+Add an unauthenticated health endpoint label when the application provides one.
 
-## Security
-
-- **No secrets in repository**: All secrets come from 1Password via komodo-op
-- **Environment variables**: Use Komodo global variables for all sensitive data
-- **Access control**: Repository access controls who can deploy what
-
-## Monitoring Deployments
-
-- **Komodo UI**: View deployment status and logs
-- **GitHub Actions**: See webhook delivery status
-- **Container logs**: Check individual service logs in Komodo
+Never commit rendered `.env` files, tokens, passwords, private keys, or database dumps.
