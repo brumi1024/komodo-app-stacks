@@ -3,7 +3,7 @@ name: "proxy"
 services:
   socky_proxy:
     container_name: socky_proxy
-    image: ghcr.io/tecnativa/docker-socket-proxy:0.4.2
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.2
     networks:
       - socky_proxy-net
     environment:
