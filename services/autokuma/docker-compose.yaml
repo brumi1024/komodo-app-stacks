@@ -24,7 +24,7 @@ services:
       # Default monitor settings applied to every monitor this instance creates.
       # The static ntfy provider is reconciled from config/ntfy.json.
       AUTOKUMA__DEFAULT_SETTINGS: |-
-        *.notification_name_list: '["ntfy"]'
+        *.notification_name_list: ["ntfy"]
     volumes:
       - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE:-vps}/data:/data
       - ./config:/static-monitors:ro
