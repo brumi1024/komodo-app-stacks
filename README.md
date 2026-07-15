@@ -1,11 +1,10 @@
 # Homelab Komodo Stacks
 
 This repository is the declarative source for application stacks managed by Komodo.
-Secrets are rendered from Komodo variables populated from 1Password and must never be committed here.
 
 ## Service model
 
-The VPS is the stable public entry point and runs Caddy, Komodo Core, Authentik, Uptime Kuma, AutoKuma, ntfy, Homepage, and Beszel.
+The VPS is the public entry point and runs Caddy, Komodo Core, Authentik, Uptime Kuma, AutoKuma, ntfy, Homepage, and Beszel.
 Caddy is the only VPS application that publishes public HTTP ports.
 VPS-hosted applications communicate over the private `vps-ingress` Docker network, so their startup does not depend on a Tailscale address being present.
 
@@ -14,7 +13,6 @@ It reads local container labels over the private `monitoring-control` network an
 The remote proxy ports must be protected by the host firewall so only the VPS can reach them.
 
 Remote applications continue to use full MagicDNS names when traffic crosses hosts.
-Do not bind containers to a Tailscale IP because that creates a boot-order dependency on `tailscaled`.
 
 ## Repository layout
 
@@ -64,5 +62,3 @@ Logging policy is owned by the Docker daemon rather than repeated in every stack
 Use named volumes or host paths under `CONFIG_DIR` for persistent state.
 Prefer private Docker networking for same-host traffic and full MagicDNS names for cross-host traffic.
 Add an unauthenticated health endpoint label when the application provides one.
-
-Never commit rendered `.env` files, tokens, passwords, private keys, or database dumps.
