@@ -46,7 +46,7 @@ services:
       - kuma.authentik.http.url=http://authentik-server:9000/-/health/live/
       - kuma.authentik.http.interval=60
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     depends_on:
       postgresql:
         condition: service_healthy
@@ -65,7 +65,7 @@ services:
       - ${CONFIG_DIR}/authentik/certs:/certs
       - ${CONFIG_DIR}/authentik/custom-templates:/templates
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     depends_on:
       postgresql:
         condition: service_healthy

@@ -8,6 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 linked_repo = "app-stacks"
+env_file_path = ".env.monitoring-agent-seq-rpi"
 file_paths = [
     "services/monitoring-agent/docker-compose.yaml",
 ]

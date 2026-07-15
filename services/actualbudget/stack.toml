@@ -7,6 +7,7 @@ server = "docker"
 poll_for_updates = true
 auto_update = true
 linked_repo = "app-stacks"
+env_file_path = ".env.actualbudget"
 run_directory="services/actualbudget"
 file_paths = [
   "docker-compose.yaml"

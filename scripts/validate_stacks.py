@@ -60,6 +60,20 @@ def validate_stack_file(stack_file: Path) -> list[str]:
                     f"{stack_file.relative_to(ROOT)}: missing {path.relative_to(ROOT)}"
                 )
 
+        env_file_path = config.get("env_file_path")
+        if env_file_path and any(
+            "KOMODO_ENV_FILE" in path.read_text()
+            for path in compose_files
+            if path.is_file()
+        ):
+            expected_assignment = f"KOMODO_ENV_FILE={env_file_path}"
+            environment = config.get("environment", "").splitlines()
+            if expected_assignment not in environment:
+                errors.append(
+                    f"{stack_file.relative_to(ROOT)}: Compose expects "
+                    f"{expected_assignment}"
+                )
+
         if missing or shutil.which("docker") is None:
             continue
 
@@ -100,6 +114,37 @@ def validate_stack_file(stack_file: Path) -> list[str]:
 
 def validate_repository_policy() -> list[str]:
     errors: list[str] = []
+    env_file_owners: dict[Path, Path] = {}
+
+    for stack_file in sorted((ROOT / "services").rglob("stack.toml")):
+        document = tomllib.loads(stack_file.read_text())
+        for stack in document.get("stack", []):
+            config = stack.get("config", {})
+            env_file_path = config.get("env_file_path")
+            if not env_file_path:
+                errors.append(
+                    f"{stack_file.relative_to(ROOT)}: explicit env_file_path required"
+                )
+                continue
+
+            relative_env_path = Path(env_file_path)
+            if relative_env_path.is_absolute() or ".." in relative_env_path.parts:
+                errors.append(
+                    f"{stack_file.relative_to(ROOT)}: env_file_path must stay "
+                    "inside run_directory"
+                )
+                continue
+
+            run_directory = ROOT / config.get("run_directory", ".")
+            rendered_env_path = (run_directory / relative_env_path).resolve()
+            if owner := env_file_owners.get(rendered_env_path):
+                errors.append(
+                    f"{stack_file.relative_to(ROOT)}: env_file_path is shared with "
+                    f"{owner.relative_to(ROOT)}"
+                )
+            else:
+                env_file_owners[rendered_env_path] = stack_file
+
     for path in sorted((ROOT / "services").rglob("*")):
         if not path.is_file() or path.suffix not in {".yaml", ".yml", ".toml"}:
             continue

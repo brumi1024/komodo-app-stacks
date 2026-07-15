@@ -24,7 +24,7 @@ services:
       # can tail them. Path matches the `log_common` snippet's output target.
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/logs:/var/log/caddy
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     labels:
       - homepage.group=Administration
       - homepage.name=${CADDY_HOMEPAGE_NAME:-Caddy}

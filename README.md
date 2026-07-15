@@ -20,6 +20,8 @@ Do not bind containers to a Tailscale IP because that creates a boot-order depen
 
 Each `services/*/stack.toml` file declares a Komodo stack.
 Most stacks use one Compose file, while repeated services use a shared base plus a site-specific override.
+Every stack sets a unique `env_file_path` so concurrent automatic deployments cannot overwrite another stack's rendered environment.
+Compose services that import the rendered file use `KOMODO_ENV_FILE`, with `.env` retained only as a local-development fallback.
 
 ```text
 services/

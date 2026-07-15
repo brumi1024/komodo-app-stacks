@@ -8,12 +8,15 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 linked_repo = "app-stacks"
+env_file_path = ".env.authentik"
 run_directory = "services/authentik"
 file_paths = [
     "docker-compose.yaml",
 ]
 
 environment = """
+KOMODO_ENV_FILE=.env.authentik
+
 # Configuration directory
 CONFIG_DIR=[[CONFIG_DIR]]
 

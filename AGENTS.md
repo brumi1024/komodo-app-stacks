@@ -39,3 +39,6 @@ base + override pattern:
 
 This repo is GitOps. Pushing to `main` triggers Komodo sync and auto-deploys stacks
 with `auto_update = true`. Don't `docker compose up` manually on target hosts.
+
+- Every stack must set a unique `env_file_path` relative to its `run_directory`.
+- If a Compose service uses `env_file`, reference `${KOMODO_ENV_FILE:-.env}` and set `KOMODO_ENV_FILE` to the same path inside that stack's `environment` block.

@@ -8,6 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 linked_repo = "app-stacks"
+env_file_path = ".env.immich"
 run_directory = "services/immich"
 file_paths = [
     "docker-compose.yaml"
@@ -18,6 +19,8 @@ file_paths = [
 pre_deploy = { path = "", command = "timeout 60 bash -c 'until (echo > /dev/tcp/[[OP__KOMODO__COMMON__HOME_NAS_IP]]/2049) 2>/dev/null; do sleep 2; done'" }
 
 environment = """
+KOMODO_ENV_FILE=.env.immich
+
 # System configuration
 TZ=[[TZ]]
 

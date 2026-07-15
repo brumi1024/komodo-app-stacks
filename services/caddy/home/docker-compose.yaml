@@ -4,7 +4,7 @@ services:
   caddy:
     container_name: caddy-home
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     volumes:
       - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data

@@ -27,7 +27,7 @@ services:
       - kuma.immich.http.url=http://docker.${TAILNET}:${PORT_IMMICH_HTTP}/api/server/ping
       - kuma.immich.http.interval=60
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     ports:
       - '${PORT_IMMICH_HTTP:-2283}:2283'
     depends_on:
@@ -48,7 +48,7 @@ services:
     volumes:
       - model-cache:/cache
     env_file:
-      - .env
+      - "${KOMODO_ENV_FILE:-.env}"
     restart: always
     healthcheck:
       disable: false

@@ -8,6 +8,7 @@ poll_for_updates = true
 auto_update = true
 destroy_before_deploy = false
 linked_repo = "app-stacks"
+env_file_path = ".env.caddy-vps"
 run_directory = "services/caddy"
 file_paths = [
     "docker-compose.yaml",
@@ -17,6 +18,8 @@ config_files = [
   { path = "vps/config/Caddyfile", requires = "Redeploy" }
 ]
 environment = """
+KOMODO_ENV_FILE=.env.caddy-vps
+
 # Caddy instance identifier for data/config directories
 CADDY_INSTANCE=vps
 
