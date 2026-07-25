@@ -2,79 +2,70 @@
 # Global options #
 ##################
 {
-    dynamic_dns {
-      provider cloudflare {$CF_API_TOKEN}
-      domains {
-        {$DOMAIN} @ * *.seq *.kalasz
-      }
-      versions ipv4
-    }
+	dynamic_dns {
+		provider cloudflare {$CF_API_TOKEN}
+		domains {
+			{$DOMAIN} @ * *.home *.kalasz
+		}
+		versions ipv4 ipv6
+		ip_source simple_http https://ipv4.icanhazip.com
+		ip_source simple_http https://ipv6.icanhazip.com
+	}
 
-    dynamic_dns {
-      provider cloudflare {$CF_API_TOKEN}
-      domains {
-        {$DOMAIN} @ * *.kalasz
-      }
-      versions ipv6
-      ip_source simple_http https://ipv6.icanhazip.com
-      ip_source simple_http https://api6.ipify.org
-    }
-
-    # The admin API is reachable only on Docker networks because it is not
-    # published by Compose. Homepage uses it for the Caddy widget.
-    admin 0.0.0.0:2019
+	# The admin API is reachable only on Docker networks because it is not
+	# published by Compose. Homepage uses it for the Caddy widget.
+	admin 0.0.0.0:2019
 }
-
 
 ############
 # Snippets #
 ############
 (cloudflare) {
-  tls {
-    dns cloudflare {$CF_API_TOKEN}
-    resolvers 1.1.1.1 1.0.0.1
-  }
+	tls {
+		dns cloudflare {$CF_API_TOKEN}
+		resolvers 1.1.1.1 1.0.0.1
+	}
 
-  encode zstd gzip
+	encode zstd gzip
 }
 
 (log_common) {
-  log {
-    output file /var/log/caddy/caddy_access.log
-  }
+	log {
+		output file /var/log/caddy/caddy_access.log
+	}
 }
 
 (authenticate) {
-      # always forward outpost path to actual outpost
-      reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
+	# always forward outpost path to actual outpost
+	reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
 
-      # forward authentication to outpost
-      forward_auth http://authentik-server:9000 {
-          uri /outpost.goauthentik.io/auth/caddy
+	# forward authentication to outpost
+	forward_auth http://authentik-server:9000 {
+		uri /outpost.goauthentik.io/auth/caddy
 
-          # capitalization of the headers is important, otherwise they will be empty
-          copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+		# capitalization of the headers is important, otherwise they will be empty
+		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
 
-          # optional, in this config trust all private ranges, should probably be set to the outposts IP
-          trusted_proxies private_ranges
-      }
+		# optional, in this config trust all private ranges, should probably be set to the outposts IP
+		trusted_proxies private_ranges
+	}
 }
 
 # Local network authentication bypass
 (authenticate_with_tailscale_bypass) {
-      @tailscale_network {
-            remote_ip 100.64.0.0/10
-        }
-      
-      # Skip authentication for local network requests
-      handle @tailscale_network {
-          # Just pass through to the backend without authentication
-      }
-      
-      # Apply authentication for non-local requests
-      handle {
-          import authenticate
-      }
+	@tailscale_network {
+		remote_ip 100.64.0.0/10
+	}
+
+	# Skip authentication for local network requests
+	handle @tailscale_network {
+		# Just pass through to the backend without authentication
+	}
+
+	# Apply authentication for non-local requests
+	handle {
+		import authenticate
+	}
 }
 
 ##########################
@@ -82,51 +73,51 @@
 ##########################
 
 komodo.{$DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy komodo-core:9120 docker.{$TAILNET}:9120 {
-        lb_policy first
-        health_uri /
-        health_interval 10s
-        health_timeout 3s
-        fail_duration 30s
-        lb_try_duration 5s
-    }
+	import cloudflare
+	import log_common
+	reverse_proxy komodo-core:9120 docker.{$TAILNET}:9120 {
+		lb_policy first
+		health_uri /
+		health_interval 10s
+		health_timeout 3s
+		fail_duration 30s
+		lb_try_duration 5s
+	}
 }
 
 beszel.{$DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy beszel:8090
+	import cloudflare
+	import log_common
+	reverse_proxy beszel:8090
 }
 
 uptime.{$DOMAIN} {
-    import cloudflare
-    import log_common
-    import authenticate_with_tailscale_bypass
-    reverse_proxy uptime-kuma:3001
+	import cloudflare
+	import log_common
+	import authenticate_with_tailscale_bypass
+	reverse_proxy uptime-kuma:3001
 }
 
 ntfy.{$DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy ntfy:80
+	import cloudflare
+	import log_common
+	reverse_proxy ntfy:80
 }
 
 auth.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy authentik-server:9000
+	import cloudflare
+	reverse_proxy authentik-server:9000
 }
 
 dash.{$DOMAIN} {
-    import authenticate_with_tailscale_bypass
-    import cloudflare
-    reverse_proxy homepage:3000
+	import authenticate_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy homepage:3000
 }
 
 actual.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_ACTUAL_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_ACTUAL_HTTP}
 }
 
 ##########################
@@ -135,92 +126,92 @@ actual.{$DOMAIN} {
 
 # Home Infrastructure
 susanoo.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy https://susanoo.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
+	import cloudflare
+	import log_common
+	reverse_proxy https://susanoo.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
 pbs.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy https://proxmox-backup-server.{$TAILNET}:{$PORT_PBS_HTTPS} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	reverse_proxy https://proxmox-backup-server.{$TAILNET}:{$PORT_PBS_HTTPS} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 truenas.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy http://truenas-scale.{$TAILNET}:80
+	import cloudflare
+	import log_common
+	reverse_proxy http://truenas-scale.{$TAILNET}:80
 }
 
 pihole1.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    redir / /admin{uri}
-    reverse_proxy https://pihole1.{$TAILNET} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	redir / /admin{uri}
+	reverse_proxy https://pihole1.{$TAILNET} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 pihole2.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    redir / /admin{uri}
-    reverse_proxy https://main-pi-zero-2.{$TAILNET} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	redir / /admin{uri}
+	reverse_proxy https://main-pi-zero-2.{$TAILNET} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 # Sequoia Infrastructure
 eurus.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy https://eurus.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
+	import cloudflare
+	import log_common
+	reverse_proxy https://eurus.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
 pbs.seq.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    reverse_proxy https://proxmox-backup-server-seq.{$TAILNET}:{$PORT_PBS_HTTPS} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	reverse_proxy https://proxmox-backup-server-seq.{$TAILNET}:{$PORT_PBS_HTTPS} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 pihole1.seq.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    redir / /admin{uri}
-    reverse_proxy https://pihole-seq-1.{$TAILNET} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	redir / /admin{uri}
+	reverse_proxy https://pihole-seq-1.{$TAILNET} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 pihole2.seq.{$ADMIN_DOMAIN} {
-    import cloudflare
-    import log_common
-    redir / /admin{uri}
-    reverse_proxy https://sequoia-rpi-4.{$TAILNET} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	import log_common
+	redir / /admin{uri}
+	reverse_proxy https://sequoia-rpi-4.{$TAILNET} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 ##########################
@@ -231,54 +222,35 @@ pihole2.seq.{$ADMIN_DOMAIN} {
 
 # Home Assistant - Kalasz
 homeassistant.kalasz.{$DOMAIN} {
-  import cloudflare
-  reverse_proxy http://homeassistant-kalasz.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+	import cloudflare
+	reverse_proxy http://homeassistant-kalasz.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
-#####################################################
-# Sequoia Site Services - Required by IPv4 clients  #
-#####################################################
+#############################################
+# Site fallback edges                       #
+# Public DNS decides when traffic uses VPS. #
+#############################################
 
-# Home Assistant
-homeassistant.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy {
-        dynamic a seq-origin-v6.{$DOMAIN} 443 {
-            versions ipv6
-        }
-        header_up Host homeassistant.seq.{$DOMAIN}
-        transport http {
-            tls
-            tls_server_name homeassistant.seq.{$DOMAIN}
-        }
-    }
+*.home.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy https://docker.{$TAILNET}:443 {
+		# Caddy 2.11 normally aligns Host with the upstream hostname.
+		# Preserve the public host so the site Caddy selects the right route.
+		header_up Host {host}
+		transport http {
+			# Use one stable certificate identity for the site edge so the
+			# transport can reuse connections across fallback hostnames.
+			tls_server_name homeassistant.home.{$DOMAIN}
+		}
+	}
 }
 
-# Synology NAS
-zephyrus.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy {
-        dynamic a seq-origin-v6.{$DOMAIN} 443 {
-            versions ipv6
-        }
-        header_up Host zephyrus.seq.{$DOMAIN}
-        transport http {
-            tls
-            tls_server_name zephyrus.seq.{$DOMAIN}
-        }
-    }
-}
-
-scrypted.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy {
-        dynamic a seq-origin-v6.{$DOMAIN} 443 {
-            versions ipv6
-        }
-        header_up Host scrypted.seq.{$DOMAIN}
-        transport http {
-            tls
-            tls_server_name scrypted.seq.{$DOMAIN}
-        }
-    }
+*.seq.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy https://docker-seq.{$TAILNET}:443 {
+		header_up Host {host}
+		transport http {
+			tls_server_name homeassistant.seq.{$DOMAIN}
+		}
+	}
 }

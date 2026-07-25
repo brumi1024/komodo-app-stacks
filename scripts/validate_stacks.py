@@ -154,6 +154,18 @@ def validate_repository_policy() -> list[str]:
         scrubbed = text.replace(ALLOWED_TAILSCALE_CIDR, "")
         if TAILSCALE_IP.search(scrubbed):
             errors.append(f"{path.relative_to(ROOT)}: hard-coded Tailscale host IP")
+
+    for caddyfile in sorted((ROOT / "services").rglob("Caddyfile")):
+        dynamic_dns_apps = re.findall(
+            r"(?m)^\s*dynamic_dns\s*\{",
+            caddyfile.read_text(),
+        )
+        if len(dynamic_dns_apps) > 1:
+            errors.append(
+                f"{caddyfile.relative_to(ROOT)}: multiple dynamic_dns options "
+                "adapt to one Caddy app; combine them into one effective policy"
+            )
+
     return errors
 
 

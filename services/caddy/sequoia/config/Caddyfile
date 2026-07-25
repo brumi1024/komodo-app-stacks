@@ -2,70 +2,76 @@
 # Global options #
 ##################
 {
-    dynamic_dns {
-      provider cloudflare {$CF_API_TOKEN}
-      domains {
-        {$DOMAIN} seq seq-origin-v6 *.seq
-      }
-      versions ipv6
-      ip_source simple_http https://ipv6.icanhazip.com
-      ip_source simple_http https://api6.ipify.org
-    }
+	dynamic_dns {
+		provider cloudflare {$CF_API_TOKEN}
+		domains {
+			{$DOMAIN} seq seq-origin-v6 *.seq
+		}
+		versions ipv6
+		ip_source simple_http https://ipv6.icanhazip.com
+		ip_source simple_http https://api6.ipify.org
+	}
 
-    admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+	admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+
+	# The VPS is a trusted fallback proxy over Tailscale.
+	# Strict client-IP parsing preserves public client identity and prevents
+	# fallback traffic from inheriting the Tailnet authentication bypass.
+	servers {
+		trusted_proxies static 100.64.0.0/10
+		trusted_proxies_strict
+	}
 }
-
 
 ############
 # Snippets #
 ############
 (cloudflare) {
-  tls {
-    dns cloudflare {$CF_API_TOKEN}
-    resolvers 1.1.1.1 1.0.0.1
-  }
+	tls {
+		dns cloudflare {$CF_API_TOKEN}
+		resolvers 1.1.1.1 1.0.0.1
+	}
 
-  encode zstd gzip
+	encode zstd gzip
 }
 
-
 (log_common) {
-  log {
-    output file /var/log/caddy/caddy_access.log
-  }
+	log {
+		output file /var/log/caddy/caddy_access.log
+	}
 }
 
 (authenticate) {
-      # always forward outpost path to actual outpost
-      reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
+	# always forward outpost path to actual outpost
+	reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
 
-      # forward authentication to outpost
-      forward_auth https://auth.{$DOMAIN} {
-          uri /outpost.goauthentik.io/auth/caddy
+	# forward authentication to outpost
+	forward_auth https://auth.{$DOMAIN} {
+		uri /outpost.goauthentik.io/auth/caddy
 
-          # capitalization of the headers is important, otherwise they will be empty
-          copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+		# capitalization of the headers is important, otherwise they will be empty
+		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
 
-          # optional, in this config trust all private ranges, should probably be set to the outposts IP
-          trusted_proxies private_ranges
-      }
+		# optional, in this config trust all private ranges, should probably be set to the outposts IP
+		trusted_proxies private_ranges
+	}
 }
 
 # Local network authentication bypass
 (authenticate_with_tailscale_bypass) {
-      @tailscale_network {
-            remote_ip 100.64.0.0/10
-        }
-      
-      # Skip authentication for local network requests
-      handle @tailscale_network {
-          # Just pass through to the backend without authentication
-      }
-      
-      # Apply authentication for non-local requests
-      handle {
-          import authenticate
-      }
+	@tailscale_network {
+		client_ip 100.64.0.0/10
+	}
+
+	# Skip authentication for local network requests
+	handle @tailscale_network {
+		# Just pass through to the backend without authentication
+	}
+
+	# Apply authentication for non-local requests
+	handle {
+		import authenticate
+	}
 }
 
 ##########################
@@ -74,22 +80,22 @@
 
 # Home Assistant
 homeassistant.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy http://homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+	import cloudflare
+	reverse_proxy http://homeassistant-seq.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
 }
 
 # Synology NAS
 zephyrus.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy http://zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
+	import cloudflare
+	reverse_proxy http://zephyrus.{$TAILNET}:{$PORT_ZEPHYRUS_HTTP}
 }
 
 scrypted.seq.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
-    }
+	import cloudflare
+	reverse_proxy https://scrypted-sequoia.{$TAILNET}:{$PORT_SCRYPTED_HTTPS} {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
 }

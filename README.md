@@ -13,6 +13,7 @@ It reads local container labels over the private `monitoring-control` network an
 The remote proxy ports must be protected by the host firewall so only the VPS can reach them.
 
 Remote applications continue to use full MagicDNS names when traffic crosses hosts.
+The public IPv4, IPv6, VPS fallback, and Tailnet-direct ingress policy is documented in [Caddy multi-site ingress architecture](docs/caddy-ingress-architecture.md).
 
 ## Repository layout
 

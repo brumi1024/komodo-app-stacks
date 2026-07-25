@@ -2,72 +2,70 @@
 # Global options #
 ##################
 {
-    dynamic_dns {
-      provider cloudflare {$CF_API_TOKEN}
-      domains {
-        {$DOMAIN} home *.home
-      }
-    }
+	admin 0.0.0.0:{$PORT_CADDY_ADMIN}
 
-    admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+	# Home Assistant mobile clients currently stall on HTTP/3 asset requests
+	# through this edge; keep the Home edge on TCP transports until isolated.
+	servers :443 {
+		protocols h1 h2
 
-    # Home Assistant mobile clients currently stall on HTTP/3 asset requests
-    # through this edge; keep the Home edge on TCP transports until isolated.
-    servers :443 {
-      protocols h1 h2
-    }
+		# The VPS is a trusted fallback proxy over Tailscale.
+		# Strict client-IP parsing preserves public client identity and prevents
+		# fallback traffic from inheriting the Tailnet authentication bypass.
+		trusted_proxies static 100.64.0.0/10
+		trusted_proxies_strict
+	}
 }
-
 
 ############
 # Snippets #
 ############
 (cloudflare) {
-  tls {
-    dns cloudflare {$CF_API_TOKEN}
-    resolvers 1.1.1.1 1.0.0.1
-  }
+	tls {
+		dns cloudflare {$CF_API_TOKEN}
+		resolvers 1.1.1.1 1.0.0.1
+	}
 
-  encode zstd gzip
+	encode zstd gzip
 }
 
 (log_common) {
-  log {
-    output file /var/log/caddy/caddy_access.log
-  }
+	log {
+		output file /var/log/caddy/caddy_access.log
+	}
 }
 
 (authenticate) {
-      # always forward outpost path to actual outpost
-      reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
+	# always forward outpost path to actual outpost
+	reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
 
-      # forward authentication to outpost
-      forward_auth https://auth.{$DOMAIN} {
-          uri /outpost.goauthentik.io/auth/caddy
+	# forward authentication to outpost
+	forward_auth https://auth.{$DOMAIN} {
+		uri /outpost.goauthentik.io/auth/caddy
 
-          # capitalization of the headers is important, otherwise they will be empty
-          copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+		# capitalization of the headers is important, otherwise they will be empty
+		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
 
-          # optional, in this config trust all private ranges, should probably be set to the outposts IP
-          trusted_proxies private_ranges
-      }
+		# optional, in this config trust all private ranges, should probably be set to the outposts IP
+		trusted_proxies private_ranges
+	}
 }
 
 # Local network authentication bypass
 (authenticate_with_tailscale_bypass) {
-      @tailscale_network {
-            remote_ip 100.64.0.0/10
-        }
-      
-      # Skip authentication for local network requests
-      handle @tailscale_network {
-          # Just pass through to the backend without authentication
-      }
-      
-      # Apply authentication for non-local requests
-      handle {
-          import authenticate
-      }
+	@tailscale_network {
+		client_ip 100.64.0.0/10
+	}
+
+	# Skip authentication for local network requests
+	handle @tailscale_network {
+		# Just pass through to the backend without authentication
+	}
+
+	# Apply authentication for non-local requests
+	handle {
+		import authenticate
+	}
 }
 
 ##########################
@@ -77,82 +75,82 @@
 # Home Assistant
 
 homeassistant.home.{$DOMAIN} {
-    import cloudflare
-    header Alt-Svc "clear"
+	import cloudflare
+	header Alt-Svc "clear"
 
-    handle {
-        reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
-    }
+	handle {
+		reverse_proxy homeassistant.{$TAILNET}:{$PORT_HOMEASSISTANT_HTTP}
+	}
 }
 
 # Media Stack
 
 prowlarr.home.{$DOMAIN} {
-    import authenticate_with_tailscale_bypass
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_PROWLARR_HTTP}
+	import authenticate_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_PROWLARR_HTTP}
 }
 
 sonarr.home.{$DOMAIN} {
-    import authenticate_with_tailscale_bypass
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_SONARR_HTTP}
+	import authenticate_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_SONARR_HTTP}
 }
 
 radarr.home.{$DOMAIN} {
-    import authenticate_with_tailscale_bypass
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_RADARR_HTTP}
+	import authenticate_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_RADARR_HTTP}
 }
 
 seerr.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_SEERR_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_SEERR_HTTP}
 }
 
 tautulli.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_TAUTULLI_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_TAUTULLI_HTTP}
 }
 
 qbittorrent.home.{$DOMAIN} {
-    import authenticate_with_tailscale_bypass
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_QBITTORRENT_HTTP}
+	import authenticate_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_QBITTORRENT_HTTP}
 }
 
 plex.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy plex.{$TAILNET}:{$PORT_PLEX_HTTP}
+	import cloudflare
+	reverse_proxy plex.{$TAILNET}:{$PORT_PLEX_HTTP}
 }
 
 # Services
 paperless.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
 }
 
 stirling.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_STIRLING_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_STIRLING_HTTP}
 }
 
 immich.home.{$DOMAIN} {
-    import cloudflare
-    reverse_proxy docker.{$TAILNET}:{$PORT_IMMICH_HTTP}
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_IMMICH_HTTP}
 }
 
 evcc.home.{$DOMAIN} {
-    import cloudflare
+	import cloudflare
 
-    @provider_auth path /providerauth/*
-    handle @provider_auth {
-        reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
-    }
+	@provider_auth path /providerauth/*
+	handle @provider_auth {
+		reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
+	}
 
-    import authenticate_with_tailscale_bypass
+	import authenticate_with_tailscale_bypass
 
-    handle {
-        reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
-    }
+	handle {
+		reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
+	}
 }
