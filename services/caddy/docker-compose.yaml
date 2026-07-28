@@ -11,7 +11,7 @@ services:
       context: ./caddy-build
       dockerfile: Dockerfile
       args:
-        CADDY_VERSION: ${CADDY_VERSION:-2.8.1}
+        CADDY_VERSION: ${CADDY_VERSION:?CADDY_VERSION must be set}
     ports:
       - ${PORT_CADDY_HTTP}:80
       - ${PORT_CADDY_HTTPS}:443
