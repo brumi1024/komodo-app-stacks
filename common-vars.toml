@@ -13,7 +13,7 @@ is_secret = false
 [[variable]]
 name = "CADDY_VERSION"
 description = "Caddy version"
-value = "2.11.3"
+value = "2.11.4"
 is_secret = false
 
 [[variable]]
