@@ -36,22 +36,30 @@
 }
 
 (authenticate) {
-	# always forward outpost path to actual outpost
-	reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
+	route {
+		# always forward outpost path to actual outpost
+		reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
 
-	# forward authentication to outpost
-	forward_auth http://authentik-server:9000 {
-		uri /outpost.goauthentik.io/auth/caddy
+		# Preserve the app URL before forward_auth clones and retargets the request.
+		request_header X-Authentik-Original-Host {host}
+		request_header X-Authentik-Original-Proto {scheme}
 
-		# Authentik selects the forward-auth provider from the original app URL.
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Proto {scheme}
+		forward_auth http://authentik-server:9000 {
+			uri /outpost.goauthentik.io/auth/caddy
 
-		# capitalization of the headers is important, otherwise they will be empty
-		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+			# Authentik selects the forward-auth provider from the original app URL.
+			header_up X-Forwarded-Host {http.request.header.X-Authentik-Original-Host}
+			header_up X-Forwarded-Proto {http.request.header.X-Authentik-Original-Proto}
 
-		# optional, in this config trust all private ranges, should probably be set to the outposts IP
-		trusted_proxies private_ranges
+			# capitalization of the headers is important, otherwise they will be empty
+			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+
+			# optional, in this config trust all private ranges, should probably be set to the outposts IP
+			trusted_proxies private_ranges
+		}
+
+		request_header -X-Authentik-Original-Host
+		request_header -X-Authentik-Original-Proto
 	}
 }
 
@@ -110,6 +118,22 @@ ntfy.{$DOMAIN} {
 
 auth.{$DOMAIN} {
 	import cloudflare
+
+	# The site Caddy passes the protected application's URL in X-Forwarded-*.
+	# Preserve it before reverse_proxy replaces those headers with this proxy hop.
+	route /outpost.goauthentik.io/auth/caddy {
+		request_header X-Authentik-Original-Forwarded-Host {http.request.header.X-Forwarded-Host}
+		request_header X-Authentik-Original-Forwarded-Proto {http.request.header.X-Forwarded-Proto}
+
+		reverse_proxy authentik-server:9000 {
+			header_up X-Forwarded-Host {http.request.header.X-Authentik-Original-Forwarded-Host}
+			header_up X-Forwarded-Proto {http.request.header.X-Authentik-Original-Forwarded-Proto}
+			header_up -X-Authentik-Original-Forwarded-Host
+			header_up -X-Authentik-Original-Forwarded-Proto
+		}
+	}
+
+	# Keep the normal Authentik UI and callback traffic unchanged.
 	reverse_proxy authentik-server:9000
 }
 

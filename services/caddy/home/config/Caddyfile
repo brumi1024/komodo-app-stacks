@@ -36,22 +36,30 @@
 }
 
 (authenticate) {
-	# always forward outpost path to actual outpost
-	reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
+	route {
+		# always forward outpost path to actual outpost
+		reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
 
-	# forward authentication to outpost
-	forward_auth https://auth.{$DOMAIN} {
-		uri /outpost.goauthentik.io/auth/caddy
+		# Preserve the app URL before forward_auth clones and retargets the request.
+		request_header X-Authentik-Original-Host {host}
+		request_header X-Authentik-Original-Proto {scheme}
 
-		# Authentik selects the forward-auth provider from the original app URL.
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Proto {scheme}
+		forward_auth https://auth.{$DOMAIN} {
+			uri /outpost.goauthentik.io/auth/caddy
 
-		# capitalization of the headers is important, otherwise they will be empty
-		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+			# Authentik selects the forward-auth provider from the original app URL.
+			header_up X-Forwarded-Host {http.request.header.X-Authentik-Original-Host}
+			header_up X-Forwarded-Proto {http.request.header.X-Authentik-Original-Proto}
 
-		# optional, in this config trust all private ranges, should probably be set to the outposts IP
-		trusted_proxies private_ranges
+			# capitalization of the headers is important, otherwise they will be empty
+			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
+
+			# optional, in this config trust all private ranges, should probably be set to the outposts IP
+			trusted_proxies private_ranges
+		}
+
+		request_header -X-Authentik-Original-Host
+		request_header -X-Authentik-Original-Proto
 	}
 }
 
