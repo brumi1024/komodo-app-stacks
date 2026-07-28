@@ -40,12 +40,12 @@
 	reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
 
 	# forward authentication to outpost
-	# Authentik selects the forward-auth provider from the original app URL.
-	request_header X-Forwarded-Host {host}
-	request_header X-Forwarded-Proto {scheme}
-
 	forward_auth https://auth.{$DOMAIN} {
 		uri /outpost.goauthentik.io/auth/caddy
+
+		# Authentik selects the forward-auth provider from the original app URL.
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Proto {scheme}
 
 		# capitalization of the headers is important, otherwise they will be empty
 		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
