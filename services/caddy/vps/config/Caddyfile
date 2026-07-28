@@ -40,6 +40,10 @@
 	reverse_proxy /outpost.goauthentik.io/* http://authentik-server:9000
 
 	# forward authentication to outpost
+	# Authentik selects the forward-auth provider from the original app URL.
+	request_header X-Forwarded-Host {host}
+	request_header X-Forwarded-Proto {scheme}
+
 	forward_auth http://authentik-server:9000 {
 		uri /outpost.goauthentik.io/auth/caddy
 
