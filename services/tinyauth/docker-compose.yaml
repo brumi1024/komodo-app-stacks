@@ -60,6 +60,9 @@ services:
       TINYAUTH_APPS_QBITTORRENT_CONFIG_DOMAIN: qbittorrent.home.${DOMAIN}
       TINYAUTH_APPS_QBITTORRENT_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_QBITTORRENT_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_EVCC_CONFIG_DOMAIN: evcc.home.${DOMAIN}
+      TINYAUTH_APPS_EVCC_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_EVCC_OAUTH_GROUPS: site-admins
       TZ: ${TZ}
     volumes:
       - ${CONFIG_DIR}/tinyauth:/data
