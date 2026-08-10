@@ -37,6 +37,11 @@ services:
       TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES: openid email profile groups
       # Application ACL: only dash, and only for this Pocket ID group.
       TINYAUTH_APPS_DASH_CONFIG_DOMAIN: dash.${DOMAIN}
+      # Per-application counterpart of TINYAUTH_OAUTH_WHITELIST. Upstream
+      # documents this as a group list, but it is matched against the user's
+      # email, and leaving it empty abstains and therefore denies under the
+      # deny policy. Admit here; the group below is what actually authorizes.
+      TINYAUTH_APPS_DASH_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_DASH_OAUTH_GROUPS: homelab-users
       TZ: ${TZ}
     volumes:
