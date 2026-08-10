@@ -17,7 +17,11 @@ services:
       - ${PORT_CADDY_HTTPS}:443
       - ${PORT_CADDY_HTTPS}:443/udp
     volumes:
-      - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Mount the config directory rather than the Caddyfile itself. A `git
+      # pull` replaces the file instead of editing it in place, so a
+      # single-file bind mount keeps resolving to the old, now-unlinked inode
+      # and serves stale config until the container is recreated.
+      - ./${CADDY_INSTANCE:-caddy}/config:/etc/caddy:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
       # Access logs persisted to host so log-readers (CrowdSec, fail2ban, etc.)
