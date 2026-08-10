@@ -13,6 +13,12 @@ services:
       # Deny by default: a host without an explicit app block below gets no
       # access, so adding a route to Caddy cannot silently grant entry.
       TINYAUTH_AUTH_ACLS_POLICY: deny
+      # Required alongside the deny policy. An unset whitelist makes the email
+      # check abstain, and under this policy abstain resolves to deny, which
+      # refuses every OAuth login before any group is evaluated. Admit every
+      # identity Pocket ID authenticates and let the per-app group ACL below
+      # authorize, so membership stays managed in Pocket ID, not in this file.
+      TINYAUTH_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_AUTH_SECURECOOKIE: "true"
       TINYAUTH_DATABASE_DRIVER: sqlite
       TINYAUTH_DATABASE_PATH: /data/tinyauth.db
