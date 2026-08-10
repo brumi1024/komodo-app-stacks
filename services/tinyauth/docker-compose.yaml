@@ -42,7 +42,7 @@ services:
       # email, and leaving it empty abstains and therefore denies under the
       # deny policy. Admit here; the group below is what actually authorizes.
       TINYAUTH_APPS_DASH_OAUTH_WHITELIST: "/.*/"
-      TINYAUTH_APPS_DASH_OAUTH_GROUPS: homelab-users
+      TINYAUTH_APPS_DASH_OAUTH_GROUPS: acl-verification-no-such-group
       TZ: ${TZ}
     volumes:
       - ${CONFIG_DIR}/tinyauth:/data
