@@ -183,7 +183,7 @@ login.{$DOMAIN} {
 }
 
 dash.{$DOMAIN} {
-	import authenticate_with_tailscale_bypass
+	import authenticate_tinyauth_with_tailscale_bypass
 	import cloudflare
 	reverse_proxy homepage:3000
 }
