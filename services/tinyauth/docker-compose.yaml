@@ -35,14 +35,31 @@ services:
       # The provider key and the callback path segment must stay identical.
       TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL: https://login.${DOMAIN}/api/oauth/callback/pocketid
       TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES: openid email profile groups
-      # Application ACL: only dash, and only for this Pocket ID group.
+      # Application ACLs. Each application admits any identity the provider
+      # authenticates and is authorized by Pocket ID group membership.
+      #
+      # The per-application whitelist is upstream's counterpart of
+      # TINYAUTH_OAUTH_WHITELIST. It is documented as a group list but is
+      # matched against the user's email, and leaving it empty abstains, which
+      # the deny policy turns into a refusal before any group is evaluated.
       TINYAUTH_APPS_DASH_CONFIG_DOMAIN: dash.${DOMAIN}
-      # Per-application counterpart of TINYAUTH_OAUTH_WHITELIST. Upstream
-      # documents this as a group list, but it is matched against the user's
-      # email, and leaving it empty abstains and therefore denies under the
-      # deny policy. Admit here; the group below is what actually authorizes.
       TINYAUTH_APPS_DASH_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_DASH_OAUTH_GROUPS: homelab-users
+      TINYAUTH_APPS_UPTIME_CONFIG_DOMAIN: uptime.${DOMAIN}
+      TINYAUTH_APPS_UPTIME_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_UPTIME_OAUTH_GROUPS: site-admins
+      TINYAUTH_APPS_PROWLARR_CONFIG_DOMAIN: prowlarr.home.${DOMAIN}
+      TINYAUTH_APPS_PROWLARR_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_PROWLARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_SONARR_CONFIG_DOMAIN: sonarr.home.${DOMAIN}
+      TINYAUTH_APPS_SONARR_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_SONARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_RADARR_CONFIG_DOMAIN: radarr.home.${DOMAIN}
+      TINYAUTH_APPS_RADARR_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_RADARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_QBITTORRENT_CONFIG_DOMAIN: qbittorrent.home.${DOMAIN}
+      TINYAUTH_APPS_QBITTORRENT_OAUTH_WHITELIST: "/.*/"
+      TINYAUTH_APPS_QBITTORRENT_OAUTH_GROUPS: media-admins
       TZ: ${TZ}
     volumes:
       - ${CONFIG_DIR}/tinyauth:/data

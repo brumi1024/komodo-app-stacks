@@ -172,6 +172,23 @@ id.{$DOMAIN} {
 login.{$DOMAIN} {
 	import cloudflare
 	import log_common
+
+	# Site Caddy instances forward-auth here and pass the protected
+	# application's URL in X-Forwarded-*. Preserve it across this proxy hop,
+	# which would otherwise replace those headers with this login host and make
+	# Tinyauth resolve the wrong application.
+	route /api/auth/* {
+		request_header X-Tinyauth-Original-Forwarded-Host {http.request.header.X-Forwarded-Host}
+		request_header X-Tinyauth-Original-Forwarded-Proto {http.request.header.X-Forwarded-Proto}
+
+		reverse_proxy tinyauth:3000 {
+			header_up X-Forwarded-Host {http.request.header.X-Tinyauth-Original-Forwarded-Host}
+			header_up X-Forwarded-Proto {http.request.header.X-Tinyauth-Original-Forwarded-Proto}
+			header_up -X-Tinyauth-Original-Forwarded-Host
+			header_up -X-Tinyauth-Original-Forwarded-Proto
+		}
+	}
+
 	reverse_proxy tinyauth:3000
 }
 
