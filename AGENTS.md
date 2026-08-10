@@ -42,3 +42,18 @@ with `auto_update = true`. Don't `docker compose up` manually on target hosts.
 
 - Every stack must set a unique `env_file_path` relative to its `run_directory`.
 - If a Compose service uses `env_file`, reference `${KOMODO_ENV_FILE:-.env}` and set `KOMODO_ENV_FILE` to the same path inside that stack's `environment` block.
+
+### Config-file-only changes need a restart, not a deploy
+
+Komodo's Deploy runs `docker compose up -d`, which does nothing when the Compose
+file itself is unchanged. A change to a `config_files` entry — most often a
+Caddyfile — therefore leaves the old process running with its old configuration,
+while Komodo records the stack as deployed at the new commit. The stack reads as
+current at the right hash while the running service is stale.
+
+After changing a Caddyfile or any other `config_files` entry, run **Restart** on
+that stack, not Deploy.
+
+Mount the config *directory* rather than an individual file. A `git pull` replaces
+files instead of editing them, so a single-file bind mount keeps resolving to the
+old, now-unlinked inode and a restart alone would not help.
