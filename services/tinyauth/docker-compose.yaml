@@ -1,0 +1,55 @@
+name: "tinyauth"
+
+services:
+  tinyauth:
+    container_name: tinyauth
+    image: ghcr.io/tinyauthapp/tinyauth:${TINYAUTH_TAG:-v5.1.3}
+    restart: unless-stopped
+    environment:
+      TINYAUTH_APPURL: https://login.${DOMAIN}
+      # No Docker socket is mounted, so container-label discovery is off and
+      # every access rule is declared below instead.
+      TINYAUTH_LABELPROVIDER: none
+      # Deny by default: a host without an explicit app block below gets no
+      # access, so adding a route to Caddy cannot silently grant entry.
+      TINYAUTH_AUTH_ACLS_POLICY: deny
+      TINYAUTH_AUTH_SECURECOOKIE: "true"
+      TINYAUTH_DATABASE_DRIVER: sqlite
+      TINYAUTH_DATABASE_PATH: /data/tinyauth.db
+      # Version phone-home is on by default upstream.
+      TINYAUTH_ANALYTICS_ENABLED: "false"
+      # Skip Tinyauth's own login page and go straight to Pocket ID.
+      TINYAUTH_OAUTH_AUTOREDIRECT: pocketid
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME: Pocket ID
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTID: ${TINYAUTH_OAUTH_CLIENT_ID:?client id required}
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTSECRET: ${TINYAUTH_OAUTH_CLIENT_SECRET:?client secret required}
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL: https://id.${DOMAIN}/authorize
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL: https://id.${DOMAIN}/api/oidc/token
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL: https://id.${DOMAIN}/api/oidc/userinfo
+      # The provider key and the callback path segment must stay identical.
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL: https://login.${DOMAIN}/api/oauth/callback/pocketid
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES: openid email profile groups
+      # Application ACL: only dash, and only for this Pocket ID group.
+      TINYAUTH_APPS_DASH_CONFIG_DOMAIN: dash.${DOMAIN}
+      TINYAUTH_APPS_DASH_OAUTH_GROUPS: homelab-users
+      TZ: ${TZ}
+    volumes:
+      - ${CONFIG_DIR}/tinyauth:/data
+    networks:
+      - vps-ingress
+    healthcheck:
+      test: ["CMD", "tinyauth", "healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      # AutoKuma → central Uptime Kuma. /api/healthz returns 200 unauth.
+      - kuma.tinyauth.http.name=Tinyauth
+      - kuma.tinyauth.http.url=http://tinyauth:3000/api/healthz
+      - kuma.tinyauth.http.interval=60
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress

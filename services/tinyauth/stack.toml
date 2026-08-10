@@ -1,0 +1,31 @@
+[[stack]]
+name = "tinyauth"
+tags = ["authentication", "forward-auth", "sso"]
+
+[stack.config]
+server = "homelab-vps"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+env_file_path = ".env.tinyauth"
+run_directory = "services/tinyauth"
+file_paths = [
+    "docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+TZ=[[TZ]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+
+# Application configuration
+TINYAUTH_TAG=v5.1.3
+
+# OIDC client registered in Pocket ID for this forward-auth service.
+TINYAUTH_OAUTH_CLIENT_ID=[[OP__KOMODO__TINYAUTH__TINYAUTH_OAUTH_CLIENT_ID]]
+TINYAUTH_OAUTH_CLIENT_SECRET=[[OP__KOMODO__TINYAUTH__TINYAUTH_OAUTH_CLIENT_SECRET]]
+"""

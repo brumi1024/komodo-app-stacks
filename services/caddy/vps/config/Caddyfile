@@ -80,6 +80,35 @@
 	}
 }
 
+# Tinyauth forward auth, backed by Pocket ID. Tinyauth resolves the protected
+# application from the forwarded host, so this snippet stays generic.
+(authenticate_tinyauth) {
+	forward_auth http://tinyauth:3000 {
+		uri /api/auth/caddy
+
+		# Capitalization matters; these arrive empty otherwise.
+		copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
+	}
+}
+
+# Tinyauth equivalent of authenticate_with_tailscale_bypass. Kept separate so
+# the Authentik wrapper and its applications stay untouched.
+(authenticate_tinyauth_with_tailscale_bypass) {
+	@tailscale_network {
+		remote_ip 100.64.0.0/10
+	}
+
+	# Skip authentication for local network requests
+	handle @tailscale_network {
+		# Just pass through to the backend without authentication
+	}
+
+	# Apply authentication for non-local requests
+	handle {
+		import authenticate_tinyauth
+	}
+}
+
 ##########################
 # VPS Hosted Services    #
 ##########################
@@ -144,6 +173,13 @@ id.{$DOMAIN} {
 	import cloudflare
 	import log_common
 	reverse_proxy pocket-id:1411
+}
+
+# Tinyauth serves the login flow itself, so it must not sit behind forward auth.
+login.{$DOMAIN} {
+	import cloudflare
+	import log_common
+	reverse_proxy tinyauth:3000
 }
 
 dash.{$DOMAIN} {
