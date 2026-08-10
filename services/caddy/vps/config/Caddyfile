@@ -87,7 +87,7 @@
 		uri /api/auth/caddy
 
 		# Capitalization matters; these arrive empty otherwise.
-		copy_headers Remote-User Remote-Name Remote-Email Remote-Groups
+		copy_headers Remote-User Remote-Name Remote-Email Remote-Groups Authorization
 	}
 }
 
