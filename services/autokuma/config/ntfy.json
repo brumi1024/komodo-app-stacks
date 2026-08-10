@@ -5,11 +5,12 @@
   "name": "Ntfy",
   "config": {
     "type": "ntfy",
-    "serverUrl": "https://ntfy.{{ get_env(name='AUTOKUMA__ENV__NTFY_DOMAIN') | json_escape }}",
-    "ntfyTopic": "homelab-alerts",
+    "applyExisting": false,
+    "ntfyserverurl": "https://ntfy.{{ get_env(name='AUTOKUMA__ENV__NTFY_DOMAIN') | json_escape }}",
+    "ntfytopic": "homelab-alerts",
     "ntfyAuthenticationMethod": "usernameAndPassword",
-    "ntfyUsername": "{{ get_env(name='AUTOKUMA__ENV__NTFY_USERNAME') | json_escape }}",
-    "ntfyPassword": "{{ get_env(name='AUTOKUMA__ENV__NTFY_PASSWORD') | json_escape }}",
+    "ntfyusername": "{{ get_env(name='AUTOKUMA__ENV__NTFY_USERNAME') | json_escape }}",
+    "ntfypassword": "{{ get_env(name='AUTOKUMA__ENV__NTFY_PASSWORD') | json_escape }}",
     "ntfyPriority": 4
   }
 }
