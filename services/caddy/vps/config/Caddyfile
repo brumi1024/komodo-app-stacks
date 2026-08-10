@@ -127,7 +127,7 @@ beszel.{$DOMAIN} {
 uptime.{$DOMAIN} {
 	import cloudflare
 	import log_common
-	import authenticate_with_tailscale_bypass
+	import authenticate_tinyauth_with_tailscale_bypass
 	reverse_proxy uptime-kuma:3001
 }
 

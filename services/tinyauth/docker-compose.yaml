@@ -48,6 +48,9 @@ services:
       TINYAUTH_APPS_UPTIME_CONFIG_DOMAIN: uptime.${DOMAIN}
       TINYAUTH_APPS_UPTIME_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_UPTIME_OAUTH_GROUPS: site-admins
+      # Public status pages, badges and push-monitor endpoints must stay
+      # reachable without a session, or heartbeats stop arriving.
+      TINYAUTH_APPS_UPTIME_PATH_ALLOW: "^/(status/.*|assets/.*|api/push/.*|api/badge/.*|api/status-page/heartbeat/.*|upload/.*|icon\\.svg)"
       TINYAUTH_APPS_PROWLARR_CONFIG_DOMAIN: prowlarr.home.${DOMAIN}
       TINYAUTH_APPS_PROWLARR_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_PROWLARR_OAUTH_GROUPS: media-admins
