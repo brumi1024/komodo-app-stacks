@@ -126,19 +126,19 @@ homeassistant.home.{$DOMAIN} {
 # Media Stack
 
 prowlarr.home.{$DOMAIN} {
-	import authenticate_with_tailscale_bypass
+	import authenticate_tinyauth_with_tailscale_bypass
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_PROWLARR_HTTP}
 }
 
 sonarr.home.{$DOMAIN} {
-	import authenticate_with_tailscale_bypass
+	import authenticate_tinyauth_with_tailscale_bypass
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_SONARR_HTTP}
 }
 
 radarr.home.{$DOMAIN} {
-	import authenticate_with_tailscale_bypass
+	import authenticate_tinyauth_with_tailscale_bypass
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_RADARR_HTTP}
 }

@@ -51,15 +51,24 @@ services:
       # Public status pages, badges and push-monitor endpoints must stay
       # reachable without a session, or heartbeats stop arriving.
       TINYAUTH_APPS_UPTIME_PATH_ALLOW: "^/(status/.*|assets/.*|api/push/.*|api/badge/.*|api/status-page/heartbeat/.*|upload/.*|icon\\.svg)"
+      # The *arr applications keep their own login enabled, so an authenticated
+      # request carries a shared credential upstream over HTTP Basic. The
+      # forward-auth snippet copies Authorization for this to reach them.
       TINYAUTH_APPS_PROWLARR_CONFIG_DOMAIN: prowlarr.home.${DOMAIN}
       TINYAUTH_APPS_PROWLARR_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_PROWLARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_PROWLARR_RESPONSE_BASICAUTH_USERNAME: ${ARR_BASIC_USER:?arr basic auth user required}
+      TINYAUTH_APPS_PROWLARR_RESPONSE_BASICAUTH_PASSWORD: ${ARR_BASIC_PASSWORD:?arr basic auth password required}
       TINYAUTH_APPS_SONARR_CONFIG_DOMAIN: sonarr.home.${DOMAIN}
       TINYAUTH_APPS_SONARR_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_SONARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_SONARR_RESPONSE_BASICAUTH_USERNAME: ${ARR_BASIC_USER:?arr basic auth user required}
+      TINYAUTH_APPS_SONARR_RESPONSE_BASICAUTH_PASSWORD: ${ARR_BASIC_PASSWORD:?arr basic auth password required}
       TINYAUTH_APPS_RADARR_CONFIG_DOMAIN: radarr.home.${DOMAIN}
       TINYAUTH_APPS_RADARR_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_RADARR_OAUTH_GROUPS: media-admins
+      TINYAUTH_APPS_RADARR_RESPONSE_BASICAUTH_USERNAME: ${ARR_BASIC_USER:?arr basic auth user required}
+      TINYAUTH_APPS_RADARR_RESPONSE_BASICAUTH_PASSWORD: ${ARR_BASIC_PASSWORD:?arr basic auth password required}
       TINYAUTH_APPS_QBITTORRENT_CONFIG_DOMAIN: qbittorrent.home.${DOMAIN}
       TINYAUTH_APPS_QBITTORRENT_OAUTH_WHITELIST: "/.*/"
       TINYAUTH_APPS_QBITTORRENT_OAUTH_GROUPS: media-admins
