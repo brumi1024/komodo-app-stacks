@@ -116,9 +116,6 @@
 komodo.{$DOMAIN} {
 	import cloudflare
 	import log_common
-	# Komodo Core runs on this host. The former docker-host upstream stayed
-	# behind as a failover after the move, but nothing listens there any more,
-	# so its active health check only produced a failure every ten seconds.
 	reverse_proxy komodo-core:9120
 }
 
