@@ -1,0 +1,42 @@
+name: "pocket-id"
+
+services:
+  pocket-id:
+    container_name: pocket-id
+    image: ghcr.io/pocket-id/pocket-id:${POCKET_ID_TAG:-v2.13.0}
+    restart: unless-stopped
+    environment:
+      APP_URL: https://id.${DOMAIN}
+      ENCRYPTION_KEY: ${POCKET_ID_ENCRYPTION_KEY:?encryption key required}
+      # Callbacks must stay on HTTPS because every client reaches Pocket ID
+      # through the public Caddy edge.
+      ALLOW_INSECURE_CALLBACK_URLS: "false"
+      # Only the vps-ingress proxy may supply the client IP. Pocket ID uses it
+      # for rate limiting and audit logging.
+      TRUST_PROXY: ${VPS_INGRESS_CIDR}
+      TZ: ${TZ}
+    volumes:
+      - ${CONFIG_DIR}/pocket-id/data:/app/data
+    networks:
+      - vps-ingress
+    healthcheck:
+      test: ["CMD", "/app/pocket-id", "healthcheck"]
+      interval: 90s
+      timeout: 5s
+      retries: 2
+      start_period: 10s
+    labels:
+      - homepage.group=Administration
+      - homepage.name=Pocket ID
+      - homepage.icon=pocket-id.svg
+      - homepage.href=https://id.${DOMAIN}
+      - homepage.description=Passkey Identity Provider
+      # AutoKuma → central Uptime Kuma. /healthz returns 204 unauth.
+      - kuma.pocket-id.http.name=Pocket ID
+      - kuma.pocket-id.http.url=http://pocket-id:1411/healthz
+      - kuma.pocket-id.http.interval=60
+
+networks:
+  vps-ingress:
+    external: true
+    name: vps-ingress

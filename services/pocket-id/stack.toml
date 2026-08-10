@@ -1,0 +1,32 @@
+[[stack]]
+name = "pocket-id"
+tags = ["authentication", "identity", "oidc", "passkey"]
+
+[stack.config]
+server = "homelab-vps"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+env_file_path = ".env.pocket-id"
+run_directory = "services/pocket-id"
+file_paths = [
+    "docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+TZ=[[TZ]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+VPS_INGRESS_CIDR=[[VPS_INGRESS_CIDR]]
+
+# Application configuration
+POCKET_ID_TAG=v2.13.0
+
+# Encrypts private keys and other sensitive columns at rest. Rotating this
+# value requires `pocket-id encryption-key-rotate`, not a plain replacement.
+POCKET_ID_ENCRYPTION_KEY=[[OP__KOMODO__POCKET_ID__ENCRYPTION_KEY]]
+"""

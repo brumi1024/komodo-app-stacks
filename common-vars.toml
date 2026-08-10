@@ -17,6 +17,12 @@ value = "2.11.4"
 is_secret = false
 
 [[variable]]
+name = "VPS_INGRESS_CIDR"
+description = "Subnet of the private vps-ingress Docker network, used to scope proxy trust"
+value = "172.28.0.0/16"
+is_secret = false
+
+[[variable]]
 name = "ZIGBEE2MQTT_ADAPTER_HOST"
 description = "Zigbee2MQTT adapter host"
 value = "192.168.0.18"

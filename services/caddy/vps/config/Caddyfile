@@ -138,6 +138,14 @@ auth.{$DOMAIN} {
 	reverse_proxy authentik-server:9000
 }
 
+# Pocket ID is an identity provider, so it authenticates its own requests and
+# must never sit behind a forward-auth snippet.
+id.{$DOMAIN} {
+	import cloudflare
+	import log_common
+	reverse_proxy pocket-id:1411
+}
+
 dash.{$DOMAIN} {
 	import authenticate_with_tailscale_bypass
 	import cloudflare
