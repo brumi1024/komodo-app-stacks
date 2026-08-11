@@ -29,7 +29,7 @@ services:
       - SECURITY_OAUTH2_BLOCKREGISTRATION=false
       - SECURITY_OAUTH2_SCOPES=openid, profile, email
       - SECURITY_OAUTH2_USEASUSERNAME=email
-      - SECURITY_OAUTH2_PROVIDER=authentik
+      - SECURITY_OAUTH2_PROVIDER=pocketid
     labels:
       - homepage.group=Personal Apps
       - homepage.name=Stirling PDF
