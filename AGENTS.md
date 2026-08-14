@@ -51,8 +51,13 @@ Caddyfile — therefore leaves the old process running with its old configuratio
 while Komodo records the stack as deployed at the new commit. The stack reads as
 current at the right hash while the running service is stale.
 
-After changing a Caddyfile or any other `config_files` entry, run **Restart** on
-that stack, not Deploy.
+Neither Deploy nor Restart pulls the repository. The linked repo is refreshed by
+the resource sync, which normally runs from the push webhook, so a restart issued
+straight after a push can apply the previous commit.
+
+After changing a Caddyfile or any other `config_files` entry: run the
+`komodo-app-stacks` **sync** to pull, then **Restart** that stack to apply. Deploy
+is a no-op here, because the Compose file itself has not changed.
 
 Mount the config *directory* rather than an individual file. A `git pull` replaces
 files instead of editing them, so a single-file bind mount keeps resolving to the
