@@ -80,30 +80,30 @@ Until Technitium is ready, Tailnet clients use the same public VPS fallback path
 Kalász needs a site-local Caddy or equivalent port-443 edge before its public IPv4 can become a direct HTTPS path.
 The observed Kalász public IPv4 does not currently accept HTTPS, so its existing VPS-to-Tailscale route remains the reliable path.
 
-## Deployment order
+## Deployment and change procedure
 
-Rotate the Cloudflare API token before deployment because the previous token was exposed during adapted-config diagnostics.
-Update the 1Password item referenced by `OP__KOMODO__CADDY__CF_API_TOKEN` rather than placing the token in this repository.
+The multi-site ingress topology is deployed.
+The repository currently builds Caddy `2.11.4` with the custom modules pinned in `services/caddy/caddy-build/Dockerfile`.
 
-Deploy Home and Sequoia Caddy first.
-Verify their direct site routes and their Tailscale HTTPS listeners before enabling the VPS fallback.
-
-Before deploying VPS Caddy, create or verify the asymmetric Cloudflare fallback record:
+The asymmetric Cloudflare fallback record remains an external prerequisite and must be preserved:
 
 ```text
 A *.seq.<domain> -> VPS IPv4
 ```
 
-This record is managed outside Caddy and is a deployment prerequisite because the VPS `dynamic_dns` app cannot publish an IPv4-only Sequoia record while also publishing dual-stack records for its other names.
+This record is managed outside Caddy because the VPS `dynamic_dns` app cannot publish an IPv4-only Sequoia record while also publishing dual-stack records for its other names.
 
-Deploy VPS Caddy second.
-The deployment will also move from the currently observed Caddy `2.10.2` runtime to the repository's configured `2.11.3`, so check the build and module list before DNS cutover.
-The custom Caddy modules are pinned in the build file so rebuilding the same revision does not silently select different plugin commits.
+For Caddyfile-only changes, first run the `komodo-app-stacks` resource sync so the linked repository is current, then Restart the affected Caddy stack.
+Deploy does not apply a config-file-only change when the Compose definition is unchanged.
+See the deployment guidance in the repository `AGENTS.md` for the underlying bind-mount behavior.
 
-The VPS Dynamic DNS policy will create and maintain both address families for `*.home` and `*.kalasz`.
+For topology or Caddy build changes, update and verify the site edges before the VPS fallback edge.
+Confirm Home and Sequoia direct routes and Tailscale HTTPS listeners before changing VPS fallback routing.
+
+The VPS Dynamic DNS policy maintains both address families for `*.home` and `*.kalasz`.
 Allow for the configured DNS TTL before treating a negative cached A answer as a failed deployment.
 
-Verify last that a non-Tailnet client receives the VPS addresses for Home and Kalász, receives the address-family-specific direct and fallback records for Sequoia, and can reach every intended public service.
+After a change, verify that a non-Tailnet client receives the VPS addresses for Home and Kalász, receives the address-family-specific direct and fallback records for Sequoia, and can reach every intended public service.
 
 Implement the Technitium TODO as a separate DNS-platform change after the public ingress path is healthy.
 The public Caddy deployment does not depend on private split DNS.

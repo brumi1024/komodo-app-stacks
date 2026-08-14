@@ -4,9 +4,12 @@ This repository is the declarative source for application stacks managed by Komo
 
 ## Service model
 
-The VPS is the public entry point and runs Caddy, Komodo Core, Authentik, Uptime Kuma, AutoKuma, ntfy, Homepage, and Beszel.
+The VPS is the public entry point and runs Caddy, Komodo Core, Pocket ID, Tinyauth, Uptime Kuma, AutoKuma, ntfy, Homepage, Beszel, and CrowdSec.
 Caddy is the only VPS application that publishes public HTTP ports.
 VPS-hosted applications communicate over the private `vps-ingress` Docker network, so their startup does not depend on a Tailscale address being present.
+
+Pocket ID provides passkey-backed OIDC identity.
+Applications with native OIDC support connect to Pocket ID directly, while Tinyauth provides Caddy forward authentication for browser-facing applications that do not support OIDC themselves.
 
 One AutoKuma instance on the VPS reconciles all Uptime Kuma monitors.
 It reads local container labels over the private `monitoring-control` network and remote labels through read-only Docker socket proxies over Tailscale.
@@ -26,9 +29,12 @@ Compose services that import the rendered file use `KOMODO_ENV_FILE`, with `.env
 services/
   autokuma/       Central monitor reconciliation
   caddy/          Shared reverse-proxy base and site overrides
+  pocket-id/      Passkey-backed OIDC identity provider
   proxy/          Read-only Docker API proxies
   monitoring/     Beszel server and VPS agent
-  */stack.toml    Komodo resource declaration
+  tinyauth/       Forward authentication backed by Pocket ID
+  */stack.toml    Single-instance Komodo resource declarations
+  */*/stack.toml  Site-specific Komodo resource declarations
 scripts/
   validate_stacks.py
 ```
