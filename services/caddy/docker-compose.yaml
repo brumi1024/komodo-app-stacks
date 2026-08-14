@@ -21,12 +21,12 @@ services:
       # pull` replaces the file instead of editing it in place, so a
       # single-file bind mount keeps resolving to the old, now-unlinked inode
       # and serves stale config until the container is recreated.
-      - ./${CADDY_INSTANCE:-caddy}/config:/etc/caddy:ro
-      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
-      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
+      - ./${CADDY_INSTANCE}/config:/etc/caddy:ro
+      - ${CONFIG_DIR}/${CADDY_INSTANCE}/data:/data
+      - ${CONFIG_DIR}/${CADDY_INSTANCE}/config:/config
       # Access logs persisted to host so log-readers (CrowdSec, fail2ban, etc.)
       # can tail them. Path matches the `log_common` snippet's output target.
-      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/logs:/var/log/caddy
+      - ${CONFIG_DIR}/${CADDY_INSTANCE}/logs:/var/log/caddy
     env_file:
       - "${KOMODO_ENV_FILE:-.env}"
     labels:

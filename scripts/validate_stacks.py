@@ -15,6 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TAILSCALE_IP = re.compile(r"\b100\.(?:\d{1,3}\.){2}\d{1,3}\b")
 ALLOWED_TAILSCALE_CIDR = "100.64.0.0/10"
+VOLUMES_KEY = re.compile(r"^(\s*)volumes:\s*$")
+LIST_ITEM = re.compile(r"^(\s*)-\s+(.*)$")
+INTERPOLATION = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)([^}]*)\}")
 
 
 def resolve_path(path: str, run_directory: Path) -> Path:
@@ -22,6 +25,69 @@ def resolve_path(path: str, run_directory: Path) -> Path:
     if root_path.exists():
         return root_path
     return run_directory / path
+
+
+def declared_variables(environment: str) -> set[str]:
+    return {
+        line.split("=", 1)[0].strip()
+        for line in environment.splitlines()
+        if "=" in line and not line.lstrip().startswith("#")
+    }
+
+
+def volume_entries(text: str) -> list[str]:
+    """Yield the short-syntax volume strings a Compose file declares."""
+    entries: list[str] = []
+    volumes_indent: int | None = None
+
+    for line in text.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+
+        if match := VOLUMES_KEY.match(line):
+            volumes_indent = len(match.group(1))
+            continue
+
+        if volumes_indent is None:
+            continue
+
+        item = LIST_ITEM.match(line)
+        if item and len(item.group(1)) > volumes_indent:
+            entry = item.group(2).split(" #", 1)[0].strip()
+            entries.append(entry.strip("\"'"))
+            continue
+
+        if len(line) - len(line.lstrip()) <= volumes_indent:
+            volumes_indent = None
+
+    return entries
+
+
+def validate_volumes(compose_file: Path, declared: set[str]) -> list[str]:
+    """Reject interpolation that short-syntax volume parsing cannot survive.
+
+    Compose splits a short-syntax volume on ":" before it interpolates, so a
+    `${VAR:-default}` contributes phantom segments. Depending on the Compose
+    version that either fails outright or silently mis-parses into
+    source:target:mode, so the variable has to be declared instead.
+    """
+    errors: list[str] = []
+
+    for entry in volume_entries(compose_file.read_text()):
+        for name, modifier in INTERPOLATION.findall(entry):
+            if ":" in modifier:
+                errors.append(
+                    f"{compose_file.relative_to(ROOT)}: volume {entry} uses a "
+                    f"${{{name}{modifier}}} default; declare {name} in the "
+                    "stack environment instead"
+                )
+            elif name not in declared:
+                errors.append(
+                    f"{compose_file.relative_to(ROOT)}: volume {entry} reads "
+                    f"undeclared {name}"
+                )
+
+    return errors
 
 
 def validate_stack_file(stack_file: Path) -> list[str]:
@@ -73,6 +139,11 @@ def validate_stack_file(stack_file: Path) -> list[str]:
                     f"{stack_file.relative_to(ROOT)}: Compose expects "
                     f"{expected_assignment}"
                 )
+
+        declared = declared_variables(config.get("environment", ""))
+        for compose_file in compose_files:
+            if compose_file.is_file():
+                errors.extend(validate_volumes(compose_file, declared))
 
         if missing or shutil.which("docker") is None:
             continue
