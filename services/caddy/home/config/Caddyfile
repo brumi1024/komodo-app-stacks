@@ -35,51 +35,6 @@
 	}
 }
 
-(authenticate) {
-	route {
-		# always forward outpost path to actual outpost
-		reverse_proxy /outpost.goauthentik.io/* https://auth.{$DOMAIN}
-
-		# Preserve the app URL before forward_auth clones and retargets the request.
-		request_header X-Authentik-Original-Host {host}
-		request_header X-Authentik-Original-Proto {scheme}
-
-		forward_auth https://auth.{$DOMAIN} {
-			uri /outpost.goauthentik.io/auth/caddy
-
-			# Authentik selects the forward-auth provider from the original app URL.
-			header_up X-Forwarded-Host {http.request.header.X-Authentik-Original-Host}
-			header_up X-Forwarded-Proto {http.request.header.X-Authentik-Original-Proto}
-
-			# capitalization of the headers is important, otherwise they will be empty
-			copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version X-Forwarded-Role authorization
-
-			# optional, in this config trust all private ranges, should probably be set to the outposts IP
-			trusted_proxies private_ranges
-		}
-
-		request_header -X-Authentik-Original-Host
-		request_header -X-Authentik-Original-Proto
-	}
-}
-
-# Local network authentication bypass
-(authenticate_with_tailscale_bypass) {
-	@tailscale_network {
-		client_ip 100.64.0.0/10
-	}
-
-	# Skip authentication for local network requests
-	handle @tailscale_network {
-		# Just pass through to the backend without authentication
-	}
-
-	# Apply authentication for non-local requests
-	handle {
-		import authenticate
-	}
-}
-
 # Tinyauth forward auth, backed by Pocket ID. Tinyauth resolves the protected
 # application from the forwarded host, so this snippet stays generic.
 (authenticate_tinyauth) {
