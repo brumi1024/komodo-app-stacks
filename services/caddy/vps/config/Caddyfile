@@ -92,28 +92,6 @@ ntfy.{$DOMAIN} {
 	reverse_proxy ntfy:80
 }
 
-auth.{$DOMAIN} {
-	import cloudflare
-
-	# The site Caddy passes the protected application's URL in X-Forwarded-*.
-	# Preserve it for every outpost request before reverse_proxy replaces those
-	# headers with this proxy hop, including the post-login callback.
-	route /outpost.goauthentik.io/* {
-		request_header X-Authentik-Original-Forwarded-Host {http.request.header.X-Forwarded-Host}
-		request_header X-Authentik-Original-Forwarded-Proto {http.request.header.X-Forwarded-Proto}
-
-		reverse_proxy authentik-server:9000 {
-			header_up X-Forwarded-Host {http.request.header.X-Authentik-Original-Forwarded-Host}
-			header_up X-Forwarded-Proto {http.request.header.X-Authentik-Original-Forwarded-Proto}
-			header_up -X-Authentik-Original-Forwarded-Host
-			header_up -X-Authentik-Original-Forwarded-Proto
-		}
-	}
-
-	# Keep the normal Authentik UI and callback traffic unchanged.
-	reverse_proxy authentik-server:9000
-}
-
 # Pocket ID is an identity provider, so it authenticates its own requests and
 # must never sit behind a forward-auth snippet.
 id.{$DOMAIN} {
