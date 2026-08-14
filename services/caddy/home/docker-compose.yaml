@@ -6,9 +6,9 @@ services:
     env_file:
       - "${KOMODO_ENV_FILE:-.env}"
     volumes:
-      - ./${CADDY_INSTANCE:-caddy}/config/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/data:/data
-      - ${CONFIG_DIR}/${CADDY_INSTANCE:-caddy}/config:/config
+      - ./${CADDY_INSTANCE}/config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${CONFIG_DIR}/${CADDY_INSTANCE}/data:/data
+      - ${CONFIG_DIR}/${CADDY_INSTANCE}/config:/config
     labels:
       - homepage.name=Caddy Home
       - homepage.description=Home Reverse Proxy

@@ -25,7 +25,7 @@ services:
       AUTOKUMA__DEFAULT_SETTINGS: |-
         *.notification_name_list: ["ntfy"]
     volumes:
-      - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE:-vps}/data:/data
+      - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE}/data:/data
       - ./config:/static-monitors:ro
     networks:
       - vps-ingress
