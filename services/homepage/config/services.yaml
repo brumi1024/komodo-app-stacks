@@ -24,16 +24,6 @@
             url: http://truenas-scale.{{HOMEPAGE_VAR_TAILNET}}
             key: {{HOMEPAGE_VAR_TRUENAS_SCALE_TOKEN}}
             enablePools: true
-    - Pi-hole 1:
-        icon: pi-hole.svg
-        href: https://pihole1.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
-        description: Primary Pi-hole instance.
-        ping: pihole1.{{HOMEPAGE_VAR_TAILNET}}
-        widget:
-            type: pihole
-            version: 6
-            url: http://pihole1.{{HOMEPAGE_VAR_TAILNET}}
-            key: {{HOMEPAGE_VAR_PIHOLE_1_APP_PASSWORD}}
     - Technitium DNS 1:
         icon: technitium.svg
         href: https://dns1.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}

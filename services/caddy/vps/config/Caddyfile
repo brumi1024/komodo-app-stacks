@@ -163,18 +163,6 @@ truenas.{$ADMIN_DOMAIN} {
 	reverse_proxy http://truenas-scale.{$TAILNET}:80
 }
 
-pihole1.{$ADMIN_DOMAIN} {
-	import cloudflare
-	import log_common
-	redir / /admin{uri}
-	reverse_proxy https://pihole1.{$TAILNET} {
-		transport http {
-			tls
-			tls_insecure_skip_verify
-		}
-	}
-}
-
 dns1.{$ADMIN_DOMAIN} {
 	import cloudflare
 	import log_common

@@ -1,0 +1,10 @@
+{
+  "type": "dns",
+  "name": "Technitium DNS 2",
+  "hostname": "example.com",
+  "dns_resolve_server": "main-pi-zero-2.{{ get_env(name='AUTOKUMA__ENV__TAILNET') }}",
+  "port": 53,
+  "dns_resolve_type": "A",
+  "interval": 60,
+  "max_retries": 2
+}
