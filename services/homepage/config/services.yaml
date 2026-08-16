@@ -34,16 +34,26 @@
             version: 6
             url: http://pihole1.{{HOMEPAGE_VAR_TAILNET}}
             key: {{HOMEPAGE_VAR_PIHOLE_1_APP_PASSWORD}}
-    - Pi-hole 2:
-        icon: pi-hole.svg
-        href: https://pihole2.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
-        description: Secondary Pi-hole instance.
+    - Technitium DNS 1:
+        icon: technitium.svg
+        href: https://dns1.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Home resolver, authoritative for the home zone.
+        ping: technitiumdns-1.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: technitium
+            url: http://technitiumdns-1.{{HOMEPAGE_VAR_TAILNET}}:5380
+            key: {{HOMEPAGE_VAR_TECHNITIUM_1_API_TOKEN}}
+            range: LastDay
+    - Technitium DNS 2:
+        icon: technitium.svg
+        href: https://dns2.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Home resolver, secondary for the home zone.
         ping: main-pi-zero-2.{{HOMEPAGE_VAR_TAILNET}}
         widget:
-            type: pihole
-            version: 6
-            url: http://main-pi-zero-2.{{HOMEPAGE_VAR_TAILNET}}
-            key: {{HOMEPAGE_VAR_PIHOLE_2_APP_PASSWORD}}
+            type: technitium
+            url: http://main-pi-zero-2.{{HOMEPAGE_VAR_TAILNET}}:5380
+            key: {{HOMEPAGE_VAR_TECHNITIUM_2_API_TOKEN}}
+            range: LastDay
 
 - Sequoia:
     - Proxmox:

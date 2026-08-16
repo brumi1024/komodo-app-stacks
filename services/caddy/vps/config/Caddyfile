@@ -175,16 +175,16 @@ pihole1.{$ADMIN_DOMAIN} {
 	}
 }
 
-pihole2.{$ADMIN_DOMAIN} {
+dns1.{$ADMIN_DOMAIN} {
 	import cloudflare
 	import log_common
-	redir / /admin{uri}
-	reverse_proxy https://main-pi-zero-2.{$TAILNET} {
-		transport http {
-			tls
-			tls_insecure_skip_verify
-		}
-	}
+	reverse_proxy http://technitiumdns-1.{$TAILNET}:5380
+}
+
+dns2.{$ADMIN_DOMAIN} {
+	import cloudflare
+	import log_common
+	reverse_proxy http://main-pi-zero-2.{$TAILNET}:5380
 }
 
 # Sequoia Infrastructure
