@@ -39,3 +39,4 @@ services:
       - kuma.stirlingpdf.http.name=Stirling PDF
       - kuma.stirlingpdf.http.url=http://docker.${TAILNET}:${PORT_STIRLING_HTTP}/actuator/health
       - kuma.stirlingpdf.http.interval=60
+      - kuma.__site="stirlingpdf"

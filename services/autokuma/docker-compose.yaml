@@ -26,6 +26,23 @@ services:
       # The static ntfy provider is reconciled from config/ntfy.json.
       AUTOKUMA__DEFAULT_SETTINGS: |-
         *.notification_name_list: ["ntfy"]
+      # Site attribution. A single instance scans every Docker host, so the host a
+      # container was discovered on is the only reliable source of its location.
+      # system_info is the scanned host's Docker /info response, which the socket
+      # proxies expose via INFO=1. Invoked per monitor as kuma.__site="<monitor id>".
+      #
+      # set_global rather than set, because Tera scopes set to the enclosing block.
+      # Flat ifs rather than elif for the same reason. An unmapped host resolves to
+      # "unknown" rather than a default site, so a gap stays visible.
+      AUTOKUMA__SNIPPETS__SITE: |-
+        {%- set_global host = system_info["Name"] -%}
+        {%- set_global site = "unknown" -%}
+        {%- if host == "docker" -%}{%- set_global site = "home" -%}{%- endif -%}
+        {%- if host == "docker-seq" or host == "sequoia-rpi-4" -%}{%- set_global site = "sequoia" -%}{%- endif -%}
+        {%- if host == "homelab-vps" -%}{%- set_global site = "vps" -%}{%- endif -%}
+        {%- set_global type = "http" -%}
+        {%- if args | length > 1 -%}{%- set_global type = args[1] -%}{%- endif %}
+        {{ args[0] }}.{{ type }}.tag_names: '[{"name": "site", "value": "{{ site }}"}, {"name": "host", "value": "{{ host }}"}]'
     volumes:
       - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE}/data:/data
       - ./config:/static-monitors:ro
@@ -33,9 +50,16 @@ services:
       - vps-ingress
       - monitoring-control
     labels:
+      # Tag entities the site snippet references, declared once so they exist with
+      # intended colours rather than being created incidentally on first use.
+      - kuma.site.tag.name=site
+      - "kuma.site.tag.color=#4C6EF5"
+      - kuma.host.tag.name=host
+      - "kuma.host.tag.color=#868E96"
       - kuma.autokuma.http.name=AutoKuma
       - kuma.autokuma.http.url=http://autokuma-vps:8090/health
       - kuma.autokuma.http.interval=60
+      - kuma.__site="autokuma"
     deploy:
       resources:
         limits:

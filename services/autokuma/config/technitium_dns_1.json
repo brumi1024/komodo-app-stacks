@@ -6,5 +6,6 @@
   "port": 53,
   "dns_resolve_type": "A",
   "interval": 60,
-  "max_retries": 2
+  "max_retries": 2,
+  "tag_names": [{"name": "site", "value": "home"}, {"name": "host", "value": "technitiumdns-1"}]
 }

@@ -63,6 +63,7 @@ services:
       - kuma.paperless.http.name=Paperless
       - kuma.paperless.http.url=http://docker.${TAILNET}:${PORT_PAPERLESS_HTTP}/api/
       - kuma.paperless.http.interval=60
+      - kuma.__site="paperless"
     environment:
       - PAPERLESS_TIME_ZONE=${TZ}
       - PAPERLESS_OCR_LANGUAGE=eng

@@ -24,6 +24,7 @@ services:
       - kuma.prowlarr.http.name=Prowlarr
       - kuma.prowlarr.http.url=http://docker.${TAILNET}:${PORT_PROWLARR_HTTP}/ping
       - kuma.prowlarr.http.interval=60
+      - kuma.__site="prowlarr"
     ports:
       - ${PORT_PROWLARR_HTTP}:9696
     dns:
@@ -50,6 +51,7 @@ services:
       - kuma.seerr.http.name=Jellyseerr
       - kuma.seerr.http.url=http://docker.${TAILNET}:${PORT_SEERR_HTTP}/api/v1/status
       - kuma.seerr.http.interval=60
+      - kuma.__site="seerr"
     environment:
       - TZ=${TZ}
       - PORT=${PORT_SEERR_HTTP}
@@ -85,6 +87,7 @@ services:
       - kuma.qbittorrent.http.name=qBittorrent
       - kuma.qbittorrent.http.url=http://docker.${TAILNET}:${PORT_QBITTORRENT_HTTP}
       - kuma.qbittorrent.http.interval=60
+      - kuma.__site="qbittorrent"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -116,6 +119,7 @@ services:
       - kuma.radarr.http.name=Radarr
       - kuma.radarr.http.url=http://docker.${TAILNET}:${PORT_RADARR_HTTP}/ping
       - kuma.radarr.http.interval=60
+      - kuma.__site="radarr"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -143,6 +147,7 @@ services:
       - kuma.sonarr.http.name=Sonarr
       - kuma.sonarr.http.url=http://docker.${TAILNET}:${PORT_SONARR_HTTP}/ping
       - kuma.sonarr.http.interval=60
+      - kuma.__site="sonarr"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

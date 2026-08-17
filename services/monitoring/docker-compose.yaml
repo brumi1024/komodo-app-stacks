@@ -21,6 +21,7 @@ services:
       - kuma.beszel.http.name=Beszel
       - kuma.beszel.http.url=http://beszel:8090/api/health
       - kuma.beszel.http.interval=60
+      - kuma.__site="beszel"
   beszel-agent:
     image: "henrygd/beszel-agent"
     container_name: "beszel-agent"

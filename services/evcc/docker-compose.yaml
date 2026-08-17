@@ -24,4 +24,5 @@ services:
       - kuma.evcc.http.name=evcc
       - kuma.evcc.http.url=http://docker.${TAILNET}:${PORT_EVCC_HTTP}
       - kuma.evcc.http.interval=60
+      - kuma.__site="evcc"
     restart: unless-stopped

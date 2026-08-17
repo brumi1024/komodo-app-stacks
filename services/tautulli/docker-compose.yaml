@@ -23,6 +23,7 @@ services:
       - kuma.tautulli.http.name=Tautulli
       - kuma.tautulli.http.url=http://docker.${TAILNET}:${PORT_TAUTULLI_HTTP}/status
       - kuma.tautulli.http.interval=60
+      - kuma.__site="tautulli"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

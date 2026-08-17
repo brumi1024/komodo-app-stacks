@@ -22,6 +22,7 @@ services:
       - kuma.actualbudget.http.name=Actual Budget
       - kuma.actualbudget.http.url=http://docker.${TAILNET}:${PORT_ACTUAL_HTTP}
       - kuma.actualbudget.http.interval=60
+      - kuma.__site="actualbudget"
     healthcheck:
       # Enable health check for the instance
       test: ['CMD-SHELL', 'node src/scripts/health-check.js']

@@ -26,6 +26,7 @@ services:
       - kuma.immich.http.name=Immich
       - kuma.immich.http.url=http://docker.${TAILNET}:${PORT_IMMICH_HTTP}/api/server/ping
       - kuma.immich.http.interval=60
+      - kuma.__site="immich"
     env_file:
       - "${KOMODO_ENV_FILE:-.env}"
     ports:

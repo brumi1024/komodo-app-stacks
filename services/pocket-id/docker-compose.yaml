@@ -35,6 +35,7 @@ services:
       - kuma.pocket-id.http.name=Pocket ID
       - kuma.pocket-id.http.url=http://pocket-id:1411/healthz
       - kuma.pocket-id.http.interval=60
+      - kuma.__site="pocket-id"
 
 networks:
   vps-ingress:

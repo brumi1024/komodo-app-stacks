@@ -82,6 +82,7 @@ services:
       - kuma.tinyauth.http.name=Tinyauth
       - kuma.tinyauth.http.url=http://tinyauth:3000/api/healthz
       - kuma.tinyauth.http.interval=60
+      - kuma.__site="tinyauth"
 
 networks:
   vps-ingress:

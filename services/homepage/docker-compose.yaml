@@ -41,6 +41,7 @@ services:
       - kuma.homepage.http.name=Homepage
       - kuma.homepage.http.url=http://homepage:3000
       - kuma.homepage.http.interval=60
+      - kuma.__site="homepage"
 
 networks:
   vps-ingress:
