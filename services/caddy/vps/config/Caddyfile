@@ -193,30 +193,6 @@ pbs.seq.{$ADMIN_DOMAIN} {
 	}
 }
 
-pihole1.seq.{$ADMIN_DOMAIN} {
-	import cloudflare
-	import log_common
-	redir / /admin{uri}
-	reverse_proxy https://pihole-seq-1.{$TAILNET} {
-		transport http {
-			tls
-			tls_insecure_skip_verify
-		}
-	}
-}
-
-pihole2.seq.{$ADMIN_DOMAIN} {
-	import cloudflare
-	import log_common
-	redir / /admin{uri}
-	reverse_proxy https://sequoia-rpi-4.{$TAILNET} {
-		transport http {
-			tls
-			tls_insecure_skip_verify
-		}
-	}
-}
-
 ##########################
 # Service Routing        #
 # Routes to appropriate  #

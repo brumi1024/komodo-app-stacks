@@ -67,26 +67,6 @@
             url: http://zephyrus.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_ZEPHYRUS_HTTP}}
             username: remote_stats
             password: {{HOMEPAGE_VAR_ZEPHYRUS_REMOTE_STATS_PASSWORD}}
-    - Pi-hole Sequoia 1:
-        icon: pi-hole.svg
-        href: https://pihole1.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
-        description: Primary Pi-hole instance.
-        ping: pihole-seq-1.{{HOMEPAGE_VAR_TAILNET}}
-        widget:
-            type: pihole
-            version: 6
-            url: http://pihole-seq-1.{{HOMEPAGE_VAR_TAILNET}}
-            key: {{HOMEPAGE_VAR_SEQUOIA_PIHOLE_1_APP_PASSWORD}}
-    - Pi-hole Sequoia 2:
-        icon: pi-hole.svg
-        href: https://pihole2.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
-        description: Secondary Pi-hole instance.
-        ping: sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}
-        widget:
-            type: pihole
-            version: 6
-            url: http://sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}
-            key: {{HOMEPAGE_VAR_SEQUOIA_PIHOLE_2_APP_PASSWORD}}
 
 - Smart Home:
     - Home Assistant:
