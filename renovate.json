@@ -135,6 +135,12 @@
         "ghcr.io/tecnativa/docker-socket-proxy"
       ],
       "groupName": "Security proxy tools"
+    },
+    {
+      "description": "LinuxServer's qbittorrent registry still carries tags like 20.04.1 from before the image switched to tracking the app's own version, and Renovate reads that old tag as a newer release than the current 5.x line. Cap the major version below the app's real range so Renovate stops proposing it.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["lscr.io/linuxserver/qbittorrent"],
+      "allowedVersions": "<10.0.0"
     }
   ],
   "customManagers": [
