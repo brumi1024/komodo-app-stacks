@@ -2,7 +2,7 @@ name: "dashboard"
 
 services:
   homepage:
-    image: ghcr.io/gethomepage/homepage:${HOMEPAGE_TAG:-latest}
+    image: ghcr.io/gethomepage/homepage:v2.0.0
     container_name: homepage
     environment:
       - PUID=${PUID}
