@@ -83,6 +83,18 @@
       "automerge": false
     },
     {
+      "description": "Immich's database tag encodes the Postgres major and the extension versions in one string, and the registry carries the same suffix under majors 14 to 17, so Renovate reads a major upgrade as an ordinary tag bump. Postgres will not start on a data directory from an older major. Digests stay tracked.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/immich-app/postgres"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "enabled": false
+    },
+    {
+      "description": "One pull request for the Caddy build: a plugin bump and a Caddy bump both rebuild the same image, so they are reviewed and deployed together.",
+      "matchPackageNames": ["caddy", "/^github\\.com\\/(mholt|caddy-dns|hslatman)\\//"],
+      "groupName": "Caddy build"
+    },
+    {
       "description": "Never auto-merge database major updates",
       "matchDatasources": ["docker"],
       "matchPackageNames": [
@@ -123,6 +135,22 @@
         "ghcr.io/tecnativa/docker-socket-proxy"
       ],
       "groupName": "Security proxy tools"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Versions pinned as Komodo variables, marked with a renovate comment so any future one works the same way.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^common-vars\\.toml$/"],
+      "matchStrings": ["# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+value = \"(?<currentValue>[^\"]+)\""]
+    },
+    {
+      "description": "xcaddy plugin pins in the Caddy build. depName keeps any subpackage so the line is rewritten intact; packageName drops it so the go datasource resolves.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^services/caddy/caddy-build/Dockerfile$/"],
+      "matchStrings": ["--with (?<depName>github\\.com/(?<org>[^/@\\s]+)/(?<pkg>[^/@\\s]+)(?:/[^@\\s]+)?)@(?<currentValue>[^\\s\\\\]+)"],
+      "packageNameTemplate": "github.com/{{{org}}}/{{{pkg}}}",
+      "datasourceTemplate": "go"
     }
   ]
 }
