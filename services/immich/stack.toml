@@ -25,7 +25,6 @@ KOMODO_ENV_FILE=.env.immich
 TZ=[[TZ]]
 
 # Version configuration
-IMMICH_TAG=release
 
 # Network and domain configuration
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
