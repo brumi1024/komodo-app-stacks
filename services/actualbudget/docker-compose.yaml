@@ -3,7 +3,7 @@ name: "actualbudget"
 services:
   actual_server:
     container_name: actual_server
-    image: docker.io/actualbudget/actual-server:${ACTUALBUDGET_TAG:-latest}
+    image: docker.io/actualbudget/actual-server:26.8.1
     ports:
       - ${PORT_ACTUAL_HTTP}:5006
     volumes:
