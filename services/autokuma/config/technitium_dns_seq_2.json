@@ -1,0 +1,11 @@
+{
+  "type": "dns",
+  "name": "Technitium DNS Sequoia 2",
+  "hostname": "example.com",
+  "dns_resolve_server": "sequoia-rpi-4.{{ get_env(name='AUTOKUMA__ENV__TAILNET') }}",
+  "port": 53,
+  "dns_resolve_type": "A",
+  "interval": 60,
+  "max_retries": 2,
+  "tag_names": [{"name": "site", "value": "sequoia"}, {"name": "host", "value": "sequoia-rpi-4"}]
+}

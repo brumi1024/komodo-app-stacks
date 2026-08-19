@@ -67,6 +67,26 @@
             url: http://zephyrus.{{HOMEPAGE_VAR_TAILNET}}:{{HOMEPAGE_VAR_PORT_ZEPHYRUS_HTTP}}
             username: remote_stats
             password: {{HOMEPAGE_VAR_ZEPHYRUS_REMOTE_STATS_PASSWORD}}
+    - Technitium DNS Sequoia 1:
+        icon: technitium.svg
+        href: https://dns1.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Sequoia resolver, authoritative for the sequoia zone.
+        ping: technitiumdns-seq-1.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: technitium
+            url: http://technitiumdns-seq-1.{{HOMEPAGE_VAR_TAILNET}}:5380
+            key: {{HOMEPAGE_VAR_TECHNITIUM_SEQ_1_API_TOKEN}}
+            range: LastDay
+    - Technitium DNS Sequoia 2:
+        icon: technitium.svg
+        href: https://dns2.seq.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
+        description: Sequoia resolver, secondary for the sequoia zone.
+        ping: sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}
+        widget:
+            type: technitium
+            url: http://sequoia-rpi-4.{{HOMEPAGE_VAR_TAILNET}}:5380
+            key: {{HOMEPAGE_VAR_TECHNITIUM_SEQ_2_API_TOKEN}}
+            range: LastDay
 
 - Smart Home:
     - Home Assistant:
