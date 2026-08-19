@@ -3,7 +3,7 @@ name: "tinyauth"
 services:
   tinyauth:
     container_name: tinyauth
-    image: ghcr.io/tinyauthapp/tinyauth:${TINYAUTH_TAG:-v5.1.3}
+    image: ghcr.io/tinyauthapp/tinyauth:v5.1.3
     restart: unless-stopped
     environment:
       TINYAUTH_APPURL: https://login.${DOMAIN}
