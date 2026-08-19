@@ -193,6 +193,18 @@ pbs.seq.{$ADMIN_DOMAIN} {
 	}
 }
 
+dns1.seq.{$ADMIN_DOMAIN} {
+	import cloudflare
+	import log_common
+	reverse_proxy http://technitiumdns-seq-1.{$TAILNET}:5380
+}
+
+dns2.seq.{$ADMIN_DOMAIN} {
+	import cloudflare
+	import log_common
+	reverse_proxy http://sequoia-rpi-4.{$TAILNET}:5380
+}
+
 ##########################
 # Service Routing        #
 # Routes to appropriate  #
