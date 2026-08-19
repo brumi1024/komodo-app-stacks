@@ -6,6 +6,7 @@
   "schedule": ["before 6am"],
   "timezone": "Europe/Budapest",
   "labels": ["dependencies"],
+  "configMigration": true,
   "automerge": false,
   "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 5,
@@ -19,19 +20,19 @@
     {
       "description": "Group Linux Server Docker images",
       "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["^linuxserver/", "^lscr.io/linuxserver/"],
+      "matchPackageNames": ["/^linuxserver\\//", "/^lscr.io\\/linuxserver\\//"],
       "groupName": "LinuxServer.io images"
     },
     {
       "description": "Group Prometheus stack images",
       "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["^prom/", "^grafana/"],
+      "matchPackageNames": ["/^prom\\//", "/^grafana\\//"],
       "groupName": "Prometheus monitoring stack"
     },
     {
       "description": "Group Immich stack images",
       "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["^ghcr.io/immich-app/"],
+      "matchPackageNames": ["/^ghcr.io\\/immich-app\\//"],
       "groupName": "Immich stack"
     },
     {
@@ -88,7 +89,7 @@
     {
       "description": "Group homepage and dashboard images",
       "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["^ghcr.io/gethomepage/"],
+      "matchPackageNames": ["/^ghcr.io\\/gethomepage\\//"],
       "groupName": "Homepage dashboard"
     },
     {
@@ -107,8 +108,5 @@
       ],
       "groupName": "Security proxy tools"
     }
-  ],
-  "docker": {
-    "fileMatch": ["(^|/)docker-compose.*\\.ya?ml$"]
-  }
+  ]
 }
