@@ -2,7 +2,7 @@ name: "servarr"
 
 services:
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:${PROWLARR_TAG:-latest}
+    image: lscr.io/linuxserver/prowlarr:2.5.2
     container_name: prowlarr
     environment:
       - PUID=${PUID}
@@ -32,7 +32,7 @@ services:
       - 1.0.0.1
     restart: unless-stopped
   seerr:
-    image: ghcr.io/seerr-team/seerr:latest
+    image: ghcr.io/seerr-team/seerr:v3.4.1
     init: true
     container_name: jellyseerr
     volumes:
@@ -65,7 +65,7 @@ services:
       retries: 3
     restart: unless-stopped
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_TAG:-latest}
+    image: lscr.io/linuxserver/qbittorrent:5.2.3
     container_name: qbittorrent
     volumes:
       - ${CONFIG_DIR}/qbittorrent:/config
@@ -100,7 +100,7 @@ services:
       - ${PORT_QBITTORRENT_TORRENTING}:6881/udp
     restart: unless-stopped
   radarr:
-    image: lscr.io/linuxserver/radarr:${RADARR_TAG:-latest}
+    image: lscr.io/linuxserver/radarr:6.3.0
     container_name: radarr
     volumes:
       - ${CONFIG_DIR}/radarr:/config
@@ -128,7 +128,7 @@ services:
       - ${PORT_RADARR_HTTP}:7878
     restart: unless-stopped
   sonarr:
-    image: lscr.io/linuxserver/sonarr:${SONARR_TAG:-latest}
+    image: lscr.io/linuxserver/sonarr:4.0.19
     container_name: sonarr
     volumes:
       - ${CONFIG_DIR}/sonarr:/config

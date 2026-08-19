@@ -2,7 +2,7 @@ name: "crowdsec"
 
 services:
   crowdsec:
-    image: crowdsecurity/crowdsec:latest
+    image: crowdsecurity/crowdsec:v1.7.8
     container_name: crowdsec
     restart: unless-stopped
     environment:

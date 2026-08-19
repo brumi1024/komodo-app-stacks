@@ -24,7 +24,6 @@ DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 VPS_INGRESS_CIDR=[[VPS_INGRESS_CIDR]]
 
 # Application configuration
-POCKET_ID_TAG=v2.13.0
 
 # Encrypts private keys and other sensitive columns at rest. Rotating this
 # value requires `pocket-id encryption-key-rotate`, not a plain replacement.

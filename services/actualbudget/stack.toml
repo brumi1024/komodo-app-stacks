@@ -18,7 +18,6 @@ environment = """
 CONFIG_DIR=[[CONFIG_DIR]]
 
 # Application configuration
-ACTUALBUDGET_TAG=latest
 TZ=[[TZ]]
 
 # Network and domain configuration

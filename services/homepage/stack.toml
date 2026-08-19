@@ -25,7 +25,6 @@ PGID=[[OP__KOMODO__COMMON__PGID]]
 TZ=[[TZ]]
 
 # Application configuration
-HOMEPAGE_TAG=latest
 HOMEPAGE_ALLOWED_HOSTS=[[OP__KOMODO__HOMEPAGE__HOMEPAGE_ALLOWED_HOSTS]]
 
 # Network and domain configuration

@@ -2,7 +2,7 @@ name: "tautulli"
 
 services:
   tautulli:
-    image: ghcr.io/tautulli/tautulli
+    image: ghcr.io/tautulli/tautulli:v2.17.2
     container_name: tautulli
     volumes:
       - ${CONFIG_DIR}/tautulli:/config

@@ -23,7 +23,6 @@ TZ=[[TZ]]
 DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 
 # Application configuration
-TINYAUTH_TAG=v5.1.3
 
 # OIDC client registered in Pocket ID for this forward-auth service.
 TINYAUTH_OAUTH_CLIENT_ID=[[OP__KOMODO__TINYAUTH__TINYAUTH_OAUTH_CLIENT_ID]]

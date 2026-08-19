@@ -3,7 +3,7 @@ name: ${AUTOKUMA_PROJECT_NAME:-autokuma}
 services:
   autokuma:
     container_name: autokuma-${AUTOKUMA_INSTANCE:-vps}
-    image: ghcr.io/bigboot/autokuma:${AUTOKUMA_TAG:-2.1.0-rc.2}
+    image: ghcr.io/bigboot/autokuma:2.1.0-rc.2
     restart: unless-stopped
     environment:
       AUTOKUMA__KUMA__URL: ${AUTOKUMA__KUMA__URL}
