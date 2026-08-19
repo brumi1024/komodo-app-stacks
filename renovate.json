@@ -67,6 +67,13 @@
       "groupName": "Authentik authentication stack"
     },
     {
+      "description": "Immich's database tag encodes the Postgres major and the extension versions in one string, so what looks like a tag bump is an in-place major Postgres upgrade needing a dump and restore. Digests stay tracked; the major is a deliberate migration.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/immich-app/postgres"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "enabled": false
+    },
+    {
       "description": "Never auto-merge database major updates",
       "matchDatasources": ["docker"],
       "matchPackageNames": [
