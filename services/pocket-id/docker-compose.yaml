@@ -3,7 +3,7 @@ name: "pocket-id"
 services:
   pocket-id:
     container_name: pocket-id
-    image: ghcr.io/pocket-id/pocket-id:v2.13.0
+    image: ghcr.io/pocket-id/pocket-id:v2.14.0
     restart: unless-stopped
     environment:
       APP_URL: https://id.${DOMAIN}
