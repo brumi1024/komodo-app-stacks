@@ -34,6 +34,10 @@ services:
       # set_global rather than set, because Tera scopes set to the enclosing block.
       # Flat ifs rather than elif for the same reason. An unmapped host resolves to
       # "unknown" rather than a default site, so a gap stays visible.
+      #
+      # The emitted tag_names value carries no surrounding quotes. A docker-compose
+      # label needs them because that file is YAML; a snippet body is not, so quotes
+      # written here reach the JSON parser literally and fail it.
       AUTOKUMA__SNIPPETS__SITE: |-
         {%- set_global host = system_info["Name"] -%}
         {%- set_global site = "unknown" -%}
@@ -42,7 +46,7 @@ services:
         {%- if host == "homelab-vps" -%}{%- set_global site = "vps" -%}{%- endif -%}
         {%- set_global type = "http" -%}
         {%- if args | length > 1 -%}{%- set_global type = args[1] -%}{%- endif %}
-        {{ args[0] }}.{{ type }}.tag_names: '[{"name": "site", "value": "{{ site }}"}, {"name": "host", "value": "{{ host }}"}]'
+        {{ args[0] }}.{{ type }}.tag_names: [{"name": "site", "value": "{{ site }}"}, {"name": "host", "value": "{{ host }}"}]
     volumes:
       - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE}/data:/data
       - ./config:/static-monitors:ro
