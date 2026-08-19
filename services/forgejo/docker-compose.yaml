@@ -38,7 +38,7 @@ services:
       - homepage.group=Personal Apps
       - homepage.name=Forgejo
       - homepage.icon=forgejo.svg
-      - homepage.href=https://git.home.${DOMAIN}
+      - homepage.href=https://git.${DOMAIN}
       - homepage.description=Git forge
       # AutoKuma → central Uptime Kuma. /api/healthz answers unauthenticated.
       - kuma.forgejo.http.name=Forgejo
@@ -60,8 +60,11 @@ services:
       FORGEJO__database__USER: ${FORGEJO_DB_USER}
       FORGEJO__database__PASSWD: ${FORGEJO_DB_PASSWORD}
 
-      FORGEJO__server__DOMAIN: git.home.${DOMAIN}
-      FORGEJO__server__ROOT_URL: https://git.home.${DOMAIN}/
+      # Canonical name is location-independent: the forge can move hosts
+      # without invalidating the remote in every clone. git.home.<domain>
+      # stays routable as the direct-to-site path.
+      FORGEJO__server__DOMAIN: git.${DOMAIN}
+      FORGEJO__server__ROOT_URL: https://git.${DOMAIN}/
       FORGEJO__server__HTTP_PORT: "3000"
       # SSH_DOMAIN and SSH_PORT are what clone URLs advertise; SSH_LISTEN_PORT
       # is the port inside the container. Setting only one breaks clone URLs.
