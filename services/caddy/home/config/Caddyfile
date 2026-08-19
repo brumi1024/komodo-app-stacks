@@ -120,6 +120,13 @@ plex.home.{$DOMAIN} {
 }
 
 # Services
+# No forward auth here: Forgejo owns its own login through Pocket ID, and
+# git over HTTP would break behind an interactive auth redirect.
+git.home.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_FORGEJO_HTTP}
+}
+
 paperless.home.{$DOMAIN} {
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}

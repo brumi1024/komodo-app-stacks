@@ -66,6 +66,22 @@
       "groupName": "Authentik authentication stack"
     },
     {
+      "description": "Group Forgejo stack images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "codeberg.org/forgejo/forgejo",
+        "docker.io/library/postgres"
+      ],
+      "groupName": "Forgejo git forge stack"
+    },
+    {
+      "description": "Never auto-merge Forgejo majors; they run schema migrations",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["codeberg.org/forgejo/forgejo"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
       "description": "Never auto-merge database major updates",
       "matchDatasources": ["docker"],
       "matchPackageNames": [

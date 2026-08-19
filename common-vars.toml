@@ -202,3 +202,15 @@ name = "PORT_SOCKY_PROXY"
 description = "Socky proxy port"
 value = "12375"
 is_secret = false
+
+[[variable]]
+name = "PORT_FORGEJO_HTTP"
+description = "Forgejo HTTP port"
+value = "3030"
+is_secret = false
+
+[[variable]]
+name = "PORT_FORGEJO_SSH"
+description = "Forgejo git-over-SSH port"
+value = "2222"
+is_secret = false

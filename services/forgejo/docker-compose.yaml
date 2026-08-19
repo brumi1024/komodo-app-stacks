@@ -1,0 +1,106 @@
+name: "forgejo"
+
+services:
+  forgejo-db:
+    container_name: forgejo-postgres
+    image: docker.io/library/postgres:17
+    restart: unless-stopped
+    volumes:
+      - forgejo-pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: forgejo
+      POSTGRES_USER: ${FORGEJO_DB_USER}
+      POSTGRES_PASSWORD: ${FORGEJO_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${FORGEJO_DB_USER} -d forgejo"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  forgejo:
+    container_name: forgejo
+    image: codeberg.org/forgejo/forgejo:16.0.2
+    restart: unless-stopped
+    depends_on:
+      forgejo-db:
+        condition: service_healthy
+    ports:
+      - "${PORT_FORGEJO_HTTP:-3030}:3000"
+      # Git over SSH bypasses the reverse proxy, so the host port is the
+      # clone endpoint. Keep it off the public edge; the tailnet reaches it.
+      - "${PORT_FORGEJO_SSH:-2222}:22"
+    volumes:
+      - ${CONFIG_DIR}/forgejo:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Forgejo
+      - homepage.icon=forgejo.svg
+      - homepage.href=https://git.home.${DOMAIN}
+      - homepage.description=Git forge
+      # AutoKuma → central Uptime Kuma. /api/healthz answers unauthenticated.
+      - kuma.forgejo.http.name=Forgejo
+      - kuma.forgejo.http.url=http://docker.${TAILNET}:${PORT_FORGEJO_HTTP}/api/healthz
+      - kuma.forgejo.http.interval=60
+      - kuma.__site="forgejo"
+    environment:
+      USER_UID: 1000
+      USER_GID: 1000
+      TZ: ${TZ}
+
+      # Generate app.ini from this environment on first boot instead of
+      # exposing a web installer nobody is watching.
+      FORGEJO__security__INSTALL_LOCK: "true"
+
+      FORGEJO__database__DB_TYPE: postgres
+      FORGEJO__database__HOST: forgejo-db:5432
+      FORGEJO__database__NAME: forgejo
+      FORGEJO__database__USER: ${FORGEJO_DB_USER}
+      FORGEJO__database__PASSWD: ${FORGEJO_DB_PASSWORD}
+
+      FORGEJO__server__DOMAIN: git.home.${DOMAIN}
+      FORGEJO__server__ROOT_URL: https://git.home.${DOMAIN}/
+      FORGEJO__server__HTTP_PORT: "3000"
+      # SSH_DOMAIN and SSH_PORT are what clone URLs advertise; SSH_LISTEN_PORT
+      # is the port inside the container. Setting only one breaks clone URLs.
+      FORGEJO__server__SSH_DOMAIN: docker.${TAILNET}
+      FORGEJO__server__SSH_PORT: ${PORT_FORGEJO_SSH}
+      FORGEJO__server__SSH_LISTEN_PORT: "22"
+      FORGEJO__server__LFS_START_SERVER: "true"
+
+      # Accounts come from Pocket ID only: local sign-up is closed, but OIDC
+      # may still create the account on first login.
+      FORGEJO__service__DISABLE_REGISTRATION: "false"
+      FORGEJO__service__ALLOW_ONLY_EXTERNAL_REGISTRATION: "true"
+      FORGEJO__service__REQUIRE_SIGNIN_VIEW: "true"
+      FORGEJO__service__ENABLE_NOTIFY_MAIL: "false"
+      FORGEJO__oauth2_client__ENABLE_AUTO_REGISTRATION: "true"
+      FORGEJO__oauth2_client__ACCOUNT_LINKING: auto
+      FORGEJO__oauth2_client__UPDATE_AVATAR: "true"
+
+      FORGEJO__repository__DEFAULT_BRANCH: main
+      FORGEJO__repository__DEFAULT_PRIVATE: private
+
+      # Push mirrors to GitHub are the off-site copy of every repository.
+      FORGEJO__mirror__ENABLED: "true"
+      FORGEJO__mirror__DISABLE_NEW_PUSH: "false"
+
+      # Actions accept jobs before a runner exists; they queue until one registers.
+      FORGEJO__actions__ENABLED: "true"
+
+      FORGEJO__log__LEVEL: Info
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget -q --spider --tries=1 http://127.0.0.1:3000/api/healthz || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  forgejo-pgdata:
+    name: forgejo-pgdata
+    driver: local
