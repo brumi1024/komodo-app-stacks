@@ -135,6 +135,14 @@ actual.{$DOMAIN} {
 	reverse_proxy docker.{$TAILNET}:{$PORT_ACTUAL_HTTP}
 }
 
+# Canonical forge name. Deployment-wide rather than site-local, so git remotes
+# survive the forge moving hosts. git.home.{$DOMAIN} reaches the same service
+# through the home edge and becomes the direct path once split DNS lands.
+git.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_FORGEJO_HTTP}
+}
+
 ##########################
 # Admin Domain Routing   #
 ##########################

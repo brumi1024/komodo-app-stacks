@@ -1,0 +1,32 @@
+[[stack]]
+name = "forgejo"
+tags = ["git", "forge", "development", "home"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = false
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+env_file_path = ".env.forgejo"
+file_paths = [
+    "services/forgejo/docker-compose.yaml",
+]
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+PORT_FORGEJO_HTTP=[[PORT_FORGEJO_HTTP]]
+PORT_FORGEJO_SSH=[[PORT_FORGEJO_SSH]]
+
+# Database configuration
+FORGEJO_DB_USER=forgejo
+FORGEJO_DB_PASSWORD=[[OP__KOMODO__FORGEJO__FORGEJO_DB_PASSWORD]]
+"""
