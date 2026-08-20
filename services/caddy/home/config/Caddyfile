@@ -156,3 +156,10 @@ evcc.home.{$DOMAIN} {
 		reverse_proxy docker.{$TAILNET}:{$PORT_EVCC_HTTP}
 	}
 }
+
+# Zigbee2MQTT
+z2m.home.{$DOMAIN} {
+	import authenticate_tinyauth_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_ZIGBEE2MQTT}
+}

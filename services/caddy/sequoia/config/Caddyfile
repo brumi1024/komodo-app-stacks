@@ -41,6 +41,34 @@
 	}
 }
 
+# Tinyauth forward auth, backed by Pocket ID. Tinyauth resolves the protected
+# application from the forwarded host, so this snippet stays generic.
+(authenticate_tinyauth) {
+	forward_auth https://login.{$DOMAIN} {
+		uri /api/auth/caddy
+
+		# Capitalization matters; these arrive empty otherwise.
+		copy_headers Remote-User Remote-Name Remote-Email Remote-Groups Authorization
+	}
+}
+
+# Tailnet clients reach the backend directly; every other client authenticates.
+(authenticate_tinyauth_with_tailscale_bypass) {
+	@tailscale_network {
+		client_ip 100.64.0.0/10
+	}
+
+	# Skip authentication for local network requests
+	handle @tailscale_network {
+		# Just pass through to the backend without authentication
+	}
+
+	# Apply authentication for non-local requests
+	handle {
+		import authenticate_tinyauth
+	}
+}
+
 ##########################
 # Sequoia Site Services  #
 ##########################
@@ -65,4 +93,11 @@ scrypted.seq.{$DOMAIN} {
 			tls_insecure_skip_verify
 		}
 	}
+}
+
+# Zigbee2MQTT
+z2m.seq.{$DOMAIN} {
+	import authenticate_tinyauth_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy sequoia-rpi-4.{$TAILNET}:{$PORT_ZIGBEE2MQTT}
 }
