@@ -3,7 +3,7 @@ name: "forgejo"
 services:
   forgejo-db:
     container_name: forgejo-postgres
-    image: docker.io/library/postgres:17
+    image: docker.io/library/postgres:18
     restart: unless-stopped
     volumes:
       - forgejo-pgdata:/var/lib/postgresql/data

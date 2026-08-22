@@ -15,7 +15,7 @@ services:
 
   paperless-db:
     container_name: paperless-postgres
-    image: docker.io/library/postgres:17
+    image: docker.io/library/postgres:18
     restart: unless-stopped
     volumes:
       - paperless-pgdata:/var/lib/postgresql/data
