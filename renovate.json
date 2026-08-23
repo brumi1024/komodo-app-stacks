@@ -95,6 +95,13 @@
       "groupName": "Caddy build"
     },
     {
+      "description": "A Postgres major is a data migration, not an image swap: the server refuses to start on a data directory written by an older major, and 18+ also moved the cluster into a major-versioned subdirectory of the mount. Renovate sees neither, so it reads a major as an ordinary tag bump. Bump this by hand alongside a dump and restore. Minor and patch stay tracked.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/library/postgres"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "description": "Never auto-merge database major updates",
       "matchDatasources": ["docker"],
       "matchPackageNames": [

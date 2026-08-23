@@ -6,7 +6,9 @@ services:
     image: docker.io/library/postgres:18
     restart: unless-stopped
     volumes:
-      - forgejo-pgdata:/var/lib/postgresql/data
+      # Postgres 18+ images place the cluster in a major-versioned subdirectory,
+      # so the mount is the parent, not the data directory itself.
+      - forgejo-pgdata-18:/var/lib/postgresql
     environment:
       POSTGRES_DB: forgejo
       POSTGRES_USER: ${FORGEJO_DB_USER}
@@ -104,6 +106,6 @@ services:
       start_period: 60s
 
 volumes:
-  forgejo-pgdata:
-    name: forgejo-pgdata
+  forgejo-pgdata-18:
+    name: forgejo-pgdata-18
     driver: local
