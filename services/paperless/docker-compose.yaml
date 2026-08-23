@@ -83,9 +83,21 @@ services:
 
       - PAPERLESS_WEBSERVER_WORKERS=2
 
+      # Polling, not inotify: the consume directory is an NFS mount and inotify
+      # events do not cross it.
       - PAPERLESS_CONSUMER_POLLING=60
       - PAPERLESS_CONSUMER_POLLING_DELAY=30
       - PAPERLESS_CONSUMER_POLLING_RETRY_COUNT=3
+
+      # Documents are filed into subdirectories by hand, and paperless does not
+      # descend into them by default. The subdirectory name becomes a tag.
+      - PAPERLESS_CONSUMER_RECURSIVE=true
+      - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
+      # Upstream ships an empty ignore list, and this share is written from
+      # macOS and a Synology NAS, so their metadata files would be consumed
+      # as documents.
+      - PAPERLESS_CONSUMER_IGNORE_PATTERNS=[".DS_Store", ".DS_STORE", "._*", "desktop.ini", "Thumbs.db"]
+      - PAPERLESS_CONSUMER_IGNORE_DIRS=["@eaDir", ".stfolder", ".stversions"]
 
       - PAPERLESS_REDIS=redis://paperless-broker:6379
       - PAPERLESS_DBHOST=paperless-db
