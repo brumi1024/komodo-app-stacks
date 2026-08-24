@@ -5,8 +5,8 @@ This file captures the non-obvious rules that aren't spelled out there.
 
 ## Related repositories
 
-- `brumi1024/homelab-infra`: Ansible bootstrap of the hosts, Komodo Core and Periphery, and the live-state notes.
-  Host and inventory questions go there.
+- `brumi1024/homelab-infra`: Ansible bootstrap of the hosts, Komodo Core and Periphery.
+  Host and inventory questions go there; live estate state lives in the private `agentic-notes` checkout on operator machines.
 - `brumi1024/komodo-resource-syncs`: the sync that pulls this repo into Komodo.
   Add or rename a sync there, not here.
 - `brumi1024/deploy-komodo-op`: the komodo-op stack that turns 1Password items into the `[[OP__KOMODO__*]]` variables used here.
