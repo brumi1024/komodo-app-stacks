@@ -62,6 +62,8 @@ The validator parses every TOML resource, verifies referenced files, renders eve
 Resource sync does not automatically make a stateful migration safe.
 Database backups, data-directory moves, and control-plane relocation must use an explicit migration runbook with a tested rollback path.
 
+The repository-owned `$renovate-pr-triage` skill under `.agents/skills/` provides read-only dependency pull-request risk classification.
+
 ## Adding a stack
 
 Use an existing nearby service as the template.

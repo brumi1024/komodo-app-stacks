@@ -11,6 +11,11 @@ This file captures the non-obvious rules that aren't spelled out there.
   Add or rename a sync there, not here.
 - `brumi1024/deploy-komodo-op`: the komodo-op stack that turns 1Password items into the `[[OP__KOMODO__*]]` variables used here.
 
+## Reusable procedures
+
+- Use `$komodo-stack-lifecycle` for adding, removing, or auditing a stack across the four Komodo repositories.
+- Use `$renovate-pr-triage` for read-only risk classification of Renovate pull requests before merge.
+
 ## Secrets
 
 - All secret values come from 1Password via `komodo-op`.

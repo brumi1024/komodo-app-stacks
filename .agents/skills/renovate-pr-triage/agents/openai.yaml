@@ -1,0 +1,3 @@
+interface:
+  display_name: "Renovate PR Triage"
+  short_description: "Help with Renovate PR Triage tasks"
