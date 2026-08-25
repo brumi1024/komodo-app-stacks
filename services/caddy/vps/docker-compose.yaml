@@ -6,6 +6,7 @@ services:
     networks:
       - default
       - vps-ingress
+      - crowdsec-control
     labels:
       - homepage.name=Caddy VPS
       - homepage.description=VPS Reverse Proxy
@@ -18,3 +19,6 @@ networks:
   vps-ingress:
     external: true
     name: vps-ingress
+  crowdsec-control:
+    external: true
+    name: crowdsec-control

@@ -15,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TAILSCALE_IP = re.compile(r"\b100\.(?:\d{1,3}\.){2}\d{1,3}\b")
 ALLOWED_TAILSCALE_CIDR = "100.64.0.0/10"
+DOCKER_SOCKET_BIND = "/var/run/docker.sock:/var/run/docker.sock"
+DOCKER_SOCKET_PROXY = ROOT / "services/proxy/docker-compose.yaml"
 VOLUMES_KEY = re.compile(r"^(\s*)volumes:\s*$")
 LIST_ITEM = re.compile(r"^(\s*)-\s+(.*)$")
 INTERPOLATION = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)([^}]*)\}")
@@ -220,6 +222,11 @@ def validate_repository_policy() -> list[str]:
         if not path.is_file() or path.suffix not in {".yaml", ".yml", ".toml"}:
             continue
         text = path.read_text()
+        if DOCKER_SOCKET_BIND in text and path != DOCKER_SOCKET_PROXY:
+            errors.append(
+                f"{path.relative_to(ROOT)}: direct Docker socket mounts are "
+                "reserved for the constrained socket proxy"
+            )
         if "SOCKY_PROXY_BIND_IP" in text:
             errors.append(f"{path.relative_to(ROOT)}: obsolete Tailnet bind variable")
         scrubbed = text.replace(ALLOWED_TAILSCALE_CIDR, "")

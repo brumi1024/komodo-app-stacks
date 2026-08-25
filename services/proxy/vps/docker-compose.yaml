@@ -1,5 +1,7 @@
 services:
   socky_proxy:
+    ports:
+      - "127.0.0.1:${PORT_SOCKY_PROXY:?PORT_SOCKY_PROXY is required}:2375"
     networks:
       - socky_proxy-net
       - monitoring-control

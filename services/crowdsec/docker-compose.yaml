@@ -22,6 +22,8 @@ services:
       # caddy-vps writes to /var/log/caddy/caddy_access.log inside its container,
       # which is bind-mounted from this host path:
       - ${CONFIG_DIR}/caddy-vps/logs:/var/log/caddy:ro
+    networks:
+      - crowdsec-control
     healthcheck:
       test: ["CMD", "cscli", "version"]
       interval: 30s
@@ -33,3 +35,8 @@ services:
       - homepage.name=CrowdSec
       - homepage.icon=crowdsec.svg
       - homepage.description=Edge intrusion detection / IP reputation
+
+networks:
+  crowdsec-control:
+    external: true
+    name: crowdsec-control
