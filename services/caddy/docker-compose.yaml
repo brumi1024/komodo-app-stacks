@@ -29,6 +29,13 @@ services:
       - ${CONFIG_DIR}/${CADDY_INSTANCE}/logs:/var/log/caddy
     env_file:
       - "${KOMODO_ENV_FILE:-.env}"
+    # A container gets its own netns and tcp_congestion_control is namespaced,
+    # so a host-level setting never reaches here and a new container starts on
+    # cubic. Every Caddy instance sends over long internet paths where cubic
+    # collapses per flow. Needs tcp_bbr loaded on the host, or the container
+    # will not start.
+    sysctls:
+      - net.ipv4.tcp_congestion_control=bbr
     labels:
       - homepage.group=Administration
       - homepage.name=${CADDY_HOMEPAGE_NAME:-Caddy}
