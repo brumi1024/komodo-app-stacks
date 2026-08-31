@@ -1,0 +1,10 @@
+# Acquisition for the caddy-vps access log, mounted read-only by the compose
+# file. Without a file here CrowdSec parses nothing and the bouncer enforces an
+# empty decision list.
+#
+# The live file only; the rotated siblings are gzipped and would be re-read on
+# every restart.
+filenames:
+  - /var/log/caddy/caddy_access.log
+labels:
+  type: caddy

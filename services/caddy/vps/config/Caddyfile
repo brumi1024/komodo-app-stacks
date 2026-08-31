@@ -27,6 +27,9 @@
 ############
 # Snippets #
 ############
+# The public-edge bundle: TLS, compression, CrowdSec remediation, and the access
+# log CrowdSec parses. A site that skips this import is neither filtered nor
+# detected, so every public site imports it and nothing else carries logging.
 (cloudflare) {
 	route {
 		crowdsec
@@ -38,11 +41,20 @@
 	}
 
 	encode zstd gzip
-}
 
-(log_common) {
 	log {
 		output file /var/log/caddy/caddy_access.log
+
+		# Caddy redacts Authorization and Cookie by itself; application
+		# credentials that travel in other headers are dropped here so they
+		# never reach the log file or the CrowdSec alert context.
+		format filter {
+			wrap json
+			fields {
+				request>headers>X-Api-Key delete
+				request>headers>X-Api-Secret delete
+			}
+		}
 	}
 }
 
@@ -80,26 +92,22 @@
 
 komodo.{$DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy komodo-core:9120
 }
 
 beszel.{$DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy beszel:8090
 }
 
 uptime.{$DOMAIN} {
 	import cloudflare
-	import log_common
 	import authenticate_tinyauth_with_tailscale_bypass
 	reverse_proxy uptime-kuma:3001
 }
 
 ntfy.{$DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy ntfy:80
 }
 
@@ -107,14 +115,12 @@ ntfy.{$DOMAIN} {
 # must never sit behind a forward-auth snippet.
 id.{$DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy pocket-id:1411
 }
 
 # Tinyauth serves the login flow itself, so it must not sit behind forward auth.
 login.{$DOMAIN} {
 	import cloudflare
-	import log_common
 
 	# Site Caddy instances forward-auth here and pass the protected
 	# application's URL in X-Forwarded-*. Preserve it across this proxy hop,
@@ -161,13 +167,11 @@ git.{$DOMAIN} {
 # Home Infrastructure
 susanoo.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy https://susanoo.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
 pbs.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy https://proxmox-backup-server.{$TAILNET}:{$PORT_PBS_HTTPS} {
 		transport http {
 			tls
@@ -178,32 +182,27 @@ pbs.{$ADMIN_DOMAIN} {
 
 truenas.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy http://truenas-scale.{$TAILNET}:80
 }
 
 dns1.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy http://technitiumdns-1.{$TAILNET}:5380
 }
 
 dns2.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy http://main-pi-zero-2.{$TAILNET}:5380
 }
 
 # Sequoia Infrastructure
 eurus.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy https://eurus.{$TAILNET}:{$PORT_PROXMOX_HTTPS}
 }
 
 pbs.seq.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy https://proxmox-backup-server-seq.{$TAILNET}:{$PORT_PBS_HTTPS} {
 		transport http {
 			tls
@@ -214,13 +213,11 @@ pbs.seq.{$ADMIN_DOMAIN} {
 
 dns1.seq.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy http://technitiumdns-seq-1.{$TAILNET}:5380
 }
 
 dns2.seq.{$ADMIN_DOMAIN} {
 	import cloudflare
-	import log_common
 	reverse_proxy http://sequoia-rpi-4.{$TAILNET}:5380
 }
 
