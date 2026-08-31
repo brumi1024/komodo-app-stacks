@@ -15,6 +15,9 @@ services:
       ENROLL_KEY: ${CROWDSEC_ENROLL_KEY:-}
       ENROLL_INSTANCE_NAME: homelab-vps
       ENROLL_TAGS: "homelab caddy vps"
+      # Without WAL the CAPI blocklist insert holds the sqlite write lock long
+      # enough to fail bouncer requests, which upstream warns about at startup.
+      USE_WAL: "true"
     volumes:
       # Allowlists are database state under this path, not config:
       # `cscli allowlists` manages them, and `tailnet` holds 100.64.0.0/10.
