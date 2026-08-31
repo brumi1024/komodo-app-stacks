@@ -35,11 +35,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-    labels:
-      - homepage.group=Security
-      - homepage.name=CrowdSec
-      - homepage.icon=crowdsec.svg
-      - homepage.description=Edge intrusion detection / IP reputation
 
 networks:
   crowdsec-control:
