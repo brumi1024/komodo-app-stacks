@@ -123,6 +123,19 @@
         href: https://unifi.ui.com/
         description: Unifi Controller
 
+- Security:
+    - CrowdSec:
+        icon: crowdsec.svg
+        description: Edge intrusion detection on the VPS Caddy
+        server: homelab-vps-docker
+        container: crowdsec
+        widget:
+            type: crowdsec
+            url: http://crowdsec:8080
+            username: homepage
+            password: {{HOMEPAGE_VAR_CROWDSEC_PASSWORD}}
+            limit24h: true
+
 - Media:
     - Plex:
         icon: plex.svg

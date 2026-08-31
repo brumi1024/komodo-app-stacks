@@ -30,12 +30,14 @@ services:
       - HOMEPAGE_VAR_TECHNITIUM_2_API_TOKEN=${TECHNITIUM_2_API_TOKEN}
       - HOMEPAGE_VAR_TECHNITIUM_SEQ_1_API_TOKEN=${TECHNITIUM_SEQ_1_API_TOKEN}
       - HOMEPAGE_VAR_TECHNITIUM_SEQ_2_API_TOKEN=${TECHNITIUM_SEQ_2_API_TOKEN}
+      - HOMEPAGE_VAR_CROWDSEC_PASSWORD=${CROWDSEC_MACHINE_PASSWORD}
     volumes:
       - ./config:/app/config
       - /etc/localtime:/etc/localtime:ro
     networks:
       - vps-ingress
       - monitoring-control
+      - crowdsec-control
     restart: unless-stopped
     labels:
       - kuma.homepage.http.name=Homepage
@@ -50,3 +52,6 @@ networks:
   monitoring-control:
     external: true
     name: monitoring-control
+  crowdsec-control:
+    external: true
+    name: crowdsec-control
