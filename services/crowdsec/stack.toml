@@ -9,8 +9,12 @@ auto_update = true
 destroy_before_deploy = false
 linked_repo = "app-stacks"
 env_file_path = ".env.crowdsec"
+run_directory = "services/crowdsec"
 file_paths = [
-    "services/crowdsec/docker-compose.yaml",
+    "docker-compose.yaml",
+]
+config_files = [
+  { path = "acquis.d/caddy.yaml", requires = "Redeploy" }
 ]
 
 environment = """

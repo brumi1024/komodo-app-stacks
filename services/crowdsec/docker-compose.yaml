@@ -16,12 +16,17 @@ services:
       ENROLL_INSTANCE_NAME: homelab-vps
       ENROLL_TAGS: "homelab caddy vps"
     volumes:
+      # Allowlists are database state under this path, not config:
+      # `cscli allowlists` manages them, and `tailnet` holds 100.64.0.0/10.
       - ${CONFIG_DIR}/crowdsec/data:/var/lib/crowdsec/data
       - ${CONFIG_DIR}/crowdsec/config:/etc/crowdsec
-      # Read-only mount of caddy-vps access logs so the agent can parse them.
-      # caddy-vps writes to /var/log/caddy/caddy_access.log inside its container,
-      # which is bind-mounted from this host path:
-      - ${CONFIG_DIR}/caddy-vps/logs:/var/log/caddy:ro
+      # Acquisition is declared in git. The rest of /etc/crowdsec is unmanaged
+      # host state, and an agent with no acquisition file parses nothing.
+      - ./acquis.d:/etc/crowdsec/acquis.d:ro
+      # caddy-vps access log. The caddy stack writes it under
+      # ${CONFIG_DIR}/${CADDY_INSTANCE}/logs with CADDY_INSTANCE=vps, so the
+      # host path is ${CONFIG_DIR}/vps/logs.
+      - ${CONFIG_DIR}/vps/logs:/var/log/caddy:ro
     networks:
       - crowdsec-control
     healthcheck:
