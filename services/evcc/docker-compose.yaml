@@ -3,7 +3,7 @@ name: "evcc"
 services:
   evcc:
     container_name: evcc
-    image: evcc/evcc:0.314.5
+    image: evcc/evcc:0.315.0
     command:
       - evcc
     ports:
