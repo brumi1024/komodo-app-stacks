@@ -69,11 +69,11 @@ services:
     container_name: qbittorrent
     volumes:
       - ${CONFIG_DIR}/qbittorrent:/config
-      - type: volume
-        source: media
+      - type: bind
+        source: ${MEDIA_DIR}/downloads
         target: /data/downloads
-        volume:
-          subpath: downloads
+        bind:
+          create_host_path: false
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=File Management
@@ -104,7 +104,11 @@ services:
     container_name: radarr
     volumes:
       - ${CONFIG_DIR}/radarr:/config
-      - media:/data
+      - type: bind
+        source: ${MEDIA_DIR}
+        target: /data
+        bind:
+          create_host_path: false
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media Tools
@@ -132,7 +136,11 @@ services:
     container_name: sonarr
     volumes:
       - ${CONFIG_DIR}/sonarr:/config
-      - media:/data
+      - type: bind
+        source: ${MEDIA_DIR}
+        target: /data
+        bind:
+          create_host_path: false
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Media Tools
@@ -155,11 +163,3 @@ services:
     ports:
       - ${PORT_SONARR_HTTP}:8989
     restart: unless-stopped
-
-volumes:
-  media:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS_IP},rw,vers=4.1
-      device: ":/mnt/blackbox/media"

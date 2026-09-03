@@ -13,10 +13,11 @@ run_directory = "services/immich"
 file_paths = [
     "docker-compose.yaml"
 ]
-# Wait for NFS (port 2049) on the home NAS before deploy. The 'photos' volume
-# mounts NFS from the NAS at container start; deploying onto a stale/down NAS
-# brings up containers against an empty path. Fails after 60s.
-pre_deploy = { path = "", command = "timeout 60 bash -c 'until (echo > /dev/tcp/[[OP__KOMODO__COMMON__HOME_NAS_IP]]/2049) 2>/dev/null; do sleep 2; done'" }
+# Guard against deploying onto an unmounted bind path. Photos live on a ZFS
+# dataset bind-mounted into the Docker host at [[BLACKBOX_DIR]]/photos;
+# without this check Docker would happily create an empty directory and
+# start Immich against it. Fails after 10s.
+pre_deploy = { path = "", command = "timeout 10 bash -c 'until [ -d [[BLACKBOX_DIR]]/photos ] && [ -n \"$(ls -A [[BLACKBOX_DIR]]/photos 2>/dev/null)\" ]; do sleep 1; done'" }
 
 environment = """
 KOMODO_ENV_FILE=.env.immich
@@ -40,6 +41,6 @@ DB_PASSWORD=[[OP__KOMODO__IMMICH__IMMICH_DB_PASSWORD]]
 IMMICH_API_AUTH_TOKEN=[[OP__KOMODO__IMMICH__IMMICH_API_AUTH_TOKEN]]
 
 # Storage configuration
-NAS_IP=[[OP__KOMODO__COMMON__HOME_NAS_IP]]
+PHOTOS_DIR=[[BLACKBOX_DIR]]/photos
 DB_DATA_LOCATION=[[CONFIG_DIR]]/immich/postgres
 """

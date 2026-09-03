@@ -12,6 +12,11 @@ env_file_path = ".env.servarr"
 file_paths = [
     "services/servarr/docker-compose.yaml",
 ]
+# Guard against deploying onto an unmounted bind path. Media lives on a ZFS
+# dataset bind-mounted into the Docker host at [[BLACKBOX_DIR]]/media;
+# without this check Docker would happily create an empty directory and
+# start the *arr stack against it. Fails after 10s.
+pre_deploy = { path = "", command = "timeout 10 bash -c 'until [ -d [[BLACKBOX_DIR]]/media ] && [ -n \"$(ls -A [[BLACKBOX_DIR]]/media 2>/dev/null)\" ]; do sleep 1; done'" }
 
 environment = """
 # User and group configuration
@@ -43,5 +48,5 @@ SONARR_API_AUTH_TOKEN=[[OP__KOMODO__SERVARR__SONARR_API_AUTH_TOKEN]]
 PLEX_AUTH_TOKEN=[[OP__KOMODO__SERVARR__PLEX_AUTH_TOKEN]]
 
 # Storage configuration
-NAS_IP=[[OP__KOMODO__COMMON__HOME_NAS_IP]]
+MEDIA_DIR=[[BLACKBOX_DIR]]/media
 """
