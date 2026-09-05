@@ -14,16 +14,6 @@
             username:  {{HOMEPAGE_VAR_SUSANOO_MONITORING_USER}}
             password:  {{HOMEPAGE_VAR_SUSANOO_MONITORING_TOKEN}}
             node: susanoo
-    - TrueNAS:
-        icon: truenas.svg
-        href: https://truenas.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
-        description: TrueNAS Scale
-        ping: truenas-scale.{{HOMEPAGE_VAR_TAILNET}}
-        widget:
-            type: truenas
-            url: http://truenas-scale.{{HOMEPAGE_VAR_TAILNET}}
-            key: {{HOMEPAGE_VAR_TRUENAS_SCALE_TOKEN}}
-            enablePools: true
     - Technitium DNS 1:
         icon: technitium.svg
         href: https://dns1.{{HOMEPAGE_VAR_ADMIN_DOMAIN}}
