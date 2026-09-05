@@ -37,7 +37,7 @@ This file captures the non-obvious rules that aren't spelled out there.
 3. Every service block should set `container_name` and `restart`.
    Container logging policy is configured once on each Docker daemon rather than repeated in stack files.
 4. Persistent data goes under `${CONFIG_DIR}/<stack>/...`.
-   NFS volumes use `addr=${NAS_IP},rw,vers=4.1` (see `immich`, `paperless`).
+   Datasets bind-mounted from the home Docker host's ZFS pool live under `${BLACKBOX_DIR}/<dataset>` (see `immich`, `paperless`, `servarr`).
 5. User-facing services get `homepage.*` labels; internal-only sidecars do not.
 
 ## Multi-instance stacks

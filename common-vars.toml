@@ -11,6 +11,12 @@ value = "/srv/docker-config"
 is_secret = false
 
 [[variable]]
+name = "BLACKBOX_DIR"
+description = "Host root for the blackbox ZFS datasets bind-mounted into the Docker host"
+value = "/mnt/blackbox"
+is_secret = false
+
+[[variable]]
 name = "CADDY_VERSION"
 description = "Caddy version"
 # renovate: datasource=docker depName=caddy

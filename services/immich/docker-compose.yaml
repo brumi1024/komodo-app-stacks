@@ -8,9 +8,11 @@ services:
       file: hwaccel.transcoding.yml
       service: quicksync # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     volumes:
-      - type: volume
-        source: photos
+      - type: bind
+        source: ${PHOTOS_DIR}
         target: /usr/src/app/upload
+        bind:
+          create_host_path: false
       - /etc/localtime:/etc/localtime:ro
     labels:
       - homepage.group=Personal Apps
@@ -79,9 +81,3 @@ services:
 
 volumes:
   model-cache:
-  photos:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS_IP},rw,vers=4.1
-      device: ":/mnt/blackbox/photos"
