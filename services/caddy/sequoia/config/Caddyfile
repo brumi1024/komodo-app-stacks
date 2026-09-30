@@ -44,8 +44,18 @@
 # Tinyauth forward auth, backed by Pocket ID. Tinyauth resolves the protected
 # application from the forwarded host, so this snippet stays generic.
 (authenticate_tinyauth) {
-	forward_auth https://login.{$DOMAIN} {
+	# Dial the VPS over Tailscale rather than its public address. The VPS
+	# trusts tailnet peers as proxies, so CrowdSec and Tinyauth see the visitor
+	# from X-Forwarded-For instead of this site's WAN IP; over the internet,
+	# one crawler hitting this edge would get the whole site banned.
+	forward_auth https://homelab-vps.{$TAILNET}:443 {
 		uri /api/auth/caddy
+
+		# Keep the public name for routing and certificate validation.
+		header_up Host login.{$DOMAIN}
+		transport http {
+			tls_server_name login.{$DOMAIN}
+		}
 
 		# Capitalization matters; these arrive empty otherwise.
 		copy_headers Remote-User Remote-Name Remote-Email Remote-Groups Authorization

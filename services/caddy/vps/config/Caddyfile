@@ -16,6 +16,14 @@
 	# published by Compose. Homepage uses it for the Caddy widget.
 	admin 0.0.0.0:2019
 
+	# Site Caddy instances forward-auth over Tailscale, so tailnet peers are
+	# trusted proxies. Strict parsing makes client_ip, which the CrowdSec
+	# parser and the bypass matcher read, the visitor rather than the site edge.
+	servers {
+		trusted_proxies static 100.64.0.0/10
+		trusted_proxies_strict
+	}
+
 	crowdsec {
 		api_url http://crowdsec:8080
 		api_key {$CROWDSEC_BOUNCER_API_KEY}
@@ -71,8 +79,10 @@
 
 # Tailnet clients reach the backend directly; every other client authenticates.
 (authenticate_tinyauth_with_tailscale_bypass) {
+	# client_ip, not remote_ip: a site edge is a tailnet peer, and its
+	# forwarded visitors must not inherit the bypass.
 	@tailscale_network {
-		remote_ip 100.64.0.0/10
+		client_ip 100.64.0.0/10
 	}
 
 	# Skip authentication for local network requests
