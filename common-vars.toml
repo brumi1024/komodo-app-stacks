@@ -30,6 +30,18 @@ value = "172.28.0.0/16"
 is_secret = false
 
 [[variable]]
+name = "HOME_DNS_PRIMARY"
+description = "Home site Technitium resolver, primary"
+value = "192.168.0.5"
+is_secret = false
+
+[[variable]]
+name = "HOME_DNS_SECONDARY"
+description = "Home site Technitium resolver, secondary"
+value = "192.168.0.6"
+is_secret = false
+
+[[variable]]
 name = "ZIGBEE2MQTT_ADAPTER_HOST"
 description = "Zigbee2MQTT adapter host"
 value = "192.168.30.18"

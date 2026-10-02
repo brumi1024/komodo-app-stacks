@@ -9,6 +9,10 @@ services:
     ports:
       - "${PORT_EVCC_HTTP:-7070}:7070/tcp"
       - "${PORT_EVCC_OCPP:-8887}:8887/tcp"
+    # Split-horizon resolvers, so Home Assistant is reached on the LAN, not through the VPS.
+    dns:
+      - ${HOME_DNS_PRIMARY}
+      - ${HOME_DNS_SECONDARY}
     volumes:
       - ${CONFIG_DIR}/evcc:/root/.evcc
     environment:
