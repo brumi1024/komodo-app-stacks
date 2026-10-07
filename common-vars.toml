@@ -20,7 +20,7 @@ is_secret = false
 name = "CADDY_VERSION"
 description = "Caddy version"
 # renovate: datasource=docker depName=caddy
-value = "2.11.6"
+value = "2.11.7"
 is_secret = false
 
 [[variable]]
