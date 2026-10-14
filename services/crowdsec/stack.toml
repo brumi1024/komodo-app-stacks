@@ -14,7 +14,8 @@ file_paths = [
     "docker-compose.yaml",
 ]
 config_files = [
-  { path = "acquis.d/caddy.yaml", requires = "Redeploy" }
+  { path = "acquis.d/caddy.yaml", requires = "Redeploy" },
+  { path = "parsers/homelab-whitelists.yaml", requires = "Redeploy" },
 ]
 
 environment = """
