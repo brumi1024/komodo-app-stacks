@@ -1,0 +1,15 @@
+# Mounted as a single file into s02-enrich so the hub symlinks beside it stay
+# visible. Whitelisted events are dropped before any scenario sees them.
+name: homelab/whitelists
+description: "Keep remediation and known application traffic out of detection"
+filter: "evt.Meta.log_type == 'http_access-log'"
+whitelist:
+  reason: "homelab: remediation feedback or known application request"
+  expression:
+    # The bouncer answers a banned address with 403, so without this a ban
+    # feeds http-generic-403-bf and renews itself for as long as the client
+    # retries. Only 403s reach the decision lookup, keeping it off the hot path.
+    - "evt.Meta.http_status == '403' && GetDecisionsCount(evt.Meta.source_ip) > 0"
+    # Actual's web client loads its schema migrations on startup, which
+    # http-sensitive-files reads as a .sql dump probe.
+    - "evt.Meta.target_fqdn startsWith 'actual.' && evt.Meta.http_status == '200' && evt.Meta.http_path matches '^/data/migrations/[0-9]+_[a-z0-9_]+[.]sql$'"
