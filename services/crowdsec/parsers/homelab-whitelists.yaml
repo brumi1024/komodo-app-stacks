@@ -13,3 +13,7 @@ whitelist:
     # Actual's web client loads its schema migrations on startup, which
     # http-sensitive-files reads as a .sql dump probe.
     - "evt.Meta.target_fqdn startsWith 'actual.' && evt.Meta.http_status == '200' && evt.Meta.http_path matches '^/data/migrations/[0-9]+_[a-z0-9_]+[.]sql$'"
+    # Git's smart-HTTP client asks for refs anonymously and retries with
+    # credentials on the 401, which http-generic-bf reads as a failed login.
+    # A request that sent credentials still counts, so guessing is still seen.
+    - "evt.Meta.target_fqdn startsWith 'git.' && evt.Meta.http_status == '401' && evt.Meta.http_verb == 'GET' && evt.Meta.http_user_agent startsWith 'git/' && evt.Meta.http_path matches '^/[^/]+/[^/]+/info/refs[?]service=git-(upload|receive)-pack$' && get(evt.Unmarshaled.caddy.request.headers, 'Authorization') == nil"
