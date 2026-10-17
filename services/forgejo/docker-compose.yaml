@@ -88,6 +88,11 @@ services:
       FORGEJO__repository__DEFAULT_BRANCH: main
       FORGEJO__repository__DEFAULT_PRIVATE: private
 
+      # Git's default fsync skips loose objects and refs, and a small push is
+      # stored as loose objects, so a host crash can leave them zero-length.
+      FORGEJO__git_0X2E_config__core_0X2E_fsync: committed
+      FORGEJO__git_0X2E_config__core_0X2E_fsyncMethod: fsync
+
       # Push mirrors to GitHub are the off-site copy of every repository.
       FORGEJO__mirror__ENABLED: "true"
       FORGEJO__mirror__DISABLE_NEW_PUSH: "false"
