@@ -22,6 +22,7 @@ services:
       AUTOKUMA__ENV__NTFY_ACCESS_TOKEN: ${AUTOKUMA__ENV__NTFY_ACCESS_TOKEN}
       # The static resolver monitors address the DNS nodes by MagicDNS name.
       AUTOKUMA__ENV__TAILNET: ${AUTOKUMA__ENV__TAILNET}
+      AUTOKUMA__ENV__PORT_SOCKY_PROXY: ${AUTOKUMA__ENV__PORT_SOCKY_PROXY}
       # Default monitor settings applied to every monitor this instance creates.
       # The static ntfy provider is reconciled from config/ntfy.json.
       AUTOKUMA__DEFAULT_SETTINGS: |-
@@ -38,6 +39,10 @@ services:
       # The emitted tag_names value carries no surrounding quotes. A docker-compose
       # label needs them because that file is YAML; a snippet body is not, so quotes
       # written here reach the JSON parser literally and fail it.
+      #
+      # A mapped host also parents the monitor under that host's group in
+      # config/host-<host>.json and silences it, so ntfy hears from the group alone:
+      # one alert per host incident, naming every child that is down.
       AUTOKUMA__SNIPPETS__SITE: |-
         {%- set_global host = system_info["Name"] -%}
         {%- set_global site = "unknown" -%}
@@ -47,6 +52,10 @@ services:
         {%- set_global type = "http" -%}
         {%- if args | length > 1 -%}{%- set_global type = args[1] -%}{%- endif %}
         {{ args[0] }}.{{ type }}.tag_names: [{"name": "site", "value": "{{ site }}"}, {"name": "host", "value": "{{ host }}"}]
+        {%- if site != "unknown" %}
+        {{ args[0] }}.{{ type }}.parent_name: host-{{ host }}
+        {{ args[0] }}.{{ type }}.notification_name_list: []
+        {%- endif %}
     volumes:
       - ${CONFIG_DIR}/autokuma/${AUTOKUMA_INSTANCE}/data:/data
       - ./config:/static-monitors:ro
