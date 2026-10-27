@@ -1,0 +1,72 @@
+name: "karakeep"
+
+services:
+  karakeep-web:
+    container_name: karakeep
+    image: ghcr.io/karakeep-app/karakeep:0.34.1
+    restart: unless-stopped
+    depends_on:
+      - karakeep-chrome
+      - karakeep-meilisearch
+    ports:
+      - "${PORT_KARAKEEP_HTTP:-3010}:3000"
+    volumes:
+      - ${CONFIG_DIR}/karakeep/data:/data
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Karakeep
+      - homepage.icon=karakeep.svg
+      - homepage.href=https://karakeep.home.${DOMAIN}
+      - homepage.description=Bookmarks and read-later
+      - kuma.karakeep.http.name=Karakeep
+      - kuma.karakeep.http.url=http://docker.${TAILNET}:${PORT_KARAKEEP_HTTP}/api/health
+      - kuma.karakeep.http.interval=60
+      - kuma.__site="karakeep"
+    environment:
+      - DATA_DIR=/data
+      - MEILI_ADDR=http://karakeep-meilisearch:7700
+      - MEILI_MASTER_KEY=${KARAKEEP_MEILI_MASTER_KEY}
+      - BROWSER_WEB_URL=http://karakeep-chrome:9222
+      - NEXTAUTH_URL=https://karakeep.home.${DOMAIN}
+      - NEXTAUTH_SECRET=${KARAKEEP_NEXTAUTH_SECRET}
+
+      # Pocket ID is the only login; the client's allowed groups decide who
+      # gets in, and the first account to sign in becomes admin.
+      - DISABLE_PASSWORD_AUTH=true
+      - OAUTH_AUTO_REDIRECT=true
+      - OAUTH_PROVIDER_NAME=Pocket ID
+      - OAUTH_WELLKNOWN_URL=https://id.${DOMAIN}/.well-known/openid-configuration
+      - OAUTH_CLIENT_ID=${KARAKEEP_OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${KARAKEEP_OAUTH_CLIENT_SECRET}
+
+      # Claude through Anthropic's OpenAI-compatible endpoint. It has no
+      # embeddings API, so semantic search stays off.
+      - OPENAI_BASE_URL=https://api.anthropic.com/v1/
+      - OPENAI_API_KEY=${KARAKEEP_ANTHROPIC_API_KEY}
+      - INFERENCE_TEXT_MODEL=claude-haiku-5-5
+      - INFERENCE_IMAGE_MODEL=claude-haiku-5-5
+      - INFERENCE_CONTEXT_LENGTH=8000
+      - INFERENCE_ENABLE_AUTO_SUMMARIZATION=true
+      - EMBEDDING_ENABLE_AUTO_INDEXING=false
+
+  karakeep-chrome:
+    container_name: karakeep-chrome
+    image: ghcr.io/karakeep-app/karakeep-chrome:156.0.8078.47-r1
+    restart: unless-stopped
+    init: true
+    command:
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --hide-scrollbars
+      - --disable-blink-features=AutomationControlled
+      - --window-size=1440,900
+
+  karakeep-meilisearch:
+    container_name: karakeep-meilisearch
+    image: docker.io/getmeili/meilisearch:v1.41.0
+    restart: unless-stopped
+    volumes:
+      - ${CONFIG_DIR}/karakeep/meilisearch:/meili_data
+    environment:
+      - MEILI_NO_ANALYTICS=true
+      - MEILI_MASTER_KEY=${KARAKEEP_MEILI_MASTER_KEY}
