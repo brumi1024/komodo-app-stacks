@@ -142,6 +142,18 @@ paperless.home.{$DOMAIN} {
 	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
 }
 
+# paperless-gpt has no login of its own.
+paperless-gpt.home.{$DOMAIN} {
+	import authenticate_tinyauth
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_GPT_HTTP}
+}
+
+karakeep.home.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_KARAKEEP_HTTP}
+}
+
 stirling.home.{$DOMAIN} {
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_STIRLING_HTTP}
