@@ -146,7 +146,7 @@ paperless.home.{$DOMAIN} {
 paperless-gpt.home.{$DOMAIN} {
 	import authenticate_tinyauth
 	import cloudflare
-	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_GPT_HTTP}
+	reverse_proxy paperless-gpt:8080
 }
 
 karakeep.home.{$DOMAIN} {

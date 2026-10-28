@@ -112,8 +112,10 @@ services:
     restart: unless-stopped
     depends_on:
       - paperless-webserver
-    ports:
-      - "${PORT_PAPERLESS_GPT_HTTP:-8084}:8080"
+    # No published port: it has no login, so only Caddy reaches it.
+    networks:
+      - default
+      - home-ingress
     volumes:
       - ${CONFIG_DIR}/paperless-gpt/prompts:/app/prompts
       - ${CONFIG_DIR}/paperless-gpt/config:/app/config
@@ -124,10 +126,6 @@ services:
       - homepage.icon=paperless-ngx.svg
       - homepage.href=https://paperless-gpt.home.${DOMAIN}
       - homepage.description=AI metadata and OCR for Paperless
-      - kuma.paperlessgpt.http.name=Paperless GPT
-      - kuma.paperlessgpt.http.url=http://docker.${TAILNET}:${PORT_PAPERLESS_GPT_HTTP}/
-      - kuma.paperlessgpt.http.interval=60
-      - kuma.__site="paperless"
     environment:
       - PAPERLESS_BASE_URL=http://paperless-webserver:8000
       - PAPERLESS_PUBLIC_URL=${PAPERLESS_URL}
@@ -148,6 +146,11 @@ services:
       - VISION_LLM_PROVIDER=anthropic
       - VISION_LLM_MODEL=claude-sonnet-5-5
       - OCR_LIMIT_PAGES=0
+
+networks:
+  home-ingress:
+    external: true
+    name: home-ingress
 
 volumes:
   paperless-pgdata-18:
