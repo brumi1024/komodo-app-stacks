@@ -2,7 +2,8 @@
 # Global options #
 ##################
 {
-	admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+	# Loopback only: containers on home-ingress share a network with this edge.
+	admin localhost:{$PORT_CADDY_ADMIN}
 
 	# Home Assistant mobile clients currently stall on HTTP/3 asset requests
 	# through this edge; keep the Home edge on TCP transports until isolated.
