@@ -7,5 +7,7 @@
   "dns_resolve_type": "A",
   "interval": 60,
   "max_retries": 2,
+  "parent_name": "host-sequoia-rpi-4",
+  "notification_name_list": [],
   "tag_names": [{"name": "site", "value": "sequoia"}, {"name": "host", "value": "sequoia-rpi-4"}]
 }

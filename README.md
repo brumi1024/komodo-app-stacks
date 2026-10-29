@@ -14,6 +14,8 @@ Applications with native OIDC support connect to Pocket ID directly, while Tinya
 One AutoKuma instance on the VPS reconciles all Uptime Kuma monitors.
 It reads local container labels over the private `monitoring-control` network and remote labels through read-only Docker socket proxies over Tailscale.
 The remote proxy ports must be protected by the host firewall so only the VPS can reach them.
+Every monitor on a known Docker host sits under that host's group monitor in `services/autokuma/config/`, which alone notifies ntfy, so a host outage arrives as one alert naming each service it took down.
+Each remote group also holds a Docker engine check against that host's socket proxy, so the root cause shows up as a child of its own; Uptime Kuma cannot check the host it runs on, so the VPS group has none.
 
 Remote applications continue to use full MagicDNS names when traffic crosses hosts.
 The VPS is the public edge for every site and forwards `*.home` and `*.seq` to that site's Caddy over Tailscale, preserving the original `Host` header.
