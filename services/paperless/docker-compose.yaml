@@ -100,11 +100,57 @@ services:
       - PAPERLESS_DBPASS=${PAPERLESS_DB_PASSWORD}
 
       - PAPERLESS_URL=${PAPERLESS_URL}
-      - PAPERLESS_ALLOWED_HOSTS=paperless.${DOMAIN},paperless.home.${DOMAIN}
+      - PAPERLESS_ALLOWED_HOSTS=paperless.${DOMAIN},paperless.home.${DOMAIN},paperless-webserver
       - PAPERLESS_CSRF_TRUSTED_ORIGINS=${PAPERLESS_URL},https://paperless.home.${DOMAIN}
       - PAPERLESS_ENABLE_ALLAUTH=true
       - PAPERLESS_APPS=allauth.socialaccount.providers.openid_connect
       - PAPERLESS_SOCIALACCOUNT_PROVIDERS=${PAPERLESS_SOCIALACCOUNT_PROVIDERS}
+
+  paperless-gpt:
+    container_name: paperless-gpt
+    image: docker.io/icereed/paperless-gpt:v0.31.0
+    restart: unless-stopped
+    depends_on:
+      - paperless-webserver
+    # No published port: it has no login, so only Caddy reaches it.
+    networks:
+      - default
+      - home-ingress
+    volumes:
+      - ${CONFIG_DIR}/paperless-gpt/prompts:/app/prompts
+      - ${CONFIG_DIR}/paperless-gpt/config:/app/config
+      - ${CONFIG_DIR}/paperless-gpt/db:/app/db
+    labels:
+      - homepage.group=Personal Apps
+      - homepage.name=Paperless GPT
+      - homepage.icon=paperless-ngx.svg
+      - homepage.href=https://paperless-gpt.home.${DOMAIN}
+      - homepage.description=AI metadata and OCR for Paperless
+    environment:
+      - PAPERLESS_BASE_URL=http://paperless-webserver:8000
+      - PAPERLESS_PUBLIC_URL=${PAPERLESS_URL}
+      - PAPERLESS_API_TOKEN=${PAPERLESS_GPT_API_TOKEN}
+
+      # A paperless workflow tags every new document with AUTO_TAG; tagging a
+      # document with AUTO_OCR_TAG re-reads it with the vision model on demand.
+      - AUTO_TAG=paperless-gpt-auto
+      - AUTO_OCR_TAG=paperless-gpt-ocr-auto
+      - MANUAL_TAG=paperless-gpt
+
+      - LLM_PROVIDER=anthropic
+      - LLM_MODEL=claude-sonnet-5-5
+      - LLM_LANGUAGE=English and Hungarian
+      - ANTHROPIC_API_KEY=${PAPERLESS_GPT_ANTHROPIC_API_KEY}
+
+      - OCR_PROVIDER=llm
+      - VISION_LLM_PROVIDER=anthropic
+      - VISION_LLM_MODEL=claude-sonnet-5-5
+      - OCR_LIMIT_PAGES=0
+
+networks:
+  home-ingress:
+    external: true
+    name: home-ingress
 
 volumes:
   paperless-pgdata-18:

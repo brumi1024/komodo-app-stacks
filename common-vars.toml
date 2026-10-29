@@ -115,6 +115,12 @@ value = "8000"
 is_secret = false
 
 [[variable]]
+name = "PORT_KARAKEEP_HTTP"
+description = "Karakeep HTTP port"
+value = "3010"
+is_secret = false
+
+[[variable]]
 name = "PORT_PROWLARR_HTTP"
 description = "Prowlarr HTTP port"
 value = "9696"

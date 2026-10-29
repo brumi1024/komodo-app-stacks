@@ -9,6 +9,14 @@ services:
       - ./${CADDY_INSTANCE}/config/Caddyfile:/etc/caddy/Caddyfile:ro
       - ${CONFIG_DIR}/${CADDY_INSTANCE}/data:/data
       - ${CONFIG_DIR}/${CADDY_INSTANCE}/config:/config
+    networks:
+      - default
+      - home-ingress
     labels:
       - homepage.name=Caddy Home
       - homepage.description=Home Reverse Proxy
+
+networks:
+  home-ingress:
+    external: true
+    name: home-ingress
