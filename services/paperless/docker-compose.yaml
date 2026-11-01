@@ -110,8 +110,11 @@ services:
     container_name: paperless-gpt
     image: docker.io/icereed/paperless-gpt:v0.31.0
     restart: unless-stopped
+    # It creates its tags only at startup, so it must start after paperless
+    # answers; the paperless-ngx image ships its own healthcheck.
     depends_on:
-      - paperless-webserver
+      paperless-webserver:
+        condition: service_healthy
     # No published port: it has no login, so only Caddy reaches it.
     networks:
       - default
