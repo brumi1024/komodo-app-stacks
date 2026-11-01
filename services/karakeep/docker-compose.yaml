@@ -69,4 +69,6 @@ services:
       - ${CONFIG_DIR}/karakeep/meilisearch:/meili_data
     environment:
       - MEILI_NO_ANALYTICS=true
+      # Renovate bumps the minor version; migrate the index in place on start.
+      - MEILI_UPGRADE_DB=true
       - MEILI_MASTER_KEY=${KARAKEEP_MEILI_MASTER_KEY}
