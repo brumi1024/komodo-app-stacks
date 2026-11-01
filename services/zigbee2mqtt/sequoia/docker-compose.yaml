@@ -2,6 +2,8 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt-sequoia
     restart: unless-stopped
+    environment:
+      - ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT__POWER=20
     labels:
       - homepage.group=Smart Home
       - homepage.name=Zigbee2MQTT
