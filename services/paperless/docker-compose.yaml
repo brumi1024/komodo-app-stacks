@@ -129,7 +129,7 @@ services:
     environment:
       - PAPERLESS_BASE_URL=http://paperless-webserver:8000
       - PAPERLESS_PUBLIC_URL=${PAPERLESS_URL}
-      - PAPERLESS_API_TOKEN=${PAPERLESS_GPT_API_TOKEN}
+      - PAPERLESS_API_TOKEN=${PAPERLESS_API_AUTH_TOKEN}
 
       # A paperless workflow tags every new document with AUTO_TAG; tagging a
       # document with AUTO_OCR_TAG re-reads it with the vision model on demand.
