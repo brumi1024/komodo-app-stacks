@@ -109,5 +109,5 @@ scrypted.seq.{$DOMAIN} {
 z2m.seq.{$DOMAIN} {
 	import authenticate_tinyauth_with_tailscale_bypass
 	import cloudflare
-	reverse_proxy sequoia-rpi-4.{$TAILNET}:{$PORT_ZIGBEE2MQTT}
+	reverse_proxy docker-seq.{$TAILNET}:{$PORT_ZIGBEE2MQTT}
 }

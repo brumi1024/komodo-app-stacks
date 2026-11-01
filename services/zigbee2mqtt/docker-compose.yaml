@@ -7,8 +7,9 @@ services:
     restart: unless-stopped
     volumes:
       - ${CONFIG_DIR}/zigbee2mqtt-data:/app/data
-      - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=tcp://${ZIGBEE2MQTT_ADAPTER_HOST}:${ZIGBEE2MQTT_ADAPTER_PORT}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER=${ZIGBEE2MQTT_ADAPTER_TYPE}
     ports:
       - ${PORT_ZIGBEE2MQTT:-8085}:8080  # <Host Port>:<Container Port>
