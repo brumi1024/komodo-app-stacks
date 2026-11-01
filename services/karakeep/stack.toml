@@ -1,0 +1,33 @@
+[[stack]]
+name = "karakeep"
+tags = ["bookmarks", "ai"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+env_file_path = ".env.karakeep"
+file_paths = [
+    "services/karakeep/docker-compose.yaml",
+]
+
+environment = """
+# Configuration directory
+CONFIG_DIR=[[CONFIG_DIR]]
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+PORT_KARAKEEP_HTTP=[[PORT_KARAKEEP_HTTP]]
+
+# Application secrets
+KARAKEEP_NEXTAUTH_SECRET=[[OP__KOMODO__KARAKEEP__NEXTAUTH_SECRET]]
+KARAKEEP_MEILI_MASTER_KEY=[[OP__KOMODO__KARAKEEP__MEILI_MASTER_KEY]]
+KARAKEEP_ANTHROPIC_API_KEY=[[OP__KOMODO__KARAKEEP__ANTHROPIC_API_KEY]]
+
+# OAuth configuration for the Pocket ID client
+KARAKEEP_OAUTH_CLIENT_ID=[[OP__KOMODO__KARAKEEP__OAUTH_CLIENT_ID]]
+KARAKEEP_OAUTH_CLIENT_SECRET=[[OP__KOMODO__KARAKEEP__OAUTH_CLIENT_SECRET]]
+"""

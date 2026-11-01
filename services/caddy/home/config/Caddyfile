@@ -2,7 +2,8 @@
 # Global options #
 ##################
 {
-	admin 0.0.0.0:{$PORT_CADDY_ADMIN}
+	# Loopback only: containers on home-ingress share a network with this edge.
+	admin localhost:{$PORT_CADDY_ADMIN}
 
 	# Home Assistant mobile clients currently stall on HTTP/3 asset requests
 	# through this edge; keep the Home edge on TCP transports until isolated.
@@ -140,6 +141,18 @@ git.home.{$DOMAIN} {
 paperless.home.{$DOMAIN} {
 	import cloudflare
 	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
+}
+
+# paperless-gpt has no login of its own.
+paperless-gpt.home.{$DOMAIN} {
+	import authenticate_tinyauth
+	import cloudflare
+	reverse_proxy paperless-gpt:8080
+}
+
+karakeep.home.{$DOMAIN} {
+	import cloudflare
+	reverse_proxy docker.{$TAILNET}:{$PORT_KARAKEEP_HTTP}
 }
 
 stirling.home.{$DOMAIN} {
