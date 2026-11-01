@@ -2,13 +2,14 @@ name: "zigbee2mqtt"
 
 services:
   zigbee2mqtt:
-    image: ghcr.io/koenkk/zigbee2mqtt:2.14.2
+    image: ghcr.io/koenkk/zigbee2mqtt:2.14.3
     container_name: zigbee2mqtt
     restart: unless-stopped
     volumes:
       - ${CONFIG_DIR}/zigbee2mqtt-data:/app/data
-      - /run/udev:/run/udev:ro
     environment:
       - TZ=${TZ}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=tcp://${ZIGBEE2MQTT_ADAPTER_HOST}:${ZIGBEE2MQTT_ADAPTER_PORT}
+      - ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER=${ZIGBEE2MQTT_ADAPTER_TYPE}
     ports:
       - ${PORT_ZIGBEE2MQTT:-8085}:8080  # <Host Port>:<Container Port>

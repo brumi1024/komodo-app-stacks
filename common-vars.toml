@@ -41,6 +41,18 @@ description = "Zigbee2MQTT adapter port"
 value = "6638"
 is_secret = false
 
+[[variable]]
+name = "ZIGBEE2MQTT_SEQUOIA_ADAPTER_HOST"
+description = "Sequoia Zigbee2MQTT adapter host"
+value = "192.168.1.14"
+is_secret = false
+
+[[variable]]
+name = "ZIGBEE2MQTT_SEQUOIA_ADAPTER_PORT"
+description = "Sequoia Zigbee2MQTT adapter port"
+value = "7638"
+is_secret = false
+
 # Port configuration
 [[variable]]
 name = "PORT_CADDY_HTTP"

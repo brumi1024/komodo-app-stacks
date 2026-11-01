@@ -2,7 +2,7 @@ name: "servarr"
 
 services:
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:2.6.5
+    image: lscr.io/linuxserver/prowlarr:2.7.0
     container_name: prowlarr
     environment:
       - PUID=${PUID}

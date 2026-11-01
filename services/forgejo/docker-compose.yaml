@@ -22,7 +22,7 @@ services:
 
   forgejo:
     container_name: forgejo
-    image: codeberg.org/forgejo/forgejo:17.0.0
+    image: codeberg.org/forgejo/forgejo:17.0.1
     restart: unless-stopped
     depends_on:
       forgejo-db:
