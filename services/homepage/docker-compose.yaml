@@ -41,6 +41,8 @@ services:
     labels:
       - kuma.homepage.http.name=Homepage
       - kuma.homepage.http.url=http://homepage:3000
+      # Homepage answers 400 to any Host outside HOMEPAGE_ALLOWED_HOSTS, which always includes localhost:3000.
+      - kuma.homepage.http.headers={"Host":"localhost:3000"}
       - kuma.homepage.http.interval=60
       - kuma.__site="homepage"
 
