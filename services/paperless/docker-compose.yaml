@@ -69,9 +69,10 @@ services:
       - homepage.widget.type=paperlessngx
       - homepage.widget.url=https://paperless.${DOMAIN}
       - homepage.widget.key=${PAPERLESS_API_AUTH_TOKEN}
-      # AutoKuma → central Uptime Kuma. /api/ returns 200 unauthenticated.
+      # Django rejects the tailnet Host with 400; the login page answers 200 with no redirect, which would drop the header.
       - kuma.paperless.http.name=Paperless
-      - kuma.paperless.http.url=http://docker.${TAILNET}:${PORT_PAPERLESS_HTTP}/api/
+      - kuma.paperless.http.url=http://docker.${TAILNET}:${PORT_PAPERLESS_HTTP}/accounts/login/
+      - kuma.paperless.http.headers={"Host":"paperless-webserver"}
       - kuma.paperless.http.interval=60
       - kuma.__site="paperless"
     environment:
