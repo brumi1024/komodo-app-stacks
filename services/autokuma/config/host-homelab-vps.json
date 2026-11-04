@@ -1,0 +1,8 @@
+{
+  "type": "group",
+  "name": "homelab-vps (vps)",
+  "interval": 60,
+  "max_retries": 2,
+  "retry_interval": 60,
+  "tag_names": [{"name": "site", "value": "vps"}, {"name": "host", "value": "homelab-vps"}]
+}

@@ -33,6 +33,7 @@ AUTOKUMA__DELETE_GRACE_PERIOD=86400
 AUTOKUMA__ENV__NTFY_DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
 AUTOKUMA__ENV__NTFY_ACCESS_TOKEN=[[OP__KOMODO__ALERTER__NTFY_ACCESS_TOKEN]]
 AUTOKUMA__ENV__TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+AUTOKUMA__ENV__PORT_SOCKY_PROXY=[[PORT_SOCKY_PROXY]]
 
 # Docker hosts scanned through read-only socket proxies. AutoKuma expects
 # semicolon-separated URLs when configured from environment variables.

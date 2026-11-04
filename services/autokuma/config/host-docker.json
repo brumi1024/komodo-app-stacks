@@ -1,0 +1,8 @@
+{
+  "type": "group",
+  "name": "docker (home)",
+  "interval": 60,
+  "max_retries": 2,
+  "retry_interval": 60,
+  "tag_names": [{"name": "site", "value": "home"}, {"name": "host", "value": "docker"}]
+}
