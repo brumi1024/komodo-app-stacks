@@ -69,10 +69,17 @@ services:
       - "kuma.site.tag.color=#4C6EF5"
       - kuma.host.tag.name=host
       - "kuma.host.tag.color=#868E96"
-      - kuma.autokuma.http.name=AutoKuma
-      - kuma.autokuma.http.url=http://autokuma-vps:8090/health
-      - kuma.autokuma.http.interval=60
-      - kuma.__site="autokuma"
+      # /health answers 503 once the last full sync is older than 3x sync_interval
+      # (15s), which an offline Docker host's 2x120s connect timeouts always exceed.
+      # Judge the sync age instead, so only a stalled AutoKuma reads down.
+      - kuma.autokuma.json-query.name=AutoKuma
+      - kuma.autokuma.json-query.url=http://autokuma-vps:8090/health
+      - kuma.autokuma.json-query.interval=60
+      - 'kuma.autokuma.json-query.accepted_statuscodes=["200-299","503"]'
+      - kuma.autokuma.json-query.json_path=last_sync_ago_seconds >= 0 and last_sync_ago_seconds < 900
+      - kuma.autokuma.json-query.json_path_operator===
+      - kuma.autokuma.json-query.expected_value=true
+      - kuma.__site="autokuma","json-query"
     deploy:
       resources:
         limits:
