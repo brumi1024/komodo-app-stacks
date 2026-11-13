@@ -63,7 +63,7 @@ services:
 
   karakeep-meilisearch:
     container_name: karakeep-meilisearch
-    image: docker.io/getmeili/meilisearch:v1.56.1
+    image: docker.io/getmeili/meilisearch:v1.56.2
     restart: unless-stopped
     volumes:
       - ${CONFIG_DIR}/karakeep/meilisearch:/meili_data
