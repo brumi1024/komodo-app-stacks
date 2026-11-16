@@ -143,6 +143,12 @@ paperless.home.{$DOMAIN} {
 	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
 }
 
+frigate.home.{$DOMAIN} {
+	import authenticate_tinyauth_with_tailscale_bypass
+	import cloudflare
+	reverse_proxy frigate:8971
+}
+
 # paperless-gpt has no login of its own.
 paperless-gpt.home.{$DOMAIN} {
 	import authenticate_tinyauth

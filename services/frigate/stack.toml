@@ -1,0 +1,38 @@
+[[stack]]
+name = "frigate"
+tags = ["cameras", "nvr", "smart-home"]
+
+[stack.config]
+server = "docker"
+poll_for_updates = true
+auto_update = true
+destroy_before_deploy = false
+linked_repo = "app-stacks"
+env_file_path = ".env.frigate"
+run_directory = "services/frigate"
+file_paths = [
+    "docker-compose.yaml"
+]
+# Recordings live on their own ZFS dataset bind-mounted into the Docker host;
+# without this check Docker would record onto the container's root disk.
+pre_deploy = { path = "", command = "mountpoint -q [[BLACKBOX_DIR]]/frigate" }
+
+environment = """
+# System configuration
+TZ=[[TZ]]
+CONFIG_DIR=[[CONFIG_DIR]]
+RECORDINGS_DIR=[[BLACKBOX_DIR]]/frigate
+
+# Network and domain configuration
+DOMAIN=[[OP__KOMODO__COMMON__DOMAIN]]
+TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
+PORT_FRIGATE_HTTP=[[PORT_FRIGATE_HTTP]]
+
+# Home Assistant's Mosquitto broker
+FRIGATE_MQTT_USER=[[OP__KOMODO__FRIGATE__MQTT_USER]]
+FRIGATE_MQTT_PASSWORD=[[OP__KOMODO__FRIGATE__MQTT_PASSWORD]]
+
+# The view-only RTSP account shared by every Hikvision camera
+FRIGATE_HIKVISION_USER=[[OP__KOMODO__FRIGATE__HIKVISION_USER]]
+FRIGATE_HIKVISION_PASSWORD=[[OP__KOMODO__FRIGATE__HIKVISION_PASSWORD]]
+"""
