@@ -44,6 +44,10 @@ model:
 ffmpeg:
   hwaccel_args: preset-vaapi
 
+# Frigate 0.18 leaves object detection off unless this is set.
+detect:
+  enabled: true
+
 objects:
   track:
     - person
