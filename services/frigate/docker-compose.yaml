@@ -21,9 +21,6 @@ services:
     shm_size: 512mb
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
-    networks:
-      - default
-      - home-ingress
     ports:
       - '${PORT_FRIGATE_HTTP:-8971}:8971'
     volumes:
@@ -55,8 +52,3 @@ services:
       - kuma.frigate.http.url=http://docker.${TAILNET}:${PORT_FRIGATE_HTTP}/api/version
       - kuma.frigate.http.interval=60
       - kuma.__site="frigate"
-
-networks:
-  home-ingress:
-    external: true
-    name: home-ingress

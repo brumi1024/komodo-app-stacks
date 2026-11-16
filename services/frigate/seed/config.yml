@@ -12,6 +12,7 @@ mqtt:
 tls:
   enabled: false
 
+# Only decides whose X-Forwarded-For counts for login rate limiting; Caddy reaches Frigate from a Docker bridge.
 auth:
   trusted_proxies:
     - 172.16.0.0/12
