@@ -15,7 +15,9 @@ file_paths = [
 ]
 # Recordings live on their own ZFS dataset bind-mounted into the Docker host;
 # without this check Docker would record onto the container's root disk.
-pre_deploy = { path = "", command = "mountpoint -q [[BLACKBOX_DIR]]/frigate" }
+# Then seed config.yml on a fresh install only, since Frigate's UI owns the live
+# file; a throwaway container does it because Periphery cannot write CONFIG_DIR.
+pre_deploy = { path = "", command = "mountpoint -q [[BLACKBOX_DIR]]/frigate && docker run --rm --network none -v \"$(pwd)/seed:/seed:ro\" -v [[CONFIG_DIR]]/frigate:/config docker.io/library/busybox:1.37.0 sh -c '[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml'" }
 
 environment = """
 # System configuration
