@@ -1,23 +1,10 @@
 name: "frigate"
 
 services:
-  # Frigate owns config.yml once it exists, since its UI edits the file in place.
-  frigate-config-seed:
-    container_name: frigate-config-seed
-    image: docker.io/library/busybox:1.37.0
-    restart: "no"
-    command: ["sh", "-c", "[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml"]
-    volumes:
-      - ./seed:/seed:ro
-      - ${CONFIG_DIR}/frigate:/config
-
   frigate:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:0.18.2
     restart: unless-stopped
-    depends_on:
-      frigate-config-seed:
-        condition: service_completed_successfully
     shm_size: 512mb
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128

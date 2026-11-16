@@ -176,16 +176,7 @@ def validate_stack_file(stack_file: Path) -> list[str]:
             )
             continue
 
-        services = rendered.get("services", {})
-        one_shot = {
-            dependency
-            for service in services.values()
-            for dependency, condition in (service.get("depends_on") or {}).items()
-            if condition.get("condition") == "service_completed_successfully"
-        }
-        for service_name, service in services.items():
-            if service_name in one_shot and service.get("restart") == "no":
-                continue
+        for service_name, service in rendered.get("services", {}).items():
             if service.get("restart") not in {"always", "unless-stopped"}:
                 errors.append(
                     f"{stack_file.relative_to(ROOT)}: {service_name} has no restart policy"
