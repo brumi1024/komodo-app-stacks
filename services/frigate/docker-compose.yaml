@@ -49,6 +49,8 @@ services:
       - homepage.href=https://frigate.home.${DOMAIN}
       - homepage.description=Camera NVR
       - kuma.frigate.http.name=Frigate
+      # Every API path needs a login on 8971; a 401 proves the backend answered nginx's auth check.
       - kuma.frigate.http.url=http://docker.${TAILNET}:${PORT_FRIGATE_HTTP}/api/version
+      - 'kuma.frigate.http.accepted_statuscodes=["401"]'
       - kuma.frigate.http.interval=60
       - kuma.__site="frigate"
