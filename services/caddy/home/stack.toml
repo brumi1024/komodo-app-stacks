@@ -36,6 +36,8 @@ TAILNET=[[OP__KOMODO__COMMON__TAILNET]]
 
 # Shared with Frigate, which accepts proxy identity headers only alongside it
 FRIGATE_PROXY_SECRET=[[OP__KOMODO__FRIGATE__PROXY_SECRET]]
+# Home Assistant's Frigate integration presents this as a bearer token
+FRIGATE_HA_TOKEN=[[OP__KOMODO__FRIGATE__HA_BEARER_TOKEN]]
 
 # Port configuration
 PORT_CADDY_HTTP=[[PORT_CADDY_HTTP]]
