@@ -146,7 +146,8 @@ paperless.home.{$DOMAIN} {
 # Frigate trusts Tinyauth's Remote-User only alongside this secret, so there is
 # no tailnet bypass: a request without a user would arrive as an anonymous viewer.
 # Home Assistant's Frigate integration cannot sign in through Tinyauth; it sends
-# a bearer token from its own address and is admitted as a fixed viewer.
+# a bearer token from its own address and is admitted as a fixed admin, so it
+# can toggle detection, recording and snapshots.
 frigate.home.{$DOMAIN} {
 	import cloudflare
 
@@ -157,8 +158,8 @@ frigate.home.{$DOMAIN} {
 	handle @home_assistant {
 		reverse_proxy docker.{$TAILNET}:{$PORT_FRIGATE_HTTP} {
 			header_up -Authorization
-			header_up -Remote-Groups
 			header_up Remote-User home-assistant
+			header_up Remote-Groups site-admins
 			header_up X-Proxy-Secret {$FRIGATE_PROXY_SECRET}
 		}
 	}
