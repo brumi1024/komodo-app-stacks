@@ -9,14 +9,24 @@ mqtt:
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASSWORD}"
 
-# Caddy terminates TLS; Frigate keeps its own login on 8971.
+# Caddy terminates TLS.
 tls:
   enabled: false
 
-# Only decides whose X-Forwarded-For counts for login rate limiting; Caddy reaches Frigate from a Docker bridge.
+# Sign-in is Pocket ID through Tinyauth: Frigate takes the user and role from the headers Caddy copies
+# from Tinyauth, and accepts them only with the shared secret, so port 8971 is useless without Caddy.
 auth:
-  trusted_proxies:
-    - 172.16.0.0/12
+  enabled: false
+
+proxy:
+  auth_secret: "{FRIGATE_PROXY_SECRET}"
+  header_map:
+    user: Remote-User
+    role: Remote-Groups
+    role_map:
+      admin:
+        - site-admins
+  default_role: viewer
 
 detectors:
   ov:

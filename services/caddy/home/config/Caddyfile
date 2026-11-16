@@ -143,10 +143,14 @@ paperless.home.{$DOMAIN} {
 	reverse_proxy docker.{$TAILNET}:{$PORT_PAPERLESS_HTTP}
 }
 
+# Frigate trusts Tinyauth's Remote-User only alongside this secret, so there is
+# no tailnet bypass: a request without a user would arrive as an anonymous viewer.
 frigate.home.{$DOMAIN} {
-	import authenticate_tinyauth_with_tailscale_bypass
+	import authenticate_tinyauth
 	import cloudflare
-	reverse_proxy docker.{$TAILNET}:{$PORT_FRIGATE_HTTP}
+	reverse_proxy docker.{$TAILNET}:{$PORT_FRIGATE_HTTP} {
+		header_up X-Proxy-Secret {$FRIGATE_PROXY_SECRET}
+	}
 }
 
 # paperless-gpt has no login of its own.
