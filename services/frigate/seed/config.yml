@@ -1,5 +1,6 @@
 # Copied to /config/config.yml on first start only; after that Frigate and its UI own the live file.
-# Camera Kn sits at 192.168.30.(40+n) in the IoT camera block, which has no internet access.
+# Cameras are added in the UI, so this public repo carries no camera inventory, addresses or coverage.
+# Stream URLs can use {FRIGATE_HIKVISION_USER} and {FRIGATE_HIKVISION_PASSWORD}.
 version: 0.18-0
 
 mqtt:
@@ -60,42 +61,4 @@ snapshots:
   retain:
     default: 30
 
-go2rtc:
-  streams:
-    k1_garage_nw:
-      - rtsp://{FRIGATE_HIKVISION_USER}:{FRIGATE_HIKVISION_PASSWORD}@192.168.30.41:554/streaming/channels/101
-    k1_garage_nw_sub:
-      - rtsp://{FRIGATE_HIKVISION_USER}:{FRIGATE_HIKVISION_PASSWORD}@192.168.30.41:554/streaming/channels/102
-    k3_terrace_nw:
-      - rtsp://{FRIGATE_HIKVISION_USER}:{FRIGATE_HIKVISION_PASSWORD}@192.168.30.43:554/streaming/channels/101
-    k3_terrace_nw_sub:
-      - rtsp://{FRIGATE_HIKVISION_USER}:{FRIGATE_HIKVISION_PASSWORD}@192.168.30.43:554/streaming/channels/102
-
-# Enable each camera in the UI once it answers on its reserved address.
-cameras:
-  k1_garage_nw:
-    friendly_name: K1 Garázsfront ÉNy
-    enabled: false
-    ffmpeg:
-      inputs:
-        - path: rtsp://127.0.0.1:8554/k1_garage_nw
-          input_args: preset-rtsp-restream
-          roles:
-            - record
-        - path: rtsp://127.0.0.1:8554/k1_garage_nw_sub
-          input_args: preset-rtsp-restream
-          roles:
-            - detect
-  k3_terrace_nw:
-    friendly_name: K3 Terasz ÉNy
-    enabled: false
-    ffmpeg:
-      inputs:
-        - path: rtsp://127.0.0.1:8554/k3_terrace_nw
-          input_args: preset-rtsp-restream
-          roles:
-            - record
-        - path: rtsp://127.0.0.1:8554/k3_terrace_nw_sub
-          input_args: preset-rtsp-restream
-          roles:
-            - detect
+cameras: {}
