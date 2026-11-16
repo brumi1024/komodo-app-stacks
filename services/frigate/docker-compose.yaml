@@ -4,7 +4,7 @@ services:
   # Frigate owns config.yml once it exists, since its UI edits the file in place.
   frigate-config-seed:
     container_name: frigate-config-seed
-    image: docker.io/library/busybox:1.37.0
+    image: docker.io/library/busybox:1.38.0
     restart: "no"
     command: ["sh", "-c", "[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml"]
     volumes:
