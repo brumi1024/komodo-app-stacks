@@ -1,0 +1,64 @@
+# Copied to /config/config.yml on first start only; after that Frigate and its UI own the live file.
+# Cameras are added in the UI, so this public repo carries no camera inventory, addresses or coverage.
+# Stream URLs can use {FRIGATE_HIKVISION_USER} and {FRIGATE_HIKVISION_PASSWORD}.
+version: 0.18-0
+
+mqtt:
+  enabled: true
+  host: "{FRIGATE_MQTT_HOST}"
+  user: "{FRIGATE_MQTT_USER}"
+  password: "{FRIGATE_MQTT_PASSWORD}"
+
+# Caddy terminates TLS; Frigate keeps its own login on 8971.
+tls:
+  enabled: false
+
+# Only decides whose X-Forwarded-For counts for login rate limiting; Caddy reaches Frigate from a Docker bridge.
+auth:
+  trusted_proxies:
+    - 172.16.0.0/12
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+ffmpeg:
+  hwaccel_args: preset-vaapi
+
+objects:
+  track:
+    - person
+    - car
+    - dog
+    - cat
+
+record:
+  enabled: true
+  continuous:
+    days: 0
+  motion:
+    days: 7
+  alerts:
+    retain:
+      days: 30
+      mode: motion
+  detections:
+    retain:
+      days: 30
+      mode: motion
+
+snapshots:
+  enabled: true
+  retain:
+    default: 30
+
+cameras: {}

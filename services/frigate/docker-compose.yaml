@@ -1,0 +1,54 @@
+name: "frigate"
+
+services:
+  # Frigate owns config.yml once it exists, since its UI edits the file in place.
+  frigate-config-seed:
+    container_name: frigate-config-seed
+    image: docker.io/library/busybox:1.37.0
+    restart: "no"
+    command: ["sh", "-c", "[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml"]
+    volumes:
+      - ./seed:/seed:ro
+      - ${CONFIG_DIR}/frigate:/config
+
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:0.18.2
+    restart: unless-stopped
+    depends_on:
+      frigate-config-seed:
+        condition: service_completed_successfully
+    shm_size: 512mb
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    ports:
+      - '${PORT_FRIGATE_HTTP:-8971}:8971'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_DIR}/frigate:/config
+      - type: bind
+        source: ${RECORDINGS_DIR}
+        target: /media/frigate
+        bind:
+          create_host_path: false
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    environment:
+      - TZ=${TZ}
+      - FRIGATE_MQTT_HOST=homeassistant.${TAILNET}
+      - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER}
+      - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD}
+      - FRIGATE_HIKVISION_USER=${FRIGATE_HIKVISION_USER}
+      - FRIGATE_HIKVISION_PASSWORD=${FRIGATE_HIKVISION_PASSWORD}
+    labels:
+      - homepage.group=Smart Home
+      - homepage.name=Frigate
+      - homepage.icon=frigate.svg
+      - homepage.href=https://frigate.home.${DOMAIN}
+      - homepage.description=Camera NVR
+      - kuma.frigate.http.name=Frigate
+      - kuma.frigate.http.url=http://docker.${TAILNET}:${PORT_FRIGATE_HTTP}/api/version
+      - kuma.frigate.http.interval=60
+      - kuma.__site="frigate"
