@@ -34,7 +34,10 @@ PORT_FRIGATE_HTTP=[[PORT_FRIGATE_HTTP]]
 FRIGATE_MQTT_USER=[[OP__KOMODO__FRIGATE__MQTT_USER]]
 FRIGATE_MQTT_PASSWORD=[[OP__KOMODO__FRIGATE__MQTT_PASSWORD]]
 
-# The view-only RTSP account shared by every Hikvision camera
+# Caddy sends this with Tinyauth's identity headers; Frigate rejects any request without it
+FRIGATE_PROXY_SECRET=[[OP__KOMODO__FRIGATE__PROXY_SECRET]]
+
+# The RTSP account shared by every Hikvision camera
 FRIGATE_HIKVISION_USER=[[OP__KOMODO__FRIGATE__HIKVISION_USER]]
 FRIGATE_HIKVISION_PASSWORD=[[OP__KOMODO__FRIGATE__HIKVISION_PASSWORD]]
 
