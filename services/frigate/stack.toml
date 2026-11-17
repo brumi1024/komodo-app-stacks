@@ -17,7 +17,8 @@ file_paths = [
 # without this check Docker would record onto the container's root disk.
 # Then seed config.yml on a fresh install only, since Frigate's UI owns the live
 # file; a throwaway container does it because Periphery cannot write CONFIG_DIR.
-pre_deploy = { path = "", command = "mountpoint -q [[BLACKBOX_DIR]]/frigate && docker run --rm --network none -v \"$(pwd)/seed:/seed:ro\" -v [[CONFIG_DIR]]/frigate:/config docker.io/library/busybox:1.37.0 sh -c '[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml'" }
+# The seed's YOLOv9 model is built by hand from model/Dockerfile, so seeding waits for it.
+pre_deploy = { path = "", command = "mountpoint -q [[BLACKBOX_DIR]]/frigate && docker run --rm --network none -v \"$(pwd)/seed:/seed:ro\" -v [[CONFIG_DIR]]/frigate:/config docker.io/library/busybox:1.37.0 sh -c '[ -f /config/config.yml ] && exit 0; [ -f /config/model_cache/yolov9-s-320.onnx ] || { echo model_cache/yolov9-s-320.onnx is missing: build it from services/frigate/model/Dockerfile; exit 1; }; cp /seed/config.yml /config/config.yml'" }
 
 environment = """
 # System configuration
