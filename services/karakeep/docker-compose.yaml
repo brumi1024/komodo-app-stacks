@@ -3,7 +3,7 @@ name: "karakeep"
 services:
   karakeep-web:
     container_name: karakeep
-    image: ghcr.io/karakeep-app/karakeep:0.34.1
+    image: ghcr.io/karakeep-app/karakeep:0.35.0
     restart: unless-stopped
     depends_on:
       - karakeep-chrome
