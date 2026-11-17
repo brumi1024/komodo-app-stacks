@@ -33,13 +33,15 @@ detectors:
     type: openvino
     device: GPU
 
+# Built from ../model/Dockerfile; pre_deploy refuses to seed without it.
 model:
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
-  path: /openvino-model/ssdlite_mobilenet_v2.xml
-  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+  model_type: yolo-generic
+  width: 320
+  height: 320
+  input_tensor: nchw
+  input_dtype: float
+  path: /config/model_cache/yolov9-s-320.onnx
+  labelmap_path: /labelmap/coco-80.txt
 
 ffmpeg:
   hwaccel_args: preset-vaapi
