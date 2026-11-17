@@ -2,7 +2,7 @@ name: "servarr"
 
 services:
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:2.7.0
+    image: lscr.io/linuxserver/prowlarr:3.0.2
     container_name: prowlarr
     environment:
       - PUID=${PUID}
@@ -100,7 +100,7 @@ services:
       - ${PORT_QBITTORRENT_TORRENTING}:6881/udp
     restart: unless-stopped
   radarr:
-    image: lscr.io/linuxserver/radarr:6.4.4
+    image: lscr.io/linuxserver/radarr:7.0.3
     container_name: radarr
     volumes:
       - ${CONFIG_DIR}/radarr:/config
