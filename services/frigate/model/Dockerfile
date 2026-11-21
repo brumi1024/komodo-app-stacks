@@ -2,7 +2,7 @@
 #   docker build services/frigate/model --output /tmp/frigate-model
 #   cp /tmp/frigate-model/yolov9-s-320.onnx <CONFIG_DIR>/frigate/model_cache/
 # The build pulls about 14 GB of layers; prune them afterwards.
-FROM python:3.11 AS build
+FROM python:3.15 AS build
 RUN apt-get update && apt-get install --no-install-recommends -y cmake libgl1 && rm -rf /var/lib/apt/lists/*
 COPY --from=ghcr.io/astral-sh/uv:0.10.4 /uv /bin/
 WORKDIR /yolov9
