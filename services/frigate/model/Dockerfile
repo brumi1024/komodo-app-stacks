@@ -4,7 +4,7 @@
 # The build pulls about 14 GB of layers; prune them afterwards.
 FROM python:3.15 AS build
 RUN apt-get update && apt-get install --no-install-recommends -y cmake libgl1 && rm -rf /var/lib/apt/lists/*
-COPY --from=ghcr.io/astral-sh/uv:0.10.4 /uv /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.9 /uv /bin/
 WORKDIR /yolov9
 ADD https://github.com/WongKinYiu/yolov9.git#5b1ea9a8b3f0ffe4fe0e203ec6232d788bb3fcff .
 RUN uv pip install --system -r requirements.txt
